@@ -6,6 +6,4 @@ const server = http.createServer((req, res) => {
   res.end('Hello World\n');
 });
 
-server.listen(5488, () => {
-  console.log(`Server running  on ${port}`);
-});
+server.listen(5488)
