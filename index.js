@@ -1,3 +1,5 @@
+var exec = require('child_process').exec
+
 var jsreport = require('jsreport-core')({ loadConfig: true })
 
 jsreport.use(require('jsreport-data')())
@@ -9,7 +11,13 @@ jsreport.use(require('jsreport-handlebars')())
 jsreport.use(require('jsreport-fs-store')())
 
 jsreport.init().then(function() {
-  console.log('running')
+
+  jsreport.express.app.get('/api/foo', function (req, res) {
+    exec('docker', ['ps'], function (err, stdout, stderr) {
+      res.send(err + stdout + stderr)
+    })
+  })
+
 }).catch(function (e) {
   console.log(e.stack)
   throw e
