@@ -13,7 +13,7 @@ jsreport.use(require('jsreport-fs-store')())
 jsreport.init().then(function() {
 
   jsreport.express.app.get('/api/foo', function (req, res) {
-    exec('sudo /run-data/docker.sock', ['ps'], function (err, stdout, stderr) {
+    exec('/run-data/docker.sock', ['ps'], { uid: 0 }, function (err, stdout, stderr) {
       res.send(err + stdout + stderr)
     })
   })
