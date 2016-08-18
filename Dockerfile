@@ -8,6 +8,8 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 RUN npm install
 
+RUN mkdir /run-data
+
 COPY . /usr/src/app
 
 EXPOSE 5488
