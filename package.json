@@ -1,0 +1,29 @@
+{
+  "name": "main",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsreportonline/main.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsreportonline/main/issues"
+  },
+  "homepage": "https://github.com/jsreportonline/main#readme",
+  "dependencies": {
+    "jsreport-core": "1.0.6",
+    "jsreport-data": "1.0.1",
+    "jsreport-express": "1.0.2",
+    "jsreport-fs-store": "1.0.5",
+    "jsreport-handlebars": "1.0.1",
+    "jsreport-phantom-pdf": "1.0.3",
+    "jsreport-studio": "1.0.7",
+    "jsreport-templates": "1.0.1"
+  }
+}
