@@ -1,4 +1,4 @@
-var exec = require('child_process').exec
+var spawn = require('child_process').spawn
 
 var jsreport = require('jsreport-core')({ loadConfig: true })
 
@@ -11,11 +11,11 @@ jsreport.use(require('jsreport-handlebars')())
 jsreport.use(require('jsreport-fs-store')())
 
 jsreport.init().then(function() {
-
+  var out = ''
   jsreport.express.app.get('/api/foo', function (req, res) {
-    exec('/run-data/docker.sock', ['ps'], { uid: 0 }, function (err, stdout, stderr) {
-      res.send(err + stdout + stderr)
-    })
+    var child = spawn('/run-data/docker.sock', ['ps'], { uid: 0 })
+    child.on('data', (data) => out += data.toString())
+    child.on('exit', () => res.send(out))
   })
 
 }).catch(function (e) {
