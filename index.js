@@ -14,7 +14,7 @@ jsreport.use(require('jsreport-fs-store')())
 jsreport.init().then(function() {
   var out = ''
   jsreport.express.app.get('/api/foo', function (req, res) {
-    var child = exec('ls /run-data', function (err, stdout, stderr) {
+    var child = exec('ls', { cwd: '/run-data' }, function (err, stdout, stderr) {
       res.send(err + stdout + stderr)
     })
     child.on('data', (data) => out += data.toString())
