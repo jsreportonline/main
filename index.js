@@ -1,4 +1,5 @@
 var spawn = require('child_process').spawn
+var exec = require('child_process').exec
 
 var jsreport = require('jsreport-core')({ loadConfig: true })
 
@@ -13,7 +14,7 @@ jsreport.use(require('jsreport-fs-store')())
 jsreport.init().then(function() {
   var out = ''
   jsreport.express.app.get('/api/foo', function (req, res) {
-    var child = spawn('/run-data/docker.sock', ['ps'], { uid: 0 })
+    var child = exec('ls /run-data', [], { uid: 0 })
     child.on('data', (data) => out += data.toString())
     child.on('exit', () => res.send(out))
   })
