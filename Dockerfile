@@ -13,4 +13,4 @@ RUN mkdir /run-data
 COPY . /usr/src/app
 
 EXPOSE 5488
-CMD [ "sudo", "node", "index.js" ]
+CMD [ "node", "index.js" ]
