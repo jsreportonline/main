@@ -24,6 +24,7 @@
     "jsreport-handlebars": "1.0.1",
     "jsreport-phantom-pdf": "1.0.3",
     "jsreport-studio": "1.0.7",
-    "jsreport-templates": "1.0.1"
+    "jsreport-templates": "1.0.1",
+    "winston": "^2.2.0"
   }
 }

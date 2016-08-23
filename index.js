@@ -1,5 +1,7 @@
 var spawn = require('child_process').spawn
 var exec = require('child_process').exec
+var winston = require('winston')
+var path = require('path')
 
 var jsreport = require('jsreport-core')({ loadConfig: true })
 
@@ -10,6 +12,14 @@ jsreport.use(require('jsreport-phantom-pdf')())
 jsreport.use(require('jsreport-studio')())
 jsreport.use(require('jsreport-handlebars')())
 jsreport.use(require('jsreport-fs-store')())
+
+jsreport.logger.add(winston.transports.File, {
+  name: 'main',
+  filename: 'reporter.log',
+  maxsize: 10485760,
+  json: false,
+  level: 'debug'
+})
 
 jsreport.init().then(function() {
   var out = ''
