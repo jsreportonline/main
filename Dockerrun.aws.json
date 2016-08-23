@@ -6,6 +6,12 @@
       "host": {
         "sourcePath": "/var/run"
       }
+    },
+    {
+      "name": "nginx-proxy-conf",
+      "host": {
+        "sourcePath": "/var/app/current/proxy/conf.d"
+      }
     }
   ],
   "containerDefinitions": [
@@ -13,10 +19,10 @@
       "name": "main",
       "image": "jsreportonline/main",
       "essential": true,
-      "memory": 512,
+      "memory": 256,
       "portMappings": [
         {
-          "hostPort": 80,
+          "hostPort": 5488,
           "containerPort": 5488
         }
       ],
@@ -24,6 +30,28 @@
         {
           "sourceVolume": "run",
           "containerPath": "/run-data"
+        }
+      ]
+    },
+    {
+      "name": "nginx-proxy",
+      "image": "nginx",
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [
+        "main"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "nginx-proxy-conf",
+          "containerPath": "/etc/nginx/conf.d",
+          "readOnly": true
         }
       ]
     }

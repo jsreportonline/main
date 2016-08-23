@@ -13,7 +13,15 @@
         },
         "enabled": false
     },
-    "connectionString": { "name": "fs" },
+    "connectionString": {
+        "name": "mongoDB",
+        "authDb": "admin",
+        "address": ["jsreportonline-shard-00-00-nstup.mongodb.net", "jsreportonline-shard-00-01-nstup.mongodb.net", "jsreportonline-shard-00-02-nstup.mongodb.net"],
+        "port": [27017,27017,27017],
+        "replicaSet" : "jsreportonline-shard-0",
+        "databaseName" : "test",
+        "ssl": true
+    },
     "httpPort": 5488,
     "httpsPort": null,
     "blobStorage": "fileSystem",

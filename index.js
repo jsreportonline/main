@@ -11,7 +11,7 @@ jsreport.use(require('jsreport-express')())
 jsreport.use(require('jsreport-phantom-pdf')())
 jsreport.use(require('jsreport-studio')())
 jsreport.use(require('jsreport-handlebars')())
-jsreport.use(require('jsreport-fs-store')())
+jsreport.use(require('jsreport-mongodb-store')())
 
 jsreport.logger.add(winston.transports.File, {
   name: 'main',
