@@ -35,7 +35,27 @@ module.exports = function (providerConfiguration, cb) {
 
   providerConfiguration.logger.info(`Connecting mongo to ${connectionString}`)
 
-  MongoClient.connect(connectionString, (err, db) => {
+  // required for azure - firewall closes idle connections, wee need to set the lower value for timeouts
+  var options = {
+    server: {
+      auto_reconnect: true,
+      socketOptions: {
+        keepAlive: 1,
+        connectTimeoutMS: 10000,
+        socketTimeoutMS: 60000
+      }
+    },
+    replSet: {
+      auto_reconnect: true,
+      socketOptions: {
+        keepAlive: 1,
+        connectTimeoutMS: 10000,
+        socketTimeoutMS: 60000
+      }
+    }
+  }
+
+  MongoClient.connect(connectionString, options, (err, db) => {
     if (err) {
       providerConfiguration.logger.error(`Connection failed ${err.stack}`)
     } else {

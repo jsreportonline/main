@@ -1,5 +1,5 @@
-var exec = require('child_process').exec
 var winston = require('winston')
+var request = require('request')
 
 var jsreport = require('jsreport-core')({ loadConfig: true })
 
@@ -20,15 +20,9 @@ jsreport.logger.add(winston.transports.File, {
 })
 
 jsreport.init().then(function () {
-  var out = ''
   jsreport.express.app.get('/api/foo', function (req, res) {
-    var child = exec('ls', { cwd: '/run-data' }, function (err, stdout, stderr) {
-      res.send(err + stdout + stderr)
-    })
-    child.on('data', (data) => out += data.toString())
-    child.on('exit', () => res.send(out))
+    request('http://tasks:3000').pipe(res)
   })
-
 }).catch(function (e) {
   console.log(e.stack)
   throw e

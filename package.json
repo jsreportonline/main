@@ -27,6 +27,7 @@
     "listener-collection": "^0.1.0",
     "mongodb": "^2.2.8",
     "q": "1.4.1",
+    "request": "2.74.0",
     "winston": "2.2.0"
   },
   "devDependencies": {
