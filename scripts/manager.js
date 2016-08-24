@@ -22,8 +22,8 @@ Manager.prototype.execute = function (inputs, options, cb) {
       return cb(err)
     }
 
-    if (!body) {
-      return cb(new Error('Unable to execute script'))
+    if (!body || httpResponse.statusCode !== 200) {
+      return cb(new Error(body || 'Executing script failed'))
     }
 
     if (body.error) {
