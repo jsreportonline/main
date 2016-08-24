@@ -1,6 +1,6 @@
 var winston = require('winston')
-var request = require('request')
 var ScriptManager = require('./scripts/manager')
+var phantom = require('./recipes/phantom')
 
 var jsreport = require('jsreport-core')({
   loadConfig: true
@@ -25,9 +25,7 @@ jsreport.logger.add(winston.transports.File, {
 })
 
 jsreport.init().then(function () {
-  jsreport.express.app.get('/api/foo', function (req, res) {
-    request('http://tasks:3000').pipe(res)
-  })
+  jsreport['phantom-pdf'].conversion = phantom(jsreport.options)
 }).catch(function (e) {
   console.log(e.stack)
   throw e

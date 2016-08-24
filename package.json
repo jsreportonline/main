@@ -21,7 +21,7 @@
     "jsreport-data": "1.0.1",
     "jsreport-express": "1.0.2",
     "jsreport-handlebars": "1.0.1",
-    "jsreport-phantom-pdf": "1.0.3",
+    "jsreport-phantom-pdf": "jsreport/jsreport-phantom-pdf",
     "jsreport-studio": "1.0.7",
     "jsreport-templates": "1.0.1",
     "listener-collection": "^0.1.0",
