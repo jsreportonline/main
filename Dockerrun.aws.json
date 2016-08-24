@@ -19,12 +19,15 @@
       "name": "main",
       "image": "jsreportonline/main",
       "essential": true,
-      "memory": 256,
+      "memory": 128,
       "portMappings": [
         {
           "hostPort": 5488,
           "containerPort": 5488
         }
+      ],
+      "links": [
+        "tasks"
       ],
       "mountPoints": [
         {
@@ -34,10 +37,23 @@
       ]
     },
     {
+      "name": "tasks",
+      "image": "jsreportonline/tasks",
+      "essential": true,
+      "memory": 64,
+      "portMappings": [
+        {
+          "hostPort": 3000,
+          "containerPort": 3000
+        }
+      ],
+      "mountPoints": []
+    },
+    {
       "name": "nginx-proxy",
       "image": "nginx",
       "essential": true,
-      "memory": 128,
+      "memory": 64,
       "portMappings": [
         {
           "hostPort": 80,

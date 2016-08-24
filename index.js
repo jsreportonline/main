@@ -1,7 +1,12 @@
 var winston = require('winston')
 var request = require('request')
+var ScriptManager = require('./scripts/manager')
 
-var jsreport = require('jsreport-core')({ loadConfig: true })
+var jsreport = require('jsreport-core')({
+  loadConfig: true
+}).afterConfigLoaded(() => {
+  jsreport.options.tasks.scriptManager = new ScriptManager(jsreport.options.tasks)
+})
 
 jsreport.use(require('jsreport-data')())
 jsreport.use(require('jsreport-templates')())

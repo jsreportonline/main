@@ -30,9 +30,7 @@
         "timeout": 60000
     },
     "tasks": {
-        "strategy": "dedicated-process",
-        "timeout": 10000,
-        "allowedModules": []
+
     },
     "scripts": {
         "allowedModules": [],
