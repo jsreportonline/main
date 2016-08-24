@@ -21,10 +21,16 @@
     "jsreport-data": "1.0.1",
     "jsreport-express": "1.0.2",
     "jsreport-handlebars": "1.0.1",
-    "jsreport-mongodb-store": "0.4.1",
     "jsreport-phantom-pdf": "1.0.3",
     "jsreport-studio": "1.0.7",
     "jsreport-templates": "1.0.1",
-    "winston": "^2.2.0"
+    "listener-collection": "^0.1.0",
+    "mongodb": "^2.2.8",
+    "q": "1.4.1",
+    "winston": "2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "3.3.1",
+    "standard": "7.1.2"
   }
 }

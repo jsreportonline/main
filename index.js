@@ -1,7 +1,5 @@
-var spawn = require('child_process').spawn
 var exec = require('child_process').exec
 var winston = require('winston')
-var path = require('path')
 
 var jsreport = require('jsreport-core')({ loadConfig: true })
 
@@ -11,7 +9,7 @@ jsreport.use(require('jsreport-express')())
 jsreport.use(require('jsreport-phantom-pdf')())
 jsreport.use(require('jsreport-studio')())
 jsreport.use(require('jsreport-handlebars')())
-jsreport.use(require('jsreport-mongodb-store')())
+jsreport.use(require('./mongo/mongo')())
 
 jsreport.logger.add(winston.transports.File, {
   name: 'main',
@@ -21,7 +19,7 @@ jsreport.logger.add(winston.transports.File, {
   level: 'debug'
 })
 
-jsreport.init().then(function() {
+jsreport.init().then(function () {
   var out = ''
   jsreport.express.app.get('/api/foo', function (req, res) {
     var child = exec('ls', { cwd: '/run-data' }, function (err, stdout, stderr) {
