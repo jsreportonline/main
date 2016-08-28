@@ -2,24 +2,24 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "name": "run",
+      "name": "docker",
       "host": {
-        "sourcePath": "/var/run"
+        "sourcePath": "/var/run/docker.sock"
       }
     },
     {
-      "name": "nginx-proxy-conf",
+      "name": "nginx-conf",
       "host": {
-        "sourcePath": "/var/app/current/proxy/conf.d"
+        "sourcePath": "/var/app/current/nginx.conf"
       }
     }
   ],
   "containerDefinitions": [
     {
       "name": "main",
+      "memory": 128,
       "image": "jsreportonline/main",
       "essential": true,
-      "memory": 128,
       "portMappings": [
         {
           "hostPort": 5488,
@@ -27,24 +27,38 @@
         }
       ],
       "links": [
-        "tasks"
+        "tasks",
+        "phantom-pdf"
       ],
       "mountPoints": [
         {
-          "sourceVolume": "run",
-          "containerPath": "/run-data"
+          "sourceVolume": "docker",
+          "containerPath": "/var/run/docker.sock"
         }
       ]
     },
     {
       "name": "tasks",
+      "memory": 64,
       "image": "jsreportonline/tasks",
       "essential": true,
-      "memory": 64,
       "portMappings": [
         {
           "hostPort": 3000,
           "containerPort": 3000
+        }
+      ],
+      "mountPoints": []
+    },
+    {
+      "name": "phantom-pdf",
+      "memory": 64,
+      "image": "jsreportonline/phantom-pdf",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 4000,
+          "containerPort": 4000
         }
       ],
       "mountPoints": []
@@ -65,8 +79,8 @@
       ],
       "mountPoints": [
         {
-          "sourceVolume": "nginx-proxy-conf",
-          "containerPath": "/etc/nginx/conf.d",
+          "sourceVolume": "nginx-conf",
+          "containerPath": "/etc/nginx/nginx.conf",
           "readOnly": true
         }
       ]

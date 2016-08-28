@@ -17,21 +17,31 @@
   },
   "homepage": "https://github.com/jsreportonline/main#readme",
   "dependencies": {
+    "client-sessions": "0.7.0",
+    "ejs": "2.5.1",
+    "jsreport-authentication": "1.0.3",
     "jsreport-core": "1.0.6",
     "jsreport-data": "1.0.1",
+    "jsreport-debug": "1.0.2",
     "jsreport-express": "1.0.2",
+    "jsreport-fs-store": "1.0.5",
     "jsreport-handlebars": "1.0.1",
     "jsreport-phantom-pdf": "jsreport/jsreport-phantom-pdf",
     "jsreport-studio": "1.0.7",
     "jsreport-templates": "1.0.1",
-    "listener-collection": "^0.1.0",
-    "mongodb": "^2.2.8",
+    "listener-collection": "0.1.0",
+    "mongodb": "2.2.8",
+    "passport": "0.3.2",
+    "passport-http": "0.3.0",
+    "passport-local": "1.0.0",
+    "password-hash": "1.2.2",
     "q": "1.4.1",
     "request": "2.74.0",
+    "validator": "5.5.0",
     "winston": "2.2.0"
   },
   "devDependencies": {
     "eslint": "3.3.1",
-    "standard": "7.1.2"
+    "standard": "8.0.0"
   }
 }
