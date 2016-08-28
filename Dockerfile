@@ -3,7 +3,7 @@ MAINTAINER Jan Blaha
 EXPOSE 5488
 
 RUN apt-get update && apt-get install -y sudo
-RUN apt-get install docker.io -y
+RUN apt-get install docker-engine -y
 
 RUN npm install npm -g
 
