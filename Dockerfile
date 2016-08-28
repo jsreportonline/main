@@ -6,8 +6,6 @@ RUN apt-get update && apt-get install -y sudo
 RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN apt-get install -y nodejs docker.io
 
-RUN npm install npm -g
-
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
