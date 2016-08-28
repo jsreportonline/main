@@ -4,7 +4,7 @@ EXPOSE 5488
 
 RUN apt-get update && apt-get install -y sudo
 RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-RUN apt-get install -y nodejs docker.io
+RUN apt-get install -y nodejs docker.io build-essential
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
