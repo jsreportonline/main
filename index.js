@@ -61,7 +61,7 @@ jsreport.init().then(function () {
   jsreport.express.app.get('/ping', (req, res) => {
     request({
       method: 'GET',
-      url: 'http://localhost:3000'
+      url: 'http://172.18.0.1:1000'
     }).pipe(res)
   })
   /* for (var key in jsreport.documentStore.collections) {
