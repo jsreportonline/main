@@ -58,6 +58,25 @@ jsreport.init().then(function () {
     })
   })
 
+  var ip
+  jsreport.express.app.get('/ip', (req, res) => {
+    var cmd = 'docker inspect --format \'{{ .NetworkSettings.IPAddress }}\' "test"'
+    exec(cmd, (err, stdout, stderr) => {
+      if (err) {
+        return res.send(err)
+      }
+      ip = stdout.toString()
+      res.send(stdout)
+    })
+  })
+
+  jsreport.express.app.get('/pong', (req, res) => {
+    request({
+      method: 'GET',
+      url: 'http://' + ip + ':1000'
+    }).pipe(res)
+  })
+
   jsreport.express.app.get('/ping', (req, res) => {
     request({
       method: 'GET',
