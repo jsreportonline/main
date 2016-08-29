@@ -60,29 +60,9 @@ jsreport.init().then(function () {
 
   jsreport.express.app.get('/ping', (req, res) => {
     request({
-      method: 'POST',
-      url: 'http://localhost:1000',
-      body: {'inputs':{'template':{'__entitySet':'templates','shortid':'SyFCEdWo','name':'test','recipe':'phantom-pdf','engine':'handlebars','__isDirty':'true','__isNew':'true','__name':'test','content':'Hello world','pathToEngine':'e:\\work\\jsreportonline\\main\\node_modules\\jsreport-handlebars\\lib\\handlebarsEngine.js'},'data':{},'engine':'e:\\work\\jsreportonline\\tasks\\scripts\\handlebarsEngine.js','appDirectory':'e:\\work\\jsreportonline\\main','rootDirectory':'e:\\work\\jsreportonline\\main\\','parentModuleDirectory':'e:\\work\\jsreportonline\\main','tasks':{'workerUrl':'http://localhost:3000','scriptManager':{'options':'[Circular ~.inputs.tasks]'},'strategy':'dedicated-process','tempDirectory':'C:\\Users\\JANBLA~1\\AppData\\Local\\Temp\\jsreport-temp','nativeModules':[{'globalVariableName':'handlebars','module':'e:\\work\\jsreportonline\\main\\node_modules\\handlebars'}]}},'options':{'execModulePath':'e:\\work\\jsreportonline\\tasks\\scripts\\engineScript.js'}},
-      json: true
-    }, function (err, httpResponse, body) {
-      if (err) {
-        return res.send(err)
-      }
-
-      if (!body || httpResponse.statusCode !== 200) {
-        return res.send(new Error(body || 'Executing script failed'))
-      }
-
-      if (body.error) {
-        var e = new Error()
-        e.message = body.error.message
-        e.stack = body.error.stack
-        e.weak = true
-        return res.send(e)
-      }
-
-      res.send(body)
-    })
+      method: 'GET',
+      url: 'http://localhost:3000'
+    }).pipe(res)
   })
   /* for (var key in jsreport.documentStore.collections) {
     var col = jsreport.documentStore.collections[key]
