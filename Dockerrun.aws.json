@@ -12,6 +12,12 @@
       "host": {
         "sourcePath": "/var/app/current/nginx.conf"
       }
+    },
+    {
+      "name": "development",
+      "host": {
+        "sourcePath": "/development"
+      }
     }
   ],
   "containerDefinitions": [
@@ -34,6 +40,10 @@
         {
           "sourceVolume": "docker",
           "containerPath": "/var/run/docker.sock"
+        },
+        {
+          "sourceVolume": "development",
+          "containerPath": "/usr/src/app/scripts"
         }
       ]
     },
@@ -42,6 +52,7 @@
       "memory": 64,
       "image": "jsreportonline/tasks",
       "essential": true,
+      "readonlyRootFilesystem": true,
       "portMappings": [
         {
           "hostPort": 3000,

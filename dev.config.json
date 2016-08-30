@@ -28,10 +28,10 @@
         "timeout": 60000
     },
     "tasks": {
-
+        "allowedModules": "*"
     },
     "scripts": {
-        "allowedModules": [],
+        "allowedModules": "*",
         "timeout": 60000
     }
 }
