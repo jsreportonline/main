@@ -28,7 +28,7 @@
     "jsreport-handlebars": "1.0.1",
     "jsreport-phantom-pdf": "jsreport/jsreport-phantom-pdf",
     "jsreport-scripts": "1.0.3",
-    "jsreport-studio": "jsreport/jsreport-studio",
+    "jsreport-studio": "1.0.8",
     "jsreport-templates": "1.0.1",
     "listener-collection": "0.1.0",
     "mongodb": "2.2.8",
