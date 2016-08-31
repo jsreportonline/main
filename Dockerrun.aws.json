@@ -28,7 +28,9 @@
       ],
       "links": [
         "tasks",
-        "phantom-pdf"
+        "tasks2",
+        "phantom-pdf",
+        "phantom-pdf2"
       ],
       "mountPoints": [
         {
@@ -52,6 +54,20 @@
       "mountPoints": []
     },
     {
+      "name": "tasks2",
+      "memory": 64,
+      "image": "jsreportonline/tasks",
+      "essential": true,
+      "readonlyRootFilesystem": true,
+      "portMappings": [
+        {
+          "hostPort": 3001,
+          "containerPort": 3000
+        }
+      ],
+      "mountPoints": []
+    },
+    {
       "name": "phantom-pdf",
       "memory": 64,
       "image": "jsreportonline/phantom-pdf",
@@ -60,6 +76,20 @@
       "portMappings": [
         {
           "hostPort": 4000,
+          "containerPort": 4000
+        }
+      ],
+      "mountPoints": []
+    },
+    {
+      "name": "phantom-pdf2",
+      "memory": 64,
+      "image": "jsreportonline/phantom-pdf",
+      "essential": true,
+      "readonlyRootFilesystem": false,
+      "portMappings": [
+        {
+          "hostPort": 4001,
           "containerPort": 4000
         }
       ],
