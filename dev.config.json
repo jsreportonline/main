@@ -16,7 +16,7 @@
         }
     },
     "connectionString": {
-        "name": "fs",
+        "name": "mongo-test",
         "address": "localhost",
         "databaseName" : "test"
     },

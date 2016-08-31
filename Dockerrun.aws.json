@@ -12,12 +12,6 @@
       "host": {
         "sourcePath": "/var/app/current/nginx.conf"
       }
-    },
-    {
-      "name": "development",
-      "host": {
-        "sourcePath": "/development"
-      }
     }
   ],
   "containerDefinitions": [
@@ -40,10 +34,6 @@
         {
           "sourceVolume": "docker",
           "containerPath": "/var/run/docker.sock"
-        },
-        {
-          "sourceVolume": "development",
-          "containerPath": "/usr/src/app/scripts"
         }
       ]
     },
@@ -66,6 +56,7 @@
       "memory": 64,
       "image": "jsreportonline/phantom-pdf",
       "essential": true,
+      "readonlyRootFilesystem": false,
       "portMappings": [
         {
           "hostPort": 4000,

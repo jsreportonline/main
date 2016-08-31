@@ -20,14 +20,15 @@
     "client-sessions": "0.7.0",
     "ejs": "2.5.1",
     "jsreport-authentication": "1.0.3",
-    "jsreport-core": "1.0.6",
+    "jsreport-core": "jsreport/jsreport-core",
     "jsreport-data": "1.0.1",
     "jsreport-debug": "1.0.2",
     "jsreport-express": "1.0.2",
     "jsreport-fs-store": "1.0.5",
     "jsreport-handlebars": "1.0.1",
     "jsreport-phantom-pdf": "jsreport/jsreport-phantom-pdf",
-    "jsreport-studio": "1.0.7",
+    "jsreport-scripts": "1.0.3",
+    "jsreport-studio": "jsreport/jsreport-studio",
     "jsreport-templates": "1.0.1",
     "listener-collection": "0.1.0",
     "mongodb": "2.2.8",
@@ -42,6 +43,9 @@
   },
   "devDependencies": {
     "eslint": "3.3.1",
-    "standard": "8.0.0"
+    "mocha": "3.0.2",
+    "should": "11.1.0",
+    "standard": "8.0.0",
+    "supertest": "2.0.0"
   }
 }
