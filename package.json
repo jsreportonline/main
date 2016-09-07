@@ -49,6 +49,7 @@
     "passport-http": "0.3.0",
     "passport-local": "1.0.0",
     "password-hash": "1.2.2",
+    "phantomjs-exact-2-1-1": "0.0.1",
     "q": "1.4.1",
     "request": "2.74.0",
     "validator": "5.5.0",
