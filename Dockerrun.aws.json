@@ -17,6 +17,7 @@
   "containerDefinitions": [
     {
       "name": "main",
+      "cpu": 128,
       "memory": 128,
       "image": "jsreportonline/main",
       "essential": true,
@@ -42,6 +43,7 @@
     {
       "name": "tasks",
       "memory": 64,
+      "cpu": 222,
       "image": "jsreportonline/tasks",
       "essential": true,
       "readonlyRootFilesystem": true,
@@ -56,6 +58,7 @@
     {
       "name": "tasks2",
       "memory": 64,
+      "cpu": 222,
       "image": "jsreportonline/tasks",
       "essential": true,
       "readonlyRootFilesystem": true,
@@ -70,6 +73,7 @@
     {
       "name": "phantom-pdf",
       "memory": 64,
+      "cpu": 222,
       "image": "jsreportonline/phantom-pdf",
       "essential": true,
       "readonlyRootFilesystem": false,
@@ -84,6 +88,7 @@
     {
       "name": "phantom-pdf2",
       "memory": 64,
+      "cpu": 222,
       "image": "jsreportonline/phantom-pdf",
       "essential": true,
       "readonlyRootFilesystem": false,
@@ -98,6 +103,7 @@
     {
       "name": "nginx-proxy",
       "image": "nginx",
+      "cpu": 8,
       "essential": true,
       "memory": 64,
       "portMappings": [
