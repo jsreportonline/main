@@ -16,6 +16,7 @@ RUN npm install
 RUN mkdir /run-data
 
 COPY . /usr/src/app
+COPY . /usr/src/app/patch
 
 EXPOSE 5488
 CMD [ "node", "index.js" ]
