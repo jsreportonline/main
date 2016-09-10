@@ -6,8 +6,10 @@ process.env = {
   debug: 'jsreport',
   NODE_ENV: 'development',
   tasks: {
-    workerHost: 'localhost',
-    workerPorts: '3000'
+    workerUrls: 'localhost:3000'
+  },
+  phantom: {
+    workerUrls: 'localhost:4000'
   }
 }
 

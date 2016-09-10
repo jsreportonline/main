@@ -32,6 +32,6 @@
     },
     "scripts": {
         "allowedModules": "*",
-        "timeout": 60000
+        "timeout": 1000
     }
 }

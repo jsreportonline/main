@@ -18,7 +18,7 @@
     {
       "name": "main",
       "cpu": 128,
-      "memory": 128,
+      "memory": 512,
       "image": "jsreportonline/main",
       "essential": true,
       "portMappings": [
@@ -29,7 +29,6 @@
       ],
       "links": [
         "tasks",
-        "tasks2",
         "phantom-pdf",
         "phantom-pdf2"
       ],
@@ -42,7 +41,7 @@
     },
     {
       "name": "tasks",
-      "memory": 64,
+      "memory": 2048,
       "cpu": 222,
       "image": "jsreportonline/tasks",
       "essential": true,
@@ -56,23 +55,8 @@
       "mountPoints": []
     },
     {
-      "name": "tasks2",
-      "memory": 64,
-      "cpu": 222,
-      "image": "jsreportonline/tasks",
-      "essential": true,
-      "readonlyRootFilesystem": true,
-      "portMappings": [
-        {
-          "hostPort": 3001,
-          "containerPort": 3000
-        }
-      ],
-      "mountPoints": []
-    },
-    {
       "name": "phantom-pdf",
-      "memory": 64,
+      "memory": 512,
       "cpu": 222,
       "image": "jsreportonline/phantom-pdf",
       "essential": true,
@@ -87,7 +71,7 @@
     },
     {
       "name": "phantom-pdf2",
-      "memory": 64,
+      "memory": 512,
       "cpu": 222,
       "image": "jsreportonline/phantom-pdf",
       "essential": true,

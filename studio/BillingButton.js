@@ -1,0 +1,14 @@
+import React, { Component } from 'react'
+import Studio from 'jsreport-studio'
+
+export default class ReportsButton extends Component {
+  openBilling () {
+    Studio.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' })
+  }
+
+  render () {
+    return <div onClick={() => this.openBilling()} className='toolbar-button'>
+      <i className='fa fa-usd' /> {Math.round(Studio.authentication.user.timeSpent / 1000)} / {Studio.authentication.user.creditsAvailable}
+    </div>
+  }
+}
