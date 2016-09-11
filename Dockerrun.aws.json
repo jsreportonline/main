@@ -30,7 +30,8 @@
       "links": [
         "tasks",
         "phantom-pdf",
-        "phantom-pdf2"
+        "phantom-pdf2",
+        "wkhtmltopdf"
       ],
       "mountPoints": [
         {
@@ -41,7 +42,7 @@
     },
     {
       "name": "tasks",
-      "memory": 2048,
+      "memory": 512,
       "cpu": 222,
       "image": "jsreportonline/tasks",
       "essential": true,
@@ -80,6 +81,21 @@
         {
           "hostPort": 4001,
           "containerPort": 4000
+        }
+      ],
+      "mountPoints": []
+    },
+    {
+      "name": "wkhtmltopdf",
+      "memory": 512,
+      "cpu": 222,
+      "image": "jsreportonline/wkhtmltopdf",
+      "essential": true,
+      "readonlyRootFilesystem": false,
+      "portMappings": [
+        {
+          "hostPort": 5001,
+          "containerPort": 5000
         }
       ],
       "mountPoints": []
