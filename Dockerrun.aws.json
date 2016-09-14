@@ -31,7 +31,8 @@
         "tasks",
         "phantom-pdf",
         "phantom-pdf2",
-        "wkhtmltopdf"
+        "wkhtmltopdf",
+        "fop"
       ],
       "mountPoints": [
         {
@@ -96,6 +97,21 @@
         {
           "hostPort": 5001,
           "containerPort": 5000
+        }
+      ],
+      "mountPoints": []
+    },
+    {
+      "name": "fop",
+      "memory": 512,
+      "cpu": 222,
+      "image": "jsreportonline/fop-pdf",
+      "essential": true,
+      "readonlyRootFilesystem": false,
+      "portMappings": [
+        {
+          "hostPort": 6000,
+          "containerPort": 6000
         }
       ],
       "mountPoints": []

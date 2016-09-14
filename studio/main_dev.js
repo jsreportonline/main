@@ -20,6 +20,4 @@ Studio.initializeListeners.push(async () => {
     onClick={() => Studio.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' })}>
     <i className='fa fa-usd' /> Billing
   </div>, 'settings')
-
-  Studio.openTab({ key: 'Reports', editorComponentKey: 'reports', title: 'Reports' })
 })

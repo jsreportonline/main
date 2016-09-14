@@ -18,7 +18,7 @@
     "connectionString": {
         "name": "mongo-test",
         "address": "localhost",
-        "databaseName" : "test"
+        "databaseName" : "multitenant"
     },
     "httpPort": 5488,
     "httpsPort": null,

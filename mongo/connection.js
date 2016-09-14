@@ -62,6 +62,6 @@ module.exports = function (providerConfiguration, cb) {
       providerConfiguration.logger.info('Connection successful')
     }
 
-    cb(err, db.db(providerConfiguration.databaseName))
+    cb(err, !err ? db.db(providerConfiguration.databaseName) : null)
   })
 }
