@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "jsreport-studio-build",
-    "test": "mocha test"
+    "test": "mocha --timeout 8000 test"
   },
   "homepage": "https://github.com/jsreportonline/main#readme",
   "dependencies": {
@@ -55,6 +55,8 @@
     "phantomjs-exact-2-1-1": "0.0.1",
     "q": "1.4.1",
     "request": "2.74.0",
+    "sendgrid": "4.3.0",
+    "uuid": "2.0.2",
     "validator": "5.5.0",
     "winston": "2.2.0"
   },

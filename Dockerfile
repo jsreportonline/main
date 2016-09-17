@@ -14,6 +14,7 @@ COPY package.json /usr/src/app/
 RUN npm install
 
 RUN mkdir /run-data
+RUN mkdir /tmp/jsreport
 
 COPY . /usr/src/app
 COPY patch /usr/src/app

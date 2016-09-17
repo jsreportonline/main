@@ -8,8 +8,25 @@ process.env = {
   tasks: {
     workerUrls: 'localhost:3000'
   },
+  'connectionString': {
+    databaseName: 'test',
+    rootDatabaseName: 'test-root'
+  },
+  'main-db': {
+    name: "test"
+  },
   phantom: {
     workerUrls: 'localhost:4000'
+  },
+  wkhtmltopdf: {
+    workerUrls: 'localhost:4000'
+  },
+  'fop': {
+    workerUrls: 'localhost:4000'
+  },
+  aws: {
+    accessKeyId: 'foo',
+    secretAccessKey: 'foo'
   }
 }
 
@@ -17,7 +34,11 @@ describe('routes', () => {
   var jsreport
 
   beforeEach((done) => {
-    init().then((j) => (jsreport = j)).then(() => done()).catch(done)
+    init().then((j) => (jsreport = j)).then(() => {
+      jsreport.documentStore.provider.db.db(jsreport.options.connectionString.databaseName).dropDatabase()
+      jsreport.documentStore.provider.db.db(jsreport.options.connectionString.rootDatabaseName).dropDatabase()
+      done()
+    }).catch(done)
   })
 
   afterEach(() => jsreport.express.server.close())
@@ -42,18 +63,29 @@ describe('routes', () => {
     request(jsreport.express.app)
       .post('/login')
       .type('form')
-      .send({ username: 'xxxx@test.cz' })
-      .end(function (err, res) {
-        if (err) {
-          return done(err)
-        }
-
-        request(jsreport.express.app).get(res.header.location)
-          .set('cookie', res.headers['set-cookie'])
-          .expect('location', /sign/)
-          .expect(302, done)
-      })
+      .send({ username: 'xxxx@test.cz', password: 'xxx' })
+      .expect('location', /sign/)
+      .expect(302, done)
   })
+
+  it('should auto login after register', (done) => {
+      request(jsreport.express.app).post('/register')
+        .type('form')
+        .send({ username: 'test@test.cz', name: 'joj', password: 'password', passwordConfirm: 'password', terms: true })
+        .expect('location', '/sign')
+        .end((err, res) => {
+          if (err) {
+            return done(err)
+          }
+
+          request(jsreport.express.app)
+            .get('/')
+            .set('cookie', res.headers['set-cookie'])
+            .expect('location', /joj/)
+            .expect(302, done)
+        })
+    })
+
 
   describe('with registered tenant', () => {
     beforeEach((done) => {
@@ -63,7 +95,7 @@ describe('routes', () => {
         .expect(302, done)
     })
 
-    it('GET login and /odata => 200', (done) => {
+    it('POST login and /odata => 200', (done) => {
       request(jsreport.express.app).post('/login')
         .type('form')
         .send({ username: 'test@test.cz', password: 'password' })
@@ -102,7 +134,7 @@ describe('routes', () => {
       request(jsreport.express.app)
         .get('/odata/templates')
         .set('host', 'joj.local.net')
-        .set('Authorization', `Basic ${new Buffer('test@test.com:password').toString('base64')}`)
+        .set('Authorization', `Basic ${new Buffer('test@test.cz:password').toString('base64')}`)
         .expect(200, done)
     })
   })

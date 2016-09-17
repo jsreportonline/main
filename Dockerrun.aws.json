@@ -12,6 +12,12 @@
       "host": {
         "sourcePath": "/var/app/current/nginx.conf"
       }
+    },
+    {
+      "name": "temp",
+      "host": {
+        "sourcePath": "/tmp/jsreport"
+      }
     }
   ],
   "containerDefinitions": [
@@ -38,8 +44,16 @@
         {
           "sourceVolume": "docker",
           "containerPath": "/var/run/docker.sock"
+        },
+        {
+          "sourceVolume": "temp",
+          "containerPath": "/temp"
         }
-      ]
+      ],
+      "environment": [{
+        "name": "tempDirectory",
+        "value": "/temp/"
+      }]
     },
     {
       "name": "tasks",
@@ -69,7 +83,14 @@
           "containerPort": 4000
         }
       ],
-      "mountPoints": []
+      "environment": [{
+        "name": "temp",
+        "value": "/temp/"
+      }],
+      "mountPoints": [ {
+        "sourceVolume": "temp",
+        "containerPath": "/temp"
+      }]
     },
     {
       "name": "phantom-pdf2",
@@ -84,7 +105,14 @@
           "containerPort": 4000
         }
       ],
-      "mountPoints": []
+      "environment": [{
+        "name": "temp",
+        "value": "/temp/"
+      }],
+      "mountPoints": [ {
+        "sourceVolume": "temp",
+        "containerPath": "/temp"
+      }]
     },
     {
       "name": "wkhtmltopdf",
@@ -92,14 +120,21 @@
       "cpu": 222,
       "image": "jsreportonline/wkhtmltopdf",
       "essential": true,
-      "readonlyRootFilesystem": false,
+      "readonlyRootFilesystem": true,
       "portMappings": [
         {
           "hostPort": 5001,
           "containerPort": 5000
         }
       ],
-      "mountPoints": []
+      "environment": [{
+        "name": "temp",
+        "value": "/temp/"
+      }],
+      "mountPoints": [ {
+        "sourceVolume": "temp",
+        "containerPath": "/temp"
+      }]
     },
     {
       "name": "fop",
@@ -114,7 +149,14 @@
           "containerPort": 6000
         }
       ],
-      "mountPoints": []
+      "environment": [{
+        "name": "temp",
+        "value": "/temp/"
+      }],
+      "mountPoints": [ {
+        "sourceVolume": "temp",
+        "containerPath": "/temp"
+      }]
     },
     {
       "name": "nginx-proxy",
