@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>jsreportonline</title>
+        <link rel="shortcut icon" href="/favicon.ico">
+        <meta name="author" content="Jan Blaha">
+        <meta name="description" content="jsreportonline - javascript business reports">
+        <style>
+            .login-page {
+                width: 360px;
+                padding: 8% 0 0;
+                margin: auto;
+            }
+
+            .form {
+                position: relative;
+                z-index: 1;
+                background: #FFFFFF;
+                max-width: 360px;
+                margin: 0 auto 100px;
+                padding: 45px;
+                text-align: center;
+                box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+            }
+
+            .form input, label {
+                font-family: "Roboto", sans-serif;
+                outline: 0;
+                background: #f2f2f2;
+                width: 100%;
+                border: 0;
+                margin: 0 0 15px;
+                padding: 15px;
+                box-sizing: border-box;
+                font-size: 14px;
+            }
+
+            .form button {
+                font-family: "Roboto", sans-serif;
+                text-transform: uppercase;
+                outline: 0;
+                background: #1C97EA;
+                width: 100%;
+                border: 0;
+                padding: 15px;
+                color: #FFFFFF;
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+            .form button:hover, .form button:active, .form button:focus {
+                background: #007ACC;
+            }
+
+            h1 {
+                font-family: "Roboto", sans-serif;
+                font-weight: normal;
+                margin-top: 0px;
+                color: #007ACC;
+                font-size: 24px;
+            }
+
+            .form-group {
+                padding-bottom: 10px
+            }
+
+            body {
+                background: #1C97EA; /* fallback for old browsers */
+                background: linear-gradient(to left, rgba(27, 146, 229, 0.27), rgba(0, 155, 255, 0.65));
+                font-family: "Roboto", sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-page">
+            <div class="form" id="login-box" style="display:<%= !viewModel.type ? "block" : "none" %>">
+                <h1>jsreportonline</h1>
+
+                <form class="login-form" id="loginForm" method="POST" action="/login">
+                    <input type="text" id="username" name="username" placeholder="username" />
+                    <input type="password" name="password" type="password" placeholder="password" />
+
+                    <% if (viewModel.login) { %>
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.login %></strong>
+                    </div>
+                    <% } %>
+
+                    <button>login</button>
+                </form>
+
+                <div style="display: block; margin-top:20px">
+                    <a style="float:left" href="#" id="reset">reset password</a>
+                    <a style="float:right" href="#" id="create">sign up</a>
+                </div>
+            </div>
+
+            <div class="form" id="create-box" style="display:<%= viewModel.type === "register" ? "block" : "none" %>">
+                <h1>jsreportonline sign up</h1>
+
+                <form class="login-form" action="/register" method="POST">
+                    <input class="text" placeholder="e-mail" type="text" name="username"
+                           value="<%= viewModel.previousUsername || '' %>">
+
+                    <% if (viewModel.username) { %>
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.username %></strong>
+                    </div>
+                    <% } %>
+
+                    <input class="text" placeholder="subdomain name" type="text" name="name"
+                           value="<%= viewModel.previousName || '' %>">
+                    <% if (viewModel.name) { %>
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.name %></strong>
+                    </div>
+                    <% } %>
+
+                    <input class="text" placeholder="password" name="password" type="password" value="">
+                    <% if (viewModel.password) { %>
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.password %></strong>
+                    </div>
+                    <% } %>
+
+                    <input class="text" placeholder="password confirmation" name="passwordConfirm" type="password"
+                           value="">
+
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.passwordConfirm %></strong>
+                    </div>
+
+                    <label style="display: block">
+                        <input name="terms" id="terms" type="checkbox">
+                        I agree with <a href="/terms" target="_blank">terms and conditions</a>
+                    </label>
+
+                    <% if (viewModel.terms) { %>
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.terms %></strong>
+                    </div>
+                    <% } %>
+                    <button>Create account</button>
+                </form>
+            </div>
+
+            <div class="form" id="reset-box" style="display:<%= viewModel.type === "reset" ? "block" : "none" %>">
+                <h1>jsreportonline password reset</h1>
+
+                <form class="login-form" id="resetForm" method="POST" action="/reset">
+                    <% if (!viewModel.resetMessage) { %>
+                    <input type="text" id="username" name="username" placeholder="username" />
+                    <button>reset</button>
+                    <% } else { %>
+                    <span><%= viewModel.resetMessage %></span>
+                    <% } %>
+                </form>
+            </div>
+
+            <div class="form" id="perform-reset-box"
+                 style="display:<%= viewModel.type === "performReset" ? "block" : "none" %>">
+                <h1>jsreportonline password reset</h1>
+                <form class="login-form" id="performReset" method="POST" action="/change-password">
+                    <input type="hidden" id="resetToken" name="resetToken" value="<%= viewModel.resetToken %>">
+                    <input id="password" name="password" type="password" placeholder="new password" />
+                    <% if (viewModel.password) { %>
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.password %></strong>
+                    </div>
+                    <% } %>
+                    <input id="passwordConfirm" name="passwordConfirm" type="password" placeholder="password confirmation" />
+                    <% if (viewModel.passwordConfirm) { %>
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.passwordConfirm %></strong>
+                    </div>
+                    <% } %>
+                    <% if (viewModel.resetMessage) { %>
+                    <div class="form-group" style="color: red;">
+                        <strong><%= viewModel.resetMessage %></strong>
+                    </div>
+                    <% } %>
+                    <button>change password</button>
+                </form>
+            </div>
+
+
+        </div>
+
+        <script>
+            document.getElementById('reset').onclick = function (e) {
+                e.preventDefault()
+
+                document.getElementById('login-box').style.display = 'none'
+                document.getElementById('reset-box').style.display = 'block'
+                document.getElementById('create-box').style.display = 'none'
+            }
+
+            document.getElementById('create').onclick = function (e) {
+                e.preventDefault()
+
+                document.getElementById('login-box').style.display = 'none'
+                document.getElementById('reset-box').style.display = 'none'
+                document.getElementById('create-box').style.display = 'block'
+            }
+        </script>
+    </body>
+</html>
