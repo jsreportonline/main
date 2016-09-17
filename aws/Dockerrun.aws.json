@@ -14,6 +14,12 @@
       }
     },
     {
+      "name": "html",
+      "host": {
+        "sourcePath": "/var/app/current/html"
+      }
+    },
+    {
       "name": "temp",
       "host": {
         "sourcePath": "/tmp/jsreport"
@@ -177,6 +183,11 @@
         {
           "sourceVolume": "nginx-conf",
           "containerPath": "/etc/nginx/nginx.conf",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "html",
+          "containerPath": "/etc/nginx/html",
           "readOnly": true
         }
       ]

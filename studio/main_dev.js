@@ -1,6 +1,7 @@
 import Studio from 'jsreport-studio'
 import BillingEditor from './BillingEditor.js'
 import BillingButton from './BillingButton.js'
+import ChangePasswordSettingsButton from './ChangePasswordSettingsButton.js'
 
 Studio.addEditorComponent('billing', BillingEditor)
 
@@ -20,4 +21,7 @@ Studio.initializeListeners.push(async () => {
     onClick={() => Studio.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' })}>
     <i className='fa fa-usd' /> Billing
   </div>, 'settings')
+
+  Studio.addToolbarComponent(ChangePasswordSettingsButton, 'settings')
 })
+
