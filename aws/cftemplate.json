@@ -1,0 +1,221 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "joec1": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "DisableApiTermination": "false",
+        "InstanceInitiatedShutdownBehavior": "stop",
+        "ImageId": "ami-aea9d3dd",
+        "InstanceType": "t2.small",
+        "IamInstanceProfile" : "jo-admin",
+        "KeyName": "jsreportonline-key",
+        "Monitoring": "false",
+        "NetworkInterfaces": [
+          {
+            "DeleteOnTermination": "true",
+            "DeviceIndex": 0,
+            "SubnetId": "subnet-f0027394",
+            "GroupSet": [
+              "sg-39eef45e"
+            ],
+            "AssociatePublicIpAddress": "true"
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash -x\n",
+                "mkdir -p ~/nginx/html\n",
+                "aws s3 cp s3://",
+                {
+                  "Ref": "Configuration"
+                },
+                " ~/configuration.env\n",
+                "echo \"ip\"=",
+                "curl http://169.254.169.254/latest/meta-data/local-ipv4 >> ~/configuration.env\n",
+                "iptables -A OUTPUT -d 169.254.169.254 -j DROP\n",
+                "aws s3 cp s3://",
+                {
+                  "Ref": "Compose"
+                },
+                " ~/docker-compose.yml\n",
+                "aws s3 cp s3://",
+                {
+                  "Ref": "nginx"
+                },
+                " ~/nginx/nginx.conf\n",
+                "aws s3 cp s3://",
+                {
+                  "Ref": "429"
+                },
+                " ~/nginx/html/429.html\n",
+                "export COMPOSE_HTTP_TIMEOUT=600\n",
+                "cd ~; docker-compose up -d",
+                "\n"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "joec2": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "DisableApiTermination": "false",
+        "InstanceInitiatedShutdownBehavior": "stop",
+        "ImageId": "ami-aea9d3dd",
+        "InstanceType": "t2.small",
+        "IamInstanceProfile" : "jo-admin",
+        "KeyName": "jsreportonline-key",
+        "Monitoring": "false",
+        "NetworkInterfaces": [
+          {
+            "DeleteOnTermination": "true",
+            "DeviceIndex": 0,
+            "SubnetId": "subnet-f0027394",
+            "GroupSet": [
+              "sg-39eef45e"
+            ],
+            "AssociatePublicIpAddress": "true"
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash -x\n",
+                "curl http://169.254.169.254/latest/meta-data/local-ipv4 >> ~/ip\n",
+                "mkdir -p ~/nginx/html\n",
+                "mkdir -p ~/nginx/html\n",
+                "aws s3 cp s3://",
+                {
+                  "Ref": "Configuration"
+                },
+                " ~/configuration.env\n",
+                "aws s3 cp s3://",
+                {
+                  "Ref": "Compose"
+                },
+                " ~/docker-compose.yml\n",
+                "aws s3 cp s3://",
+                {
+                  "Ref": "nginx"
+                },
+                " ~/nginx/nginx.conf\n",
+                "aws s3 cp s3://",
+                {
+                  "Ref": "429"
+                },
+                " ~/nginx/html/429.html\n",
+                "export COMPOSE_HTTP_TIMEOUT=600\n",
+                "cd ~; docker-compose up -d",
+                "\n"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "jolb": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "Scheme" : "internet-facing",
+        "Subnets" : [ "subnet-9ced5ec4", "subnet-e7027383"],
+        "SecurityGroups": ["sg-b0f4eed7"]
+      }
+    },
+    "jotghttp" : {
+      "Type" : "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties" : {
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckPath": "/api/ping",
+        "Name": "jotghttp",
+        "Port": 80,
+        "Protocol": "HTTP",
+        "Targets": [
+          { "Id":  { "Ref": "joec1" }, "Port": 80 },
+          { "Id":  { "Ref": "joec2" }, "Port": 80 }
+        ]    ,
+        "VpcId": "vpc-c52cbda1"
+      }
+    },
+    "jolistenerhttp": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [{
+          "Type": "forward",
+          "TargetGroupArn": { "Ref": "jotghttp" }
+        }],
+        "LoadBalancerArn":  { "Ref": "jolb" },
+        "Port": "80",
+        "Protocol": "HTTP"
+      }
+    },
+    "jolistenerhttps": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [{
+          "Type": "forward",
+          "TargetGroupArn": { "Ref": "jotghttp" }
+        }],
+        "LoadBalancerArn":  { "Ref": "jolb" },
+        "Port": "443",
+        "Protocol": "HTTPS",
+        "Certificates": [{ "CertificateArn": "arn:aws:acm:eu-west-1:605959770624:certificate/245b5e8a-39c3-42fd-9472-edffd3911bab"}]
+      }
+    },
+    "dns" : {
+      "Type" : "AWS::Route53::RecordSet",
+      "Properties" :
+      {
+        "Type": "A",
+        "HostedZoneId" : "Z2E1IWXWLE7RCM",
+        "Name" : "jsreportonline-test.net.",
+        "AliasTarget": {
+          "DNSName": { "Fn::GetAtt" : [ "jolb" , "DNSName" ] },
+          "HostedZoneId" : { "Fn::GetAtt" : [ "jolb" , "CanonicalHostedZoneID" ] }
+        }
+      }
+    },
+    "dnssub" : {
+      "Type" : "AWS::Route53::RecordSet",
+      "Properties" :
+      {
+        "Type": "A",
+        "HostedZoneId" : "Z2E1IWXWLE7RCM",
+        "Name" : "*.jsreportonline-test.net.",
+        "AliasTarget": {
+          "DNSName": { "Fn::GetAtt" : [ "jolb" , "DNSName" ] },
+          "HostedZoneId" : { "Fn::GetAtt" : [ "jolb" , "CanonicalHostedZoneID" ] }
+        }
+      }
+    }
+  },
+  "Description": "",
+  "Parameters" : {
+    "Configuration": {
+      "Type": "String",
+      "Default": "jsr-test/configuration.env",
+      "Description": "Configuration"
+    },
+    "Compose" : {
+      "Type" : "String",
+      "Default" : "jsr-test/docker-compose.yml",
+      "Description" : "Compose"
+    },
+    "nginx" : {
+      "Type" : "String",
+      "Default" : "jsr-test/nginx.conf",
+      "Description" : "nginx.conf"
+    },
+    "429" : {
+      "Type" : "String",
+      "Default" : "jsr-test/429.html",
+      "Description" : "nginx 429.html"
+    }
+  }
+}

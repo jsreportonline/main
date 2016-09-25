@@ -1,7 +1,7 @@
-var MongoClient = require('mongodb').MongoClient
-var querystring = require('querystring')
+const MongoClient = require('mongodb').MongoClient
+const querystring = require('querystring')
 
-module.exports = function (providerConfiguration, cb) {
+const buildConnectionString = (providerConfiguration) => {
   var connectionString = 'mongodb://'
 
   if (providerConfiguration.username) {
@@ -33,6 +33,14 @@ module.exports = function (providerConfiguration, cb) {
     connectionString += '?' + querystring.stringify(query)
   }
 
+  return connectionString
+}
+
+
+module.exports = function (providerConfiguration, cb) {
+
+  const connectionString = providerConfiguration.uri || buildConnectionString(providerConfiguration)
+
   providerConfiguration.logger.info(`Connecting mongo to ${connectionString}`)
 
   // required for azure - firewall closes idle connections, wee need to set the lower value for timeouts
@@ -58,10 +66,11 @@ module.exports = function (providerConfiguration, cb) {
   MongoClient.connect(connectionString, options, (err, db) => {
     if (err) {
       providerConfiguration.logger.error(`Connection failed ${err.stack}`)
+      return cb(err)
     } else {
       providerConfiguration.logger.info('Connection successful')
     }
 
-    cb(err, !err ? db.db(providerConfiguration.databaseName) : null)
+    cb(null, providerConfiguration.uri ? db : db.db(providerConfiguration.databaseName))
   })
 }

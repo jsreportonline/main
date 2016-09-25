@@ -1,0 +1,125 @@
+version: '2'
+
+services:
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ~/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ~/nginx/html:/etc/nginx/html
+    networks:
+      - app
+
+  main:
+    image: jsreportonline/main
+    ports:
+      - "5488:5488"
+    env_file: configuration.env
+    restart: always
+    volumes:
+      - /tmp:/tmp
+    networks:
+      - app
+
+  workers:
+    image: jsreportonline/workers
+    ports:
+      - "1000:1000"
+    env_file: configuration.env
+    restart: always
+    networks:
+      - app
+      - nt1
+      - nt2
+      - np1
+      - np2
+      - nw1
+      - nf1
+  
+  t1:
+    image: jsreportonline/tasks
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    networks:
+      - nt1
+  
+  t2:
+    image: jsreportonline/tasks
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    networks:
+      - nt2
+  
+  p1:
+    image: jsreportonline/phantom-pdf
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    networks:
+      - np1
+  
+  p2:
+    image: jsreportonline/phantom-pdf
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    networks:
+      - np2
+  
+  w1:
+    image: jsreportonline/wkhtmltopdf
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    environment:
+      - temp=/tmp
+    networks:
+      - nw1
+  
+  f1:
+    image: jsreportonline/fop-pdf
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 2568m
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    environment:
+      - temp=/tmp
+    networks:
+      - nf1
+  
+networks:
+  app:
+    driver: bridge
+  nt1:
+    driver: bridge
+  nt2:
+    driver: bridge
+  np1:
+    driver: bridge
+  np2:
+    driver: bridge
+  nw1:
+    driver: bridge
+  nf1:
+    driver: bridge    
