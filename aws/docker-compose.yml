@@ -29,12 +29,12 @@ services:
       - "1000:1000"
     env_file: configuration.env
     restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - app
       - nt1
-      - nt2
       - np1
-      - np2
       - nw1
       - nf1
   
@@ -44,21 +44,11 @@ services:
     cpu_quota: 25000
     restart: always
     mem_limit: 128m
+    container_name: t1
     volumes:
       - /tmp/jsreport-temp:/tmp
     networks:
       - nt1
-  
-  t2:
-    image: jsreportonline/tasks
-    read_only: true
-    cpu_quota: 25000
-    restart: always
-    mem_limit: 128m
-    volumes:
-      - /tmp/jsreport-temp:/tmp
-    networks:
-      - nt2
   
   p1:
     image: jsreportonline/phantom-pdf
@@ -66,21 +56,11 @@ services:
     cpu_quota: 25000
     restart: always
     mem_limit: 128m
+    container_name: p1
     volumes:
       - /tmp/jsreport-temp:/tmp
     networks:
       - np1
-  
-  p2:
-    image: jsreportonline/phantom-pdf
-    read_only: true
-    cpu_quota: 25000
-    restart: always
-    mem_limit: 128m
-    volumes:
-      - /tmp/jsreport-temp:/tmp
-    networks:
-      - np2
   
   w1:
     image: jsreportonline/wkhtmltopdf
@@ -88,6 +68,7 @@ services:
     cpu_quota: 25000
     restart: always
     mem_limit: 128m
+    container_name: w1
     volumes:
       - /tmp/jsreport-temp:/tmp
     environment:
@@ -101,6 +82,7 @@ services:
     cpu_quota: 25000
     restart: always
     mem_limit: 2568m
+    container_name: f1
     volumes:
       - /tmp/jsreport-temp:/tmp
     environment:
@@ -113,11 +95,7 @@ networks:
     driver: bridge
   nt1:
     driver: bridge
-  nt2:
-    driver: bridge
   np1:
-    driver: bridge
-  np2:
     driver: bridge
   nw1:
     driver: bridge

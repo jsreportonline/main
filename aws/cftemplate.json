@@ -34,9 +34,8 @@
                   "Ref": "Configuration"
                 },
                 " ~/configuration.env\n",
-                "echo \"ip\"=",
+                "echo -n \"ip=\" >> ~/configuration.env\n",
                 "curl http://169.254.169.254/latest/meta-data/local-ipv4 >> ~/configuration.env\n",
-                "iptables -A OUTPUT -d 169.254.169.254 -j DROP\n",
                 "aws s3 cp s3://",
                 {
                   "Ref": "Compose"
@@ -53,7 +52,8 @@
                 },
                 " ~/nginx/html/429.html\n",
                 "export COMPOSE_HTTP_TIMEOUT=600\n",
-                "cd ~; docker-compose up -d",
+                "cd ~; docker-compose pull && docker-compose up -d\n",
+                "iptables -A OUTPUT -m owner ! --uid-owner root -d 169.254.169.254 -j DROP",
                 "\n"
               ]
             ]
@@ -88,14 +88,14 @@
               "",
               [
                 "#!/bin/bash -x\n",
-                "curl http://169.254.169.254/latest/meta-data/local-ipv4 >> ~/ip\n",
-                "mkdir -p ~/nginx/html\n",
                 "mkdir -p ~/nginx/html\n",
                 "aws s3 cp s3://",
                 {
                   "Ref": "Configuration"
                 },
                 " ~/configuration.env\n",
+                "echo -n \"ip=\" >> ~/configuration.env\n",
+                "curl http://169.254.169.254/latest/meta-data/local-ipv4 >> ~/configuration.env\n",
                 "aws s3 cp s3://",
                 {
                   "Ref": "Compose"
@@ -112,7 +112,8 @@
                 },
                 " ~/nginx/html/429.html\n",
                 "export COMPOSE_HTTP_TIMEOUT=600\n",
-                "cd ~; docker-compose up -d",
+                "cd ~; docker-compose pull && docker-compose up -d\n",
+                "iptables -A OUTPUT -m owner ! --uid-owner root -d 169.254.169.254 -j DROP",
                 "\n"
               ]
             ]

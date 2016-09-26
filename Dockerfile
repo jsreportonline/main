@@ -1,11 +1,6 @@
-FROM ubuntu:latest
+FROM mhart/alpine-node
 MAINTAINER Jan Blaha
 EXPOSE 5488
-
-RUN apt-get update && apt-get install -y sudo
-RUN apt-get install -y  curl
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-RUN apt-get install -y nodejs docker.io build-essential
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -13,11 +8,13 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 RUN npm install --production
 
-RUN mkdir /run-data
 RUN mkdir /tmp/jsreport
 
 COPY . /usr/src/app
 COPY patch /usr/src/app
 
 EXPOSE 5488
+
+HEALTHCHECK CMD curl --fail http://localhost:5488 || exit 1
+
 CMD [ "node", "index.js" ]
