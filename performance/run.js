@@ -4,12 +4,12 @@ const fs = require('fs')
 const path = require('path')
 const url = require('url')
 
-//const server = 'http://local.net:5488'
-const server = 'http://jsreportonline-test.net'
+const server = 'http://local.net:5488'
+//const server = 'http://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
-  numberOfAccounts: 5,
+  numberOfAccounts: 50,
   iterations: 500
 }
 
@@ -17,6 +17,7 @@ var accounts = []
 var templates
 
 const createAccounts = () => {
+  var counter = 0
   console.log(`creating ${config.numberOfAccounts} accounts`)
   accounts = new Array(config.numberOfAccounts)
     .fill(1)
@@ -25,6 +26,7 @@ const createAccounts = () => {
       username: `${id}@perf.com`,
       url: `${serverUrl.protocol}//${id}.${serverUrl.hostname}${serverUrl.port ? ':' + serverUrl.port : ''}`,
       name: id,
+      index: counter++,
       password: 'password',
       passwordConfirm: 'password',
       authHeader: `Basic ${new Buffer(`${id}@perf.com:password`).toString('base64')}`,
@@ -96,7 +98,7 @@ const casesRun = [{
 }, {
   template: {
     name: 'script',
-    recipe: 'wkhtmltopdf'
+    recipe: 'phantom-pdf'
   }
 }]
 
@@ -110,18 +112,19 @@ var renderCounter = 0;
 var errorCounter = 1;
 const run = () => {
   console.log('rendering reports')
-  return Promise.all(accounts.map((a) => Promise.map(new Array(config.iterations).fill(1), () => request.post({
-      url: `${a.url}/api/report`,
-      body: casesRun[Math.floor(Math.random() * casesRun.length)],
-      json: true,
-      headers: {
-        'Authorization': a.authHeader
-      }
-    }).then((body) => {
-      console.log(++renderCounter)
-    }).catch((e) => {
-      console.log(`error: ${++errorCounter}`)
-    }), { concurrency: 1 })
+  return Promise.all(accounts.map((a) => Promise.map(new Array(config.iterations).fill(1),
+      () => Promise.delay(Math.random() * 100000).then(() => request.post({
+        url: `${a.url}/api/report`,
+        body: casesRun[Math.floor(Math.random() * casesRun.length)],
+        json: true,
+        headers: {
+          'Authorization': a.authHeader
+        }
+      }).then((body) => {
+        console.log(`${a.index}: ${++renderCounter}`)
+      }).catch((e) => {
+        console.log(`${a.index}: error: ${++errorCounter}`)
+      })), { concurrency: 1 })
   ))
 }
 
