@@ -272,10 +272,15 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { className: 'button danger', onClick: function onClick() {
+	            { className: 'button confirmation', onClick: function onClick() {
 	                return console.log('click');
 	              } },
 	            'Upgrade plan'
+	          ),
+	          _react2.default.createElement(
+	            'a',
+	            { className: 'button danger', href: 'https://gumroad.com/library', target: '_blank' },
+	            'Cancel subscription'
 	          )
 	        ),
 	        _react2.default.createElement(

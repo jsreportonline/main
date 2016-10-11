@@ -37,12 +37,19 @@ services:
       - nt2
       - nt3
       - nt4
+      - nt5
+      - nt6
+      - nt7
+      - nt8
       - np1
       - np2
       - np3
       - np4
+      - np5
       - nw1
+      - nw2
       - nf1
+      - nf2
   
   t1:
     image: jsreportonline/tasks
@@ -92,6 +99,54 @@ services:
     networks:
       - nt4
   
+  t5:
+    image: jsreportonline/tasks
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    container_name: t5
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - nt5
+  
+  t6:
+    image: jsreportonline/tasks
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    container_name: t6
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - nt6
+  
+  t7:
+    image: jsreportonline/tasks
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    container_name: t7
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - nt7
+  
+  t8:
+    image: jsreportonline/tasks
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    container_name: t8
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - nt8
+  
   p1:
     image: jsreportonline/phantom-pdf
     read_only: true
@@ -140,6 +195,18 @@ services:
     networks:
       - np4
   
+  p5:
+    image: jsreportonline/phantom-pdf
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    container_name: p5
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    networks:
+      - np5
+  
   w1:
     image: jsreportonline/wkhtmltopdf
     read_only: true
@@ -153,6 +220,20 @@ services:
       - temp=/tmp
     networks:
       - nw1
+  
+  w2:
+    image: jsreportonline/wkhtmltopdf
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 128m
+    container_name: w2
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    environment:
+      - temp=/tmp
+    networks:
+      - nw2
   
   f1:
     image: jsreportonline/fop-pdf
@@ -168,6 +249,20 @@ services:
     networks:
       - nf1
   
+  f2:
+    image: jsreportonline/fop-pdf
+    read_only: true
+    cpu_quota: 25000
+    restart: always
+    mem_limit: 2568m
+    container_name: f2
+    volumes:
+      - /tmp/jsreport-temp:/tmp
+    environment:
+      - temp=/tmp
+    networks:
+      - nf2
+  
 networks:
   app:
     driver: bridge
@@ -179,6 +274,14 @@ networks:
     driver: bridge
   nt4:
     driver: bridge
+  nt5:
+    driver: bridge
+  nt6:
+    driver: bridge
+  nt7:
+    driver: bridge
+  nt8:
+    driver: bridge
   np1:
     driver: bridge
   np2:
@@ -187,7 +290,13 @@ networks:
     driver: bridge
   np4:
     driver: bridge
+  np5:
+    driver: bridge
   nw1:
     driver: bridge
+  nw2:
+    driver: bridge
   nf1:
+    driver: bridge
+  nf2:
     driver: bridge    

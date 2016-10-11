@@ -4,13 +4,13 @@ const fs = require('fs')
 const path = require('path')
 const url = require('url')
 
-const server = 'http://local.net:5488'
-//const server = 'http://jsreportonline-test.net'
+//const server = 'http://local.net:5488'
+const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
-  numberOfAccounts: 50,
-  iterations: 500
+  numberOfAccounts: 12,
+  iterations: 200
 }
 
 var accounts = []
@@ -27,6 +27,7 @@ const createAccounts = () => {
       url: `${serverUrl.protocol}//${id}.${serverUrl.hostname}${serverUrl.port ? ':' + serverUrl.port : ''}`,
       name: id,
       index: counter++,
+      delay: (Math.random() * 20000),
       password: 'password',
       passwordConfirm: 'password',
       authHeader: `Basic ${new Buffer(`${id}@perf.com:password`).toString('base64')}`,
@@ -87,7 +88,7 @@ const caseScript = (a) => {
   })
 }
 
-const cases = [caseInvoice, caseScript]
+const cases = [caseInvoice/*, caseScript*/]
 
 const casesRun = [{
   template: {
@@ -95,12 +96,12 @@ const casesRun = [{
     recipe: 'phantom-pdf'
   },
   data: JSON.parse(fs.readFileSync(path.join(__dirname, 'cases', 'invoice', 'data.json')).toString())
-}, {
+}/*, {
   template: {
     name: 'script',
     recipe: 'phantom-pdf'
   }
-}]
+}*/]
 
 const createReports = () => {
   console.log('creating cases')
@@ -113,18 +114,24 @@ var errorCounter = 1;
 const run = () => {
   console.log('rendering reports')
   return Promise.all(accounts.map((a) => Promise.map(new Array(config.iterations).fill(1),
-      () => Promise.delay(Math.random() * 100000).then(() => request.post({
-        url: `${a.url}/api/report`,
-        body: casesRun[Math.floor(Math.random() * casesRun.length)],
-        json: true,
-        headers: {
-          'Authorization': a.authHeader
-        }
-      }).then((body) => {
-        console.log(`${a.index}: ${++renderCounter}`)
-      }).catch((e) => {
-        console.log(`${a.index}: error: ${++errorCounter}`)
-      })), { concurrency: 1 })
+      () => Promise.delay(a.delay).then(() => {
+        const startTime = new Date().getTime()
+        return request.post({
+          url: `${a.url}/api/report`,
+          body: casesRun[Math.floor(Math.random() * casesRun.length)],
+          json: true,
+          headers: {
+            'Authorization': a.authHeader
+          }
+        }).then((body) => {
+          console.log(`${a.index}: ${++renderCounter}:${new Date().getTime() - startTime}`)
+        }).catch((e) => {
+          console.error(e)
+          //process.exit()
+          console.log(`${a.index}: error: ${++errorCounter}`)
+          return Promise.delay(5000)
+        })
+      }), { concurrency: 1 })
   ))
 }
 
