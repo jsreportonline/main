@@ -37,7 +37,7 @@
     "jsreport-images": "1.0.3",
     "jsreport-jade": "2.0.1",
     "jsreport-jsrender": "1.0.1",
-    "jsreport-phantom-pdf": "jsreport/jsreport-phantom-pdf",
+    "jsreport-phantom-pdf": "github:jsreport/jsreport-phantom-pdf",
     "jsreport-public-templates": "1.0.1",
     "jsreport-reports": "1.0.2",
     "jsreport-resources": "1.0.1",
