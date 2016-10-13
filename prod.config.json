@@ -29,6 +29,9 @@
     "strategy": "dedicated-process",
     "timeout": 60000
   },
+  "scheduling": {
+    "enabled": false
+  },
   "tasks": {
 
   },
