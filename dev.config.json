@@ -26,10 +26,24 @@
         "timeout": 60000
     },
     "tasks": {
-        "allowedModules": "*"
+        "allowedModules": ["moment", "underscore"],
+        "nativeModules": [{
+            "globalVariableName": "_",
+            "module": "underscore"
+        },{
+            "globalVariableName": "moment",
+            "module": "moment"
+        }]
     },
     "scripts": {
-        "allowedModules": "*",
+        "allowedModules": ["moment", "underscore"],
+        "nativeModules": [{
+            "globalVariableName": "_",
+            "module": "underscore"
+        },{
+            "globalVariableName": "moment",
+            "module": "moment"
+        }],
         "timeout": 1000
     }
 }
