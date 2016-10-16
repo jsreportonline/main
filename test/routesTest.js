@@ -1,28 +1,17 @@
 const init = require('../lib/init')
 const request = require('supertest')
+const os = require('os')
+const path = require('path')
 require('should')
 
 process.env = {
   debug: 'jsreport',
   NODE_ENV: 'development',
-  tasks: {
-    workerUrls: 'localhost:3000'
-  },
-  'connectionString': {
-    databaseName: 'test',
-    rootDatabaseName: 'test-root'
-  },
-  'main-db': {
-    name: "test"
-  },
-  phantom: {
-    workerUrls: 'localhost:4000'
-  },
-  wkhtmltopdf: {
-    workerUrls: 'localhost:4000'
-  },
-  'fop': {
-    workerUrls: 'localhost:4000'
+  tempDirectory: path.join(os.tmpdir(), 'jsreport'),
+  connectionString: {
+    rootDatabaseName: 'multitenant-root-test',
+    databaseName: 'multitenant-test',
+    uri: 'mongodb://localhost:27017/test'
   },
   aws: {
     accessKeyId: 'foo',

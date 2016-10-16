@@ -54,17 +54,17 @@
 	
 	var _BillingEditor2 = _interopRequireDefault(_BillingEditor);
 	
-	var _BillingButton = __webpack_require__(5);
+	var _BillingButton = __webpack_require__(6);
 	
 	var _BillingButton2 = _interopRequireDefault(_BillingButton);
 	
-	var _ChangePasswordSettingsButton = __webpack_require__(6);
+	var _ChangePasswordSettingsButton = __webpack_require__(7);
 	
 	var _ChangePasswordSettingsButton2 = _interopRequireDefault(_ChangePasswordSettingsButton);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 	
 	_jsreportStudio2.default.addEditorComponent('billing', _BillingEditor2.default);
 	
@@ -81,7 +81,7 @@
 	          case 2:
 	            response = _context.sent;
 	
-	            _jsreportStudio2.default.authentication.user.timeSpent = response.tenant.timeSpent;
+	            _jsreportStudio2.default.authentication.user.creditsUsed = response.tenant.creditsUsed;
 	
 	          case 4:
 	          case 'end':
@@ -153,7 +153,13 @@
 	
 	var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
 	
+	var _UpgradePlanModal = __webpack_require__(5);
+	
+	var _UpgradePlanModal2 = _interopRequireDefault(_UpgradePlanModal);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -185,7 +191,7 @@
 	        _react2.default.createElement(
 	          'td',
 	          null,
-	          item.creditsSpent
+	          Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000)
 	        )
 	      );
 	    }
@@ -221,9 +227,69 @@
 	      );
 	    }
 	  }, {
+	    key: 'openUpgradeModal',
+	    value: function openUpgradeModal() {
+	      this.upgradeModalOpenned = true;
+	      _jsreportStudio2.default.openModal(_UpgradePlanModal2.default, {});
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.updatePlan();
+	    }
+	  }, {
+	    key: 'updatePlan',
+	    value: function () {
+	      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	        var response;
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	          while (1) {
+	            switch (_context.prev = _context.next) {
+	              case 0:
+	                _jsreportStudio2.default.startProgress();
+	                _context.next = 3;
+	                return _jsreportStudio2.default.api.get('/api/settings');
+	
+	              case 3:
+	                response = _context.sent;
+	
+	                _jsreportStudio2.default.authentication.user.plan = response.tenant.plan;
+	                _jsreportStudio2.default.authentication.user.creditsAvailable = response.tenant.creditsAvailable;
+	                _jsreportStudio2.default.stopProgress();
+	                this.forceUpdate();
+	
+	              case 8:
+	              case 'end':
+	                return _context.stop();
+	            }
+	          }
+	        }, _callee, this);
+	      }));
+	
+	      function updatePlan() {
+	        return _ref.apply(this, arguments);
+	      }
+	
+	      return updatePlan;
+	    }()
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      var _this2 = this;
+	
+	      if (this.upgradeModalOpenned) {
+	        _jsreportStudio2.default.startProgress();
+	        setTimeout(function () {
+	          return _this2.updatePlan();
+	        }, 6000);
+	      }
+	
+	      this.upgradeModalOpenned = false;
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
+	      var _this3 = this;
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -266,14 +332,14 @@
 	            { style: { marginLeft: '0rem' }, className: 'button confirmation' },
 	            _jsreportStudio2.default.authentication.user.plan || 'free',
 	            ' ',
-	            Math.round(_jsreportStudio2.default.authentication.user.timeSpent / 1000),
-	            ' / ',
+	            Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) + " ",
+	            '/ ',
 	            _jsreportStudio2.default.authentication.user.creditsAvailable
 	          ),
 	          _react2.default.createElement(
 	            'button',
 	            { className: 'button confirmation', onClick: function onClick() {
-	                return console.log('click');
+	                return _this3.openUpgradeModal();
 	              } },
 	            'Upgrade plan'
 	          ),
@@ -281,6 +347,26 @@
 	            'a',
 	            { className: 'button danger', href: 'https://gumroad.com/library', target: '_blank' },
 	            'Cancel subscription'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              'small',
+	              null,
+	              'We use ',
+	              _react2.default.createElement(
+	                'a',
+	                { href: 'https://gumroad.com', target: '_blank' },
+	                'gumroad.com'
+	              ),
+	              ' to mange jsreportonline payments and subscriptions. If you have any issues with payments, please contact gumroad support.',
+	              _react2.default.createElement('br', null),
+	              ' If the plan upgrade is not propagated after several minutes, please contact jsreport support.',
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement('br', null),
+	              'Please cancel the old subscription when upgrading between payed plans.'
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -292,8 +378,9 @@
 	            'billing history'
 	          ),
 	          _react2.default.createElement(_reactList2.default, { type: 'uniform', itemsRenderer: this.renderItems, itemRenderer: function itemRenderer(index) {
-	              return _this2.renderItem(index);
-	            }, length: _jsreportStudio2.default.authentication.user.billingHistory.length })
+	              return _this3.renderItem(index);
+	            },
+	            length: _jsreportStudio2.default.authentication.user.billingHistory.length })
 	        )
 	      );
 	    }
@@ -318,6 +405,63 @@
 
 /***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _jsreportStudio = __webpack_require__(1);
+	
+	var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var UpgradePlanModal = function (_Component) {
+	  _inherits(UpgradePlanModal, _Component);
+	
+	  function UpgradePlanModal() {
+	    _classCallCheck(this, UpgradePlanModal);
+	
+	    return _possibleConstructorReturn(this, (UpgradePlanModal.__proto__ || Object.getPrototypeOf(UpgradePlanModal)).apply(this, arguments));
+	  }
+	
+	  _createClass(UpgradePlanModal, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { style: { width: '710px', height: '640px' } },
+	        _react2.default.createElement('iframe', { src: '/gumroad.html', style: { width: '100%', height: '100%' }, frameBorder: '0' })
+	      );
+	    }
+	  }]);
+	
+	  return UpgradePlanModal;
+	}(_react.Component);
+	
+	UpgradePlanModal.propTypes = {
+	  close: _react.PropTypes.func.isRequired,
+	  options: _react.PropTypes.object.isRequired
+	};
+	exports.default = UpgradePlanModal;
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -370,7 +514,7 @@
 	          }, className: 'toolbar-button' },
 	        _react2.default.createElement('i', { className: 'fa fa-usd' }),
 	        ' ',
-	        Math.round(_jsreportStudio2.default.authentication.user.timeSpent / 1000),
+	        Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000),
 	        ' / ',
 	        _jsreportStudio2.default.authentication.user.creditsAvailable
 	      );
@@ -383,7 +527,7 @@
 	exports.default = ReportsButton;
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -392,7 +536,7 @@
 	  value: true
 	});
 	
-	var _ChangePasswordModal = __webpack_require__(7);
+	var _ChangePasswordModal = __webpack_require__(8);
 	
 	var _ChangePasswordModal2 = _interopRequireDefault(_ChangePasswordModal);
 	
@@ -421,7 +565,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -442,7 +586,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	

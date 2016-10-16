@@ -8,7 +8,7 @@ export default class ReportsButton extends Component {
 
   render () {
     return <div onClick={() => this.openBilling()} className='toolbar-button'>
-      <i className='fa fa-usd' /> {Math.round(Studio.authentication.user.timeSpent / 1000)} / {Studio.authentication.user.creditsAvailable}
+      <i className='fa fa-usd' /> {Math.round(Studio.authentication.user.creditsUsed / 1000)} / {Studio.authentication.user.creditsAvailable}
     </div>
   }
 }

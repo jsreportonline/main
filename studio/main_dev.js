@@ -8,7 +8,7 @@ Studio.addEditorComponent('billing', BillingEditor)
 Studio.previewListeners.push(() => {
   setTimeout(async () => {
     const response = await Studio.api.get('/api/settings')
-    Studio.authentication.user.timeSpent = response.tenant.timeSpent
+    Studio.authentication.user.creditsUsed = response.tenant.creditsUsed
   }, 5000)
 })
 

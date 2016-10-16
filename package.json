@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "jsreport-studio-build",
-    "test": "mocha --timeout 8000 test"
+    "test": "mocha --timeout 15000 test"
   },
   "homepage": "https://github.com/jsreportonline/main#readme",
   "dependencies": {
@@ -36,10 +36,12 @@
     "jsreport-images": "1.0.3",
     "jsreport-jade": "2.0.1",
     "jsreport-jsrender": "1.0.1",
+    "jsreport-mongodb-store": "0.5.1",
     "jsreport-phantom-pdf": "1.1.0",
     "jsreport-public-templates": "1.0.1",
     "jsreport-reports": "1.0.2",
     "jsreport-resources": "1.0.1",
+    "jsreport-sample-template": "1.0.1",
     "jsreport-scheduling": "1.0.4",
     "jsreport-scripts": "1.0.4",
     "jsreport-studio": "1.0.8",

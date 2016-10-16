@@ -8,7 +8,7 @@ export default class ReportEditor extends Component {
     const item = Studio.authentication.user.billingHistory[index]
     return <tr key={index}>
       <td>{item.billedDate.toLocaleString()}</td>
-      <td>{item.creditsSpent}</td>
+      <td>{Math.round(Studio.authentication.user.creditsUsed / 1000)}</td>
     </tr>
   }
 
@@ -65,7 +65,7 @@ export default class ReportEditor extends Component {
         <h2>current billing plan</h2>
 
         <button style={{marginLeft: '0rem'}} className='button confirmation'>
-          {Studio.authentication.user.plan || 'free'} {Math.round(Studio.authentication.user.timeSpent / 1000) + " "}
+          {Studio.authentication.user.plan || 'free'} {Math.round(Studio.authentication.user.creditsUsed / 1000) + " "}
           / {Studio.authentication.user.creditsAvailable}
         </button>
 

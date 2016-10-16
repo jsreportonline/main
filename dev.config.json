@@ -16,7 +16,7 @@
         }
     },
     "connectionString": {
-        "name": "mongo-test"
+        "name": "mongodb"
     },
     "httpPort": 5488,
     "httpsPort": null,
@@ -27,6 +27,7 @@
     },
     "tasks": {
         "allowedModules": ["moment", "underscore"],
+        "timeout": 20000,
         "nativeModules": [{
             "globalVariableName": "_",
             "module": "underscore"
@@ -36,7 +37,7 @@
         }]
     },
     "scripts": {
-        "allowedModules": ["moment", "underscore"],
+        "allowedModules": ["moment", "underscore", "request"],
         "nativeModules": [{
             "globalVariableName": "_",
             "module": "underscore"
@@ -44,6 +45,6 @@
             "globalVariableName": "moment",
             "module": "moment"
         }],
-        "timeout": 1000
+        "timeout": 40000
     }
 }
