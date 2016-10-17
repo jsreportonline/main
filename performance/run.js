@@ -4,8 +4,8 @@ const fs = require('fs')
 const path = require('path')
 const url = require('url')
 
-//const server = 'http://local.net:5488'
-const server = 'https://jsreportonline-test.net'
+const server = 'http://local.net:5488'
+//const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
@@ -88,7 +88,7 @@ const caseScript = (a) => {
   })
 }
 
-const cases = [caseInvoice/*, caseScript*/]
+const cases = [caseInvoice, caseScript]
 
 const casesRun = [{
   template: {
@@ -96,12 +96,12 @@ const casesRun = [{
     recipe: 'phantom-pdf'
   },
   data: JSON.parse(fs.readFileSync(path.join(__dirname, 'cases', 'invoice', 'data.json')).toString())
-}/*, {
+}, {
   template: {
     name: 'script',
     recipe: 'phantom-pdf'
   }
-}*/]
+}]
 
 const createReports = () => {
   console.log('creating cases')
