@@ -9,8 +9,8 @@ const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
-  numberOfAccounts: 6,
-  iterations: 200
+  numberOfAccounts: 8,
+  iterations: 2000
 }
 
 var accounts = []
@@ -27,7 +27,7 @@ const createAccounts = () => {
       url: `${serverUrl.protocol}//${id}.${serverUrl.hostname}${serverUrl.port ? ':' + serverUrl.port : ''}`,
       name: id,
       index: counter++,
-      delay: (Math.random() * 5000),
+      delay: (Math.random() * 10000),
       password: 'password',
       passwordConfirm: 'password',
       authHeader: `Basic ${new Buffer(`${id}@perf.com:password`).toString('base64')}`,
