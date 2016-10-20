@@ -53,8 +53,6 @@ const dropsCollections = (db) => {
   console.log('dropping history and fs chunks')
 
   return db.collection('settings').dropAsync()
-    .then(() => db.collection('fs.chunks').dropAsync())
-    .then(() => db.collection('fs.files').dropAsync()).catch(() => {})
 }
 
 const updateRecipes = (db) => {

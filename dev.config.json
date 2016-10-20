@@ -25,6 +25,10 @@
         "strategy": "dedicated-process",
         "timeout": 60000
     },
+    "loggly": {
+        "level": "info",
+        "subdomain": "jsreport"
+    },
     "tasks": {
         "allowedModules": ["moment", "underscore"],
         "timeout": 20000,

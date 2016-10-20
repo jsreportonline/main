@@ -4,12 +4,12 @@ const fs = require('fs')
 const path = require('path')
 const url = require('url')
 
-const server = 'http://local.net:5488'
-//const server = 'https://jsreportonline-test.net'
+//const server = 'http://local.net:5488'
+const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
-  numberOfAccounts: 12,
+  numberOfAccounts: 6,
   iterations: 200
 }
 
@@ -27,7 +27,7 @@ const createAccounts = () => {
       url: `${serverUrl.protocol}//${id}.${serverUrl.hostname}${serverUrl.port ? ':' + serverUrl.port : ''}`,
       name: id,
       index: counter++,
-      delay: (Math.random() * 20000),
+      delay: (Math.random() * 5000),
       password: 'password',
       passwordConfirm: 'password',
       authHeader: `Basic ${new Buffer(`${id}@perf.com:password`).toString('base64')}`,
@@ -88,18 +88,44 @@ const caseScript = (a) => {
   })
 }
 
-const cases = [caseInvoice, caseScript]
+const caseXlsx = (a) => {
+  return request.post({
+    url: `${a.url}/odata/templates`,
+    body: {
+      content: fs.readFileSync(path.join(__dirname, 'cases', 'xlsx', 'content.html')).toString(),
+      helpers: fs.readFileSync(path.join(__dirname, 'cases', 'xlsx', 'helpers.js')).toString(),
+      recipe: 'xlsx',
+      engine: 'handlebars',
+      name: 'xlsx'
+    },
+    json: true,
+    headers: {
+      'Authorization': a.authHeader
+    }
+  })
+}
+
+const cases = [caseInvoice, caseScript, caseXlsx]
 
 const casesRun = [{
   template: {
-    name: 'invoice',
-    recipe: 'phantom-pdf'
+    name: 'invoice'
   },
   data: JSON.parse(fs.readFileSync(path.join(__dirname, 'cases', 'invoice', 'data.json')).toString())
 }, {
   template: {
     name: 'script',
-    recipe: 'phantom-pdf'
+    recipe: 'wkhtmltopdf'
+  }
+}, {
+  template: {
+    name: 'xlsx'
+  }
+}, {
+  template: {
+    content: fs.readFileSync(path.join(__dirname, 'cases', 'image', 'content.html')).toString(),
+    recipe: 'phantom-pdf',
+    engine: 'ejs'
   }
 }]
 
