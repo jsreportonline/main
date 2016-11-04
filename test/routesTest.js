@@ -4,30 +4,16 @@ const os = require('os')
 const path = require('path')
 require('should')
 
-process.env = {
-  debug: 'jsreport',
-  NODE_ENV: 'development',
-  tempDirectory: path.join(os.tmpdir(), 'jsreport'),
-  connectionString: {
-    rootDatabaseName: 'multitenant-root-test',
-    databaseName: 'multitenant-test',
-    uri: 'mongodb://localhost:27017/test'
-  },
-  aws: {
-    accessKeyId: 'foo',
-    secretAccessKey: 'foo'
-  }
-}
+process.env = require('./basicOptions')
 
 describe('routes', () => {
   var jsreport
 
-  beforeEach((done) => {
-    init().then((j) => (jsreport = j)).then(() => {
+  beforeEach(() => {
+    return init().then((j) => (jsreport = j)).then(() => {
       jsreport.documentStore.provider.db.db(jsreport.options.connectionString.databaseName).dropDatabase()
       jsreport.documentStore.provider.db.db(jsreport.options.connectionString.rootDatabaseName).dropDatabase()
-      done()
-    }).catch(done)
+    })
   })
 
   afterEach(() => jsreport.express.server.close())

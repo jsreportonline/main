@@ -31,7 +31,7 @@
     },
     "tasks": {
         "allowedModules": ["moment", "underscore"],
-        "timeout": 20000,
+        "timeout": 180000,
         "nativeModules": [{
             "globalVariableName": "_",
             "module": "underscore"

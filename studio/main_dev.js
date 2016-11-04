@@ -12,6 +12,31 @@ Studio.previewListeners.push(() => {
   }, 5000)
 })
 
+
+Studio.readyListeners.push(async () => {
+  const checkMessages = async () => {
+    const response = await Studio.api.get('/api/message')
+    if (response && response.content) {
+      const messageId = localStorage.getItem('messageId')
+
+      if (messageId != response.id) {
+        localStorage.setItem('messageId', response.id)
+
+        Studio.openModal((props) => <div>
+          <div dangerouslySetInnerHTML={{ __html: response.content }}>
+          </div>
+          <div className='button-bar'>
+            <button className='button confirmation' onClick={() => props.close()}>ok</button>
+          </div>
+        </div>)
+      }
+    }
+  }
+
+  setInterval(checkMessages, 2 * 60 * 1000)
+  checkMessages()
+})
+
 Studio.initializeListeners.push(async () => {
   Studio.authentication.user.billingHistory = Studio.authentication.user.billingHistory || []
 
