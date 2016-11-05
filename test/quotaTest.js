@@ -26,6 +26,7 @@ describe('quota', () => {
           engine: 'none',
           recipe: 'html'
         },
+        user: t,
         tenant: t,
         options: {},
         headers: {}
@@ -45,6 +46,7 @@ describe('quota', () => {
           engine: 'none',
           recipe: 'html'
         },
+        user: t,
         tenant: Object.assign(t, {
           quotaStart: new Date(),
           quotaUsed: 1000000
@@ -63,6 +65,7 @@ describe('quota', () => {
           engine: 'none',
           recipe: 'html'
         },
+        user: t,
         tenant: Object.assign(t, {
           quotaStart: new Date(new Date().getTime() - 60 * 10 * 1000),
           quotaUsed: 1000000
