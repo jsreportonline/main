@@ -79,12 +79,11 @@
     },
     "jolaunchconfig" : {
       "Type" : "AWS::AutoScaling::LaunchConfiguration",
-      "Properties" : {
-        "ImageId" : "ami-aea9d3dd",
-        "SecurityGroups" : [ "sg-39eef45e" ],
-        "InstanceType" : "t2.medium",
-        "ImageId": "ami-aea9d3dd",
-        "IamInstanceProfile" : "jo-admin",
+      "Properties": {
+        "ImageId": "ami-b3430cc0",
+        "SecurityGroups": [ "sg-39eef45e" ],
+        "InstanceType": "t2.medium",
+        "IamInstanceProfile": "jo-admin",
         "KeyName": "jsreportonline-key",
         "AssociatePublicIpAddress": true,
         "UserData": {
