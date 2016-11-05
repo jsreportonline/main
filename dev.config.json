@@ -29,6 +29,9 @@
         "level": "info",
         "subdomain": "jsreport"
     },
+    "logger": {
+      "ignore": ["Starting rendering request"]
+    },
     "tasks": {
         "allowedModules": ["moment", "underscore"],
         "timeout": 180000,
