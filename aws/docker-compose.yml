@@ -8,8 +8,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ~/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ~/nginx/html:/etc/nginx/html
+      - /nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /nginx/html:/etc/nginx/html
     networks:
       - app
 
@@ -31,6 +31,7 @@ services:
       - "1000:1000"
     env_file: configuration.env
     restart: always
+    container_name: workers
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
@@ -58,105 +59,114 @@ services:
   t1:
     image: jsreportonline/tasks
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 33000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: t1
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/jsreport-temp:/tmp
     networks:
       - nt1
   
   t2:
     image: jsreportonline/tasks
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 33000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: t2
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/jsreport-temp:/tmp
     networks:
       - nt2
   
   t3:
     image: jsreportonline/tasks
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 33000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: t3
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/jsreport-temp:/tmp
     networks:
       - nt3
   
   t4:
     image: jsreportonline/tasks
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 33000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: t4
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/jsreport-temp:/tmp
     networks:
       - nt4
   
   t5:
     image: jsreportonline/tasks
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 33000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: t5
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/jsreport-temp:/tmp
     networks:
       - nt5
   
   t6:
     image: jsreportonline/tasks
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 33000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: t6
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/jsreport-temp:/tmp
     networks:
       - nt6
   
   t7:
     image: jsreportonline/tasks
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 33000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: t7
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/jsreport-temp:/tmp
     networks:
       - nt7
   
   t8:
     image: jsreportonline/tasks
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 33000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: t8
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/jsreport-temp:/tmp
     networks:
       - nt8
   
   p1:
     image: jsreportonline/phantom-pdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: p1
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -166,9 +176,10 @@ services:
   p2:
     image: jsreportonline/phantom-pdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: p2
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -178,9 +189,10 @@ services:
   p3:
     image: jsreportonline/phantom-pdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: p3
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -190,9 +202,10 @@ services:
   p4:
     image: jsreportonline/phantom-pdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: p4
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -202,9 +215,10 @@ services:
   p5:
     image: jsreportonline/phantom-pdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: p5
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -214,9 +228,10 @@ services:
   w1:
     image: jsreportonline/wkhtmltopdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: w1
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -228,9 +243,10 @@ services:
   w2:
     image: jsreportonline/wkhtmltopdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 128m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: w2
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -242,9 +258,10 @@ services:
   f1:
     image: jsreportonline/fop-pdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 256m
+    memswap_limit: 512m
+    mem_limit: 420m
     container_name: f1
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -256,9 +273,10 @@ services:
   f2:
     image: jsreportonline/fop-pdf
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 256m
+    memswap_limit: 512m
+    mem_limit: 420m
     container_name: f2
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -270,9 +288,10 @@ services:
   h1:
     image: jsreportonline/html-to-xlsx
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 256m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: h1
     volumes:
       - /tmp/jsreport-temp:/tmp
@@ -284,9 +303,10 @@ services:
   h2:
     image: jsreportonline/html-to-xlsx
     read_only: true
-    cpu_quota: 25000
+    cpu_quota: 50000
     restart: always
-    mem_limit: 256m
+    memswap_limit: 512m
+    mem_limit: 320m
     container_name: h2
     volumes:
       - /tmp/jsreport-temp:/tmp

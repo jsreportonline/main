@@ -152,7 +152,9 @@ const run = () => {
         }).then((body) => {
           console.log(`${a.index}: ${++renderCounter}:${new Date().getTime() - startTime}`)
         }).catch((e) => {
-          console.error(e)
+          if (e.statusCode !== 429) {
+            console.error(e)
+          }
           //process.exit()
           console.log(`${a.index}: error: ${++errorCounter}`)
           return Promise.delay(5000)
