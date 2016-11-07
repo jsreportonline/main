@@ -1,12 +1,5 @@
 {
-    "certificate": {
-        "key": "certificates/jsreport.net.key",    
-        "cert": "certificates/jsreport.net.cert"
-    },
     "authentication" : {
-        "cookieSession": {
-            "secret": "dasd321as56d1sd5s61vdv32"
-        },
         "admin": {
             "username" : "admin",
             "password": "password"
@@ -19,7 +12,6 @@
     "httpsPort": null,
     "blobStorage": "fileSystem",
     "phantom": {
-        "strategy": "dedicated-process",
         "timeout": 60000
     },
     "loggly": {

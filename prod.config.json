@@ -1,39 +1,46 @@
 {
-  "certificate": {
-    "key": "certificates/jsreport.net.key",
-    "cert": "certificates/jsreport.net.cert"
-  },
   "authentication" : {
-    "cookieSession": {
-      "secret": "<your strong secret>"
-    },
     "admin": {
       "username" : "admin",
       "password": "password"
-    },
-    "enabled": false
+    }
   },
   "connectionString": {
-    "name": "mongo-test",
-    "authDb": "admin",
-    "address": ["jsreportonline-shard-00-00-nstup.mongodb.net", "jsreportonline-shard-00-01-nstup.mongodb.net", "jsreportonline-shard-00-02-nstup.mongodb.net"],
-    "port": [27017,27017,27017],
-    "replicaSet" : "jsreportonline-shard-0",
-    "databaseName" : "test",
-    "ssl": true
+    "name": "mongodb"
   },
   "httpPort": 5488,
   "httpsPort": null,
   "blobStorage": "fileSystem",
   "phantom": {
-    "strategy": "dedicated-process",
     "timeout": 60000
+  },
+  "loggly": {
+    "level": "info",
+    "subdomain": "jsreport"
+  },
+  "logger": {
+    "ignore": ["Starting rendering request"]
   },
   "tasks": {
-
+    "allowedModules": ["moment", "underscore"],
+    "timeout": 180000,
+    "nativeModules": [{
+      "globalVariableName": "_",
+      "module": "underscore"
+    },{
+      "globalVariableName": "moment",
+      "module": "moment"
+    }]
   },
   "scripts": {
-    "allowedModules": [],
-    "timeout": 60000
+    "allowedModules": ["moment", "underscore", "request"],
+    "nativeModules": [{
+      "globalVariableName": "_",
+      "module": "underscore"
+    },{
+      "globalVariableName": "moment",
+      "module": "moment"
+    }],
+    "timeout": 40000
   }
 }
