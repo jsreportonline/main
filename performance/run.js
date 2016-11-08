@@ -3,6 +3,7 @@ const Promise = require('bluebird')
 const fs = require('fs')
 const path = require('path')
 const url = require('url')
+const _ = require('underscore')
 
 //const server = 'http://local.net:5488'
 const server = 'https://jsreportonline-test.net'
@@ -105,7 +106,24 @@ const caseXlsx = (a) => {
   })
 }
 
-const cases = [caseInvoice, caseScript, caseXlsx]
+const caseFop = (a) => {
+  return request.post({
+    url: `${a.url}/odata/templates`,
+    body: {
+      content: fs.readFileSync(path.join(__dirname, 'cases', 'fop', 'content.html')).toString(),
+      helpers: fs.readFileSync(path.join(__dirname, 'cases', 'fop', 'helpers.js')).toString(),
+      recipe: 'fop-pdf',
+      engine: 'jsrender',
+      name: 'fop'
+    },
+    json: true,
+    headers: {
+      'Authorization': a.authHeader
+    }
+  })
+}
+
+const cases = [caseInvoice, caseScript, caseXlsx, caseFop]
 
 const casesRun = [{
   template: {
@@ -127,6 +145,19 @@ const casesRun = [{
     recipe: 'phantom-pdf',
     engine: 'ejs'
   }
+}, {
+  template: {
+    name: 'fop'
+  }
+}, {
+  template: {
+    content: '{{for numbers}}<h1>{{:#data}}</h1>{{/for}}',
+    recipe: 'html',
+    engine: 'jsrender'
+  },
+  data: {
+    numbers: _.range(0, 1000000)
+  }
 }]
 
 const createReports = () => {
@@ -142,9 +173,10 @@ const run = () => {
   return Promise.all(accounts.map((a) => Promise.map(new Array(config.iterations).fill(1),
       () => Promise.delay(a.delay).then(() => {
         const startTime = new Date().getTime()
+        const item = Math.floor(Math.random() * casesRun.length)
         return request.post({
           url: `${a.url}/api/report`,
-          body: casesRun[Math.floor(Math.random() * casesRun.length)],
+          body: casesRun[item],
           json: true,
           headers: {
             'Authorization': a.authHeader
@@ -153,7 +185,7 @@ const run = () => {
           console.log(`${a.index}: ${++renderCounter}:${new Date().getTime() - startTime}`)
         }).catch((e) => {
           if (e.statusCode !== 429) {
-            console.error(e)
+            console.error('Failed item + ' + item + ' : ' + e.toString())
           }
           //process.exit()
           console.log(`${a.index}: error: ${++errorCounter}`)
