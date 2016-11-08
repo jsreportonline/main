@@ -8,7 +8,7 @@ const jsreport = require('jsreport-core')({
   loadConfig: true,
   connectionString: {
     name: 'mongoDB',
-    uri: process.env['connectionString:uri']
+    uri: process.env['connectionString:uri-dev']
   },
   rootDirectory: path.join(__dirname, '../'),
   blobStorage: 'gridFS'
@@ -28,7 +28,6 @@ s3.upload = Promise.promisify(s3.upload).bind(s3)
 console.log('starting migration')
 
 jsreport.init().then(() => {
-
   return jsreport.documentStore.collection('reports').find({}).then((reports) => {
     var total = reports.length
     return Promise.map(reports.slice(0), (report) => {

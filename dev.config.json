@@ -1,5 +1,8 @@
 {
     "authentication" : {
+        "cookieSession": {
+            "secret": "dasd321as56d1sd5s61vdv32"
+        },
         "admin": {
             "username" : "admin",
             "password": "password"
@@ -23,7 +26,7 @@
     },
     "tasks": {
         "allowedModules": ["moment", "underscore"],
-        "timeout": 180000,
+        "timeout": 60000,
         "nativeModules": [{
             "globalVariableName": "_",
             "module": "underscore"
@@ -41,6 +44,6 @@
             "globalVariableName": "moment",
             "module": "moment"
         }],
-        "timeout": 40000
+        "timeout": 60000
     }
 }

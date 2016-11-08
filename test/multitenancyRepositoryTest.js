@@ -35,6 +35,12 @@ describe('multitenancyRepository', () => {
     })
   })
 
+  it('findTenantByName should not be case sensitive', () => {
+    return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password').then(() => {
+      return jsreport.multitenancyRepository.findTenantByName('TEST').then((t) => t.email.should.be.eql('test@test.com'))
+    })
+  })
+
   it('authenticate should pass with correct credentials', () => {
     return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password').then(() => {
       return jsreport.multitenancyRepository.authenticate('test@test.com', 'password')
