@@ -40,6 +40,7 @@
                 font-family: "Roboto", sans-serif;
                 text-transform: uppercase;
                 outline: 0;
+                margin-top: 20px;
                 background: #1C97EA;
                 width: 100%;
                 border: 0;
@@ -55,8 +56,9 @@
 
             h1 {
                 font-family: "Roboto", sans-serif;
-                font-weight: normal;
+                font-weight: 500;
                 margin-top: 0px;
+                margin-bottom: 40px;
                 color: #007ACC;
                 font-size: 24px;
             }
@@ -69,6 +71,11 @@
                 background: #1C97EA; /* fallback for old browsers */
                 background: linear-gradient(to left, rgba(27, 146, 229, 0.27), rgba(0, 155, 255, 0.65));
                 font-family: "Roboto", sans-serif;
+            }
+
+            .link {
+                color: #007ACC;
+                text-decoration: none
             }
         </style>
     </head>
@@ -83,7 +90,7 @@
 
                     <% if (viewModel.login) { %>
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.login %></strong>
+                        <span><%= viewModel.login %></span>
                     </div>
                     <% } %>
 
@@ -91,8 +98,8 @@
                 </form>
 
                 <div style="display: block; margin-top:20px">
-                    <a style="float:left" href="#" id="reset">reset password</a>
-                    <a style="float:right" href="#" id="create">sign up</a>
+                    <a style="float:left" class="link"  href="#" id="reset">reset password</a>
+                    <a style="float:right" class="link" href="#" id="create">sign up</a>
                 </div>
             </div>
 
@@ -105,7 +112,7 @@
 
                     <% if (viewModel.username) { %>
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.username %></strong>
+                        <span><%= viewModel.username %></span>
                     </div>
                     <% } %>
 
@@ -113,14 +120,14 @@
                            value="<%= viewModel.previousName || '' %>">
                     <% if (viewModel.name) { %>
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.name %></strong>
+                        <span><%= viewModel.name %></span>
                     </div>
                     <% } %>
 
                     <input class="text" placeholder="password" name="password" type="password" value="">
                     <% if (viewModel.password) { %>
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.password %></strong>
+                        <span><%= viewModel.password %></span>
                     </div>
                     <% } %>
 
@@ -128,7 +135,7 @@
                            value="">
 
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.passwordConfirm %></strong>
+                        <span><%= viewModel.passwordConfirm %></span>
                     </div>
 
                     <label style="display: block">
@@ -138,7 +145,7 @@
 
                     <% if (viewModel.terms) { %>
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.terms %></strong>
+                        <span><%= viewModel.terms %></span>
                     </div>
                     <% } %>
                     <button>Create account</button>
@@ -166,18 +173,18 @@
                     <input id="password" name="password" type="password" placeholder="new password" />
                     <% if (viewModel.password) { %>
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.password %></strong>
+                        <span><%= viewModel.password %></span>
                     </div>
                     <% } %>
                     <input id="passwordConfirm" name="passwordConfirm" type="password" placeholder="password confirmation" />
                     <% if (viewModel.passwordConfirm) { %>
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.passwordConfirm %></strong>
+                        <span><%= viewModel.passwordConfirm %></span>
                     </div>
                     <% } %>
                     <% if (viewModel.resetMessage) { %>
                     <div class="form-group" style="color: red;">
-                        <strong><%= viewModel.resetMessage %></strong>
+                        <span><%= viewModel.resetMessage %></span>
                     </div>
                     <% } %>
                     <button>change password</button>
