@@ -151,7 +151,7 @@ const casesRun = [{
   }
 }, {
   template: {
-    content: '{{for numbers}}<h1>{{:#data}}</h1>{{/for}}',
+    content: '{{for numbers}}{{:#data}}{{/for}}',
     recipe: 'html',
     engine: 'jsrender'
   },
