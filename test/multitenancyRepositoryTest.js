@@ -90,4 +90,19 @@ describe('multitenancyRepository', () => {
       })
     })
   })
+
+  it('findTenant by curstom user with the same name as subdomain', () => {
+    return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password').then((t) => {
+      return jsreport.documentStore.collection('users').insert({
+        username: 'test',
+        password: 'password',
+        tenantId: 'test'
+      }).then(() => {
+        return jsreport.multitenancyRepository.findTenant('test').then((t) => {
+          t.username.should.be.eql('test')
+          t.isAdmin.should.be.eql(false)
+        })
+      })
+    })
+  })
 })

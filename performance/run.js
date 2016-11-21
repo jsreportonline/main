@@ -10,12 +10,14 @@ const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
-  numberOfAccounts: 8,
+  numberOfAccounts: 12,
   iterations: 2000
 }
 
 var accounts = []
 var templates
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const createAccounts = () => {
   var counter = 0
@@ -186,9 +188,9 @@ const run = () => {
         }).catch((e) => {
           if (e.statusCode !== 429) {
             console.error('Failed item + ' + item + ' : ' + e.toString())
+          } else {
+            console.log(`${a.index}: 429: ${++errorCounter}`)
           }
-          //process.exit()
-          console.log(`${a.index}: error: ${++errorCounter}`)
           return Promise.delay(5000)
         })
       }), { concurrency: 1 })
