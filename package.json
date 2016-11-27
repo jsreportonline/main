@@ -29,6 +29,7 @@
     "jsreport-data": "1.0.1",
     "jsreport-debug": "1.0.2",
     "jsreport-ejs": "1.0.4",
+    "jsreport-electron-pdf": "2.1.0",
     "jsreport-express": "1.0.2",
     "jsreport-fop-pdf": "0.2.0",
     "jsreport-fs-store": "1.0.6",
