@@ -8,7 +8,7 @@ export default class ReportEditor extends Component {
     const item = Studio.authentication.user.billingHistory[index]
     return <tr key={index}>
       <td>{item.billedDate.toLocaleString()}</td>
-      <td>{Math.round(Studio.authentication.user.creditsUsed / 1000)}</td>
+      <td>{Math.round(item.creditsUsed / 1000)}</td>
     </tr>
   }
 

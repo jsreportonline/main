@@ -92,10 +92,81 @@
 	  })), 5000);
 	});
 	
-	_jsreportStudio2.default.initializeListeners.push(_asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-	  return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	_jsreportStudio2.default.readyListeners.push(_asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+	  var checkMessages;
+	  return regeneratorRuntime.wrap(function _callee3$(_context3) {
 	    while (1) {
-	      switch (_context2.prev = _context2.next) {
+	      switch (_context3.prev = _context3.next) {
+	        case 0:
+	          checkMessages = function () {
+	            var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+	              var response, messageId;
+	              return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	                while (1) {
+	                  switch (_context2.prev = _context2.next) {
+	                    case 0:
+	                      _context2.next = 2;
+	                      return _jsreportStudio2.default.api.get('/api/message');
+	
+	                    case 2:
+	                      response = _context2.sent;
+	
+	                      if (response && response.content) {
+	                        messageId = localStorage.getItem('messageId');
+	
+	
+	                        if (messageId != response.id) {
+	                          localStorage.setItem('messageId', response.id);
+	
+	                          _jsreportStudio2.default.openModal(function (props) {
+	                            return React.createElement(
+	                              'div',
+	                              null,
+	                              React.createElement('div', { dangerouslySetInnerHTML: { __html: response.content } }),
+	                              React.createElement(
+	                                'div',
+	                                { className: 'button-bar' },
+	                                React.createElement(
+	                                  'button',
+	                                  { className: 'button confirmation', onClick: function onClick() {
+	                                      return props.close();
+	                                    } },
+	                                  'ok'
+	                                )
+	                              )
+	                            );
+	                          });
+	                        }
+	                      }
+	
+	                    case 4:
+	                    case 'end':
+	                      return _context2.stop();
+	                  }
+	                }
+	              }, _callee2, undefined);
+	            }));
+	
+	            return function checkMessages() {
+	              return _ref3.apply(this, arguments);
+	            };
+	          }();
+	
+	          setInterval(checkMessages, 2 * 60 * 1000);
+	          checkMessages();
+	
+	        case 3:
+	        case 'end':
+	          return _context3.stop();
+	      }
+	    }
+	  }, _callee3, undefined);
+	})));
+	
+	_jsreportStudio2.default.initializeListeners.push(_asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+	  return regeneratorRuntime.wrap(function _callee4$(_context4) {
+	    while (1) {
+	      switch (_context4.prev = _context4.next) {
 	        case 0:
 	          _jsreportStudio2.default.authentication.user.billingHistory = _jsreportStudio2.default.authentication.user.billingHistory || [];
 	
@@ -117,10 +188,10 @@
 	
 	        case 4:
 	        case 'end':
-	          return _context2.stop();
+	          return _context4.stop();
 	      }
 	    }
-	  }, _callee2, undefined);
+	  }, _callee4, undefined);
 	})));
 
 /***/ },
@@ -191,7 +262,7 @@
 	        _react2.default.createElement(
 	          'td',
 	          null,
-	          Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000)
+	          Math.round(item.creditsUsed / 1000)
 	        )
 	      );
 	    }
