@@ -24,7 +24,6 @@ describe('multitenancyRepository', () => {
         t.plan.should.be.eql('free')
         t.creditsAvailable.should.be.eql(200)
         t.creditsUsed.should.be.eql(0)
-        passwordHash.verify(t.password, 'password').should.be.ok
       })
     })
   })
@@ -50,14 +49,21 @@ describe('multitenancyRepository', () => {
   it('authenticate should return null with incorrect credentials', () => {
     return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password').then(() => {
       return jsreport.multitenancyRepository.authenticate('test@test.com', 'foo')
-        .then((v) => should(v).not.be.ok)
+        .then((v) => should(v).not.be.ok())
+    })
+  })
+
+  it('authenticate should remove password from the output', () => {
+    return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password').then(() => {
+      return jsreport.multitenancyRepository.authenticate('test@test.com', 'password')
+        .then((v) => should(v.password).not.be.ok())
     })
   })
 
   it('generateResetToken', () => {
     return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password').then((t) => {
       return jsreport.multitenancyRepository.generateResetToken('test@test.com').then((token) => {
-        token.should.be.ok
+        token.should.be.ok()
 
         return jsreport.multitenancyRepository.findTenant('test@test.com').then((t) => t.resetToken.should.be.eql(token))
       })
@@ -86,7 +92,7 @@ describe('multitenancyRepository', () => {
         password: 'password',
         tenantId: 'test'
       }).then(() => {
-        return jsreport.multitenancyRepository.authenticateTenantInExtension('foo@foo.com', 'password').then((t) => t.should.be.ok)
+        return jsreport.multitenancyRepository.authenticateTenantInExtension('foo@foo.com', 'password').then((t) => t.should.be.ok())
       })
     })
   })
@@ -103,6 +109,13 @@ describe('multitenancyRepository', () => {
           t.isAdmin.should.be.eql(false)
         })
       })
+    })
+  })
+
+  it('findTenant should remove password from the output', () => {
+    return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password').then(() => {
+      return jsreport.multitenancyRepository.findTenant('test@test.com')
+        .then((v) => should(v.password).not.be.ok())
     })
   })
 })
