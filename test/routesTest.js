@@ -85,6 +85,31 @@ describe('routes', () => {
         })
     })
 
+    it('/api/settings with cookie on one account and Authorization header to second should return the second', (done) => {
+      request(jsreport.express.app).post('/register')
+        .type('form')
+        .send({ username: 'honza@honza.cz', name: 'honza', password: 'password', passwordConfirm: 'password', terms: true })
+        .end(function (err, res) {
+          if (err) {
+            return done(err)
+          }
+
+          request(jsreport.express.app).post('/login')
+            .type('form')
+            .send({ username: 'test@test.cz', password: 'password' })
+            .end(function (err, res2) {
+              if (err) {
+                return done(err)
+              }
+              request(jsreport.express.app).get('/api/settings')
+                .set('Authorization', `Basic ${new Buffer('honza@honza.cz:password').toString('base64')}`)
+                .set('host', 'honza.local.net')
+                .set('cookie', res2.headers['set-cookie'])
+                .expect(/honza/, done)
+            })
+        })
+    })
+
     it('POST /login with valid password should redirect to subdomain', (done) => {
       request(jsreport.express.app).post('/login')
         .type('form')
