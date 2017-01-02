@@ -10,7 +10,7 @@ const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
-  numberOfAccounts: 12,
+  numberOfAccounts: 24,
   iterations: 2000
 }
 

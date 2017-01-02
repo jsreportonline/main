@@ -152,7 +152,7 @@
 	            };
 	          }();
 	
-	          setInterval(checkMessages, 2 * 60 * 1000);
+	          setInterval(checkMessages, 5 * 60 * 1000);
 	          checkMessages();
 	
 	        case 3:
