@@ -54,11 +54,15 @@
 	
 	var _BillingEditor2 = _interopRequireDefault(_BillingEditor);
 	
-	var _BillingButton = __webpack_require__(6);
+	var _superagent = __webpack_require__(6);
+	
+	var _superagent2 = _interopRequireDefault(_superagent);
+	
+	var _BillingButton = __webpack_require__(7);
 	
 	var _BillingButton2 = _interopRequireDefault(_BillingButton);
 	
-	var _ChangePasswordSettingsButton = __webpack_require__(7);
+	var _ChangePasswordSettingsButton = __webpack_require__(8);
 	
 	var _ChangePasswordSettingsButton2 = _interopRequireDefault(_ChangePasswordSettingsButton);
 	
@@ -100,46 +104,43 @@
 	        case 0:
 	          checkMessages = function () {
 	            var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-	              var response, messageId;
+	              var request;
 	              return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	                while (1) {
 	                  switch (_context2.prev = _context2.next) {
 	                    case 0:
-	                      _context2.next = 2;
-	                      return _jsreportStudio2.default.api.get('/api/message');
+	                      request = _superagent2.default.get(_jsreportStudio2.default.resolveUrl('/api/message'));
+	
+	                      request.end(function (err, response) {
+	                        if (response && response.body) {
+	                          var messageId = localStorage.getItem('messageId');
+	
+	                          if (messageId != response.body.id) {
+	                            localStorage.setItem('messageId', response.body.id);
+	
+	                            _jsreportStudio2.default.openModal(function (props) {
+	                              return React.createElement(
+	                                'div',
+	                                null,
+	                                React.createElement('div', { dangerouslySetInnerHTML: { __html: response.body.content } }),
+	                                React.createElement(
+	                                  'div',
+	                                  { className: 'button-bar' },
+	                                  React.createElement(
+	                                    'button',
+	                                    { className: 'button confirmation', onClick: function onClick() {
+	                                        return props.close();
+	                                      } },
+	                                    'ok'
+	                                  )
+	                                )
+	                              );
+	                            });
+	                          }
+	                        }
+	                      });
 	
 	                    case 2:
-	                      response = _context2.sent;
-	
-	                      if (response && response.content) {
-	                        messageId = localStorage.getItem('messageId');
-	
-	
-	                        if (messageId != response.id) {
-	                          localStorage.setItem('messageId', response.id);
-	
-	                          _jsreportStudio2.default.openModal(function (props) {
-	                            return React.createElement(
-	                              'div',
-	                              null,
-	                              React.createElement('div', { dangerouslySetInnerHTML: { __html: response.content } }),
-	                              React.createElement(
-	                                'div',
-	                                { className: 'button-bar' },
-	                                React.createElement(
-	                                  'button',
-	                                  { className: 'button confirmation', onClick: function onClick() {
-	                                      return props.close();
-	                                    } },
-	                                  'ok'
-	                                )
-	                              )
-	                            );
-	                          });
-	                        }
-	                      }
-	
-	                    case 4:
 	                    case 'end':
 	                      return _context2.stop();
 	                  }
@@ -533,6 +534,12 @@
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	module.exports = Studio.libraries['superagent'];
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -598,7 +605,7 @@
 	exports.default = ReportsButton;
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -607,7 +614,7 @@
 	  value: true
 	});
 	
-	var _ChangePasswordModal = __webpack_require__(8);
+	var _ChangePasswordModal = __webpack_require__(9);
 	
 	var _ChangePasswordModal2 = _interopRequireDefault(_ChangePasswordModal);
 	
@@ -636,7 +643,7 @@
 	};
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
