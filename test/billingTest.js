@@ -12,28 +12,11 @@ describe('checkBilling', () => {
     var now = new Date(2014, 6, 5)
 
     var update = billing.checkBilling(tenant, now)
-    update.should.be.ok
+    update.should.be.ok()
     update.$set.lastBilledDate.should.be.eql(now)
     update.$set.creditsUsed.should.be.eql(0)
     update.$push.billingHistory.creditsUsed.should.be.eql(100)
-  })
-
-
-  it('should charge when the last billed day is way in past', () => {
-    var tenant = {
-      createdOn: new Date(2014, 5, 12),
-      creditsUsed: 100,
-      lastBilledDate: new Date(2014, 11, 11)
-    }
-
-    var now = new Date(2015, 3, 3)
-
-    var update = billing.checkBilling(tenant, now)
-    update.should.be.ok
-    update.$set.lastBilledDate.should.be.eql(now)
-    update.$set.creditsUsed.should.be.eql(0)
-    update.$push.billingHistory.creditsUsed.should.be.eql(100)
-  })
+  })   
 
   it('should charge when current day is the last day of the month and billing day is greater then current', () => {
     var tenant = {
@@ -45,7 +28,7 @@ describe('checkBilling', () => {
     var now = new Date(2014, 3, 30)
 
     var update = billing.checkBilling(tenant, now)
-    update.should.be.ok
+    update.should.be.ok()
     update.$set.lastBilledDate.should.be.eql(now)
     update.$set.creditsUsed.should.be.eql(0)
     update.$push.billingHistory.creditsUsed.should.be.eql(100)
@@ -61,7 +44,7 @@ describe('checkBilling', () => {
     var now = new Date(2014, 6, 5)
 
     var update = billing.checkBilling(tenant, now)
-    should(update).not.be.ok
+    should(update).not.be.ok()
   })
 
   it('should NOT charge when now month day lower', () => {
@@ -74,7 +57,33 @@ describe('checkBilling', () => {
     var now = new Date(2014, 6, 4)
 
     var update = billing.checkBilling(tenant, now)
-    should(update).not.be.ok
+    should(update).not.be.ok()
+  })
+
+  it('should NOT charge in the first day of the next year', () => {
+    var tenant = {
+      createdOn: new Date('2014-05-05'),
+      creditsUsed: 100,
+      lastBilledDate: new Date('2014-12-05')
+    }    
+
+    var now = new Date('2015-01-01')
+
+    var update = billing.checkBilling(tenant, now)
+    should(update).not.be.ok()
+  })
+
+  it('should charge in first month of the year', () => {
+    var tenant = {
+      createdOn: new Date('2014-05-05'),
+      creditsUsed: 100,
+      lastBilledDate: new Date('2014-12-05')
+    }    
+
+    var now = new Date('2015-01-06')
+
+    var update = billing.checkBilling(tenant, now)
+    should(update).be.ok()
   })
 })
 

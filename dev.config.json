@@ -45,5 +45,8 @@
             "module": "moment"
         }],
         "timeout": 40000
+    },
+    "assets": {
+        "allowAssetsLinkedToFiles": false
     }
 }
