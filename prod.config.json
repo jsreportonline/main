@@ -21,6 +21,9 @@
   "logger": {
     "ignore": ["Starting rendering request"]
   },
+  "scheduling": {
+        "minScheduleInterval": 300000 
+    },
   "tasks": {
     "allowedModules": ["moment", "underscore"],
     "timeout": 5000,
@@ -41,7 +44,7 @@
       "globalVariableName": "moment",
       "module": "moment"
     }],
-    "timeout": 40000
+    "timeout": 20000
   },
   "assets": {
         "allowAssetsLinkedToFiles": false

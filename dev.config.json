@@ -11,12 +11,15 @@
     "connectionString": {
         "name": "mongodb"
     },
+    "scheduling": {
+        "minScheduleInterval": 300000 
+    },
     "httpPort": 5488,
     "httpsPort": null,
     "blobStorage": "fileSystem",
     "phantom": {
-        "timeout": 60000
-    },
+        "timeout": 10000
+    },   
     "loggly": {
         "level": "info",
         "subdomain": "jsreport"
@@ -44,7 +47,7 @@
             "globalVariableName": "moment",
             "module": "moment"
         }],
-        "timeout": 40000
+        "timeout": 20000
     },
     "assets": {
         "allowAssetsLinkedToFiles": false
