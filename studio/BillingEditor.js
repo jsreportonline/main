@@ -65,13 +65,17 @@ export default class ReportEditor extends Component {
         <h2>current billing plan</h2>
 
         <button style={{marginLeft: '0rem'}} className='button confirmation'>
-          {Studio.authentication.user.plan || 'free'} {Math.round(Studio.authentication.user.creditsUsed / 1000) + " "}
+          {Studio.authentication.user.plan || 'free'} {Math.round(Studio.authentication.user.creditsUsed / 1000) + ' '}
           / {Studio.authentication.user.creditsAvailable}
         </button>
 
         <button className='button confirmation' onClick={() => this.openUpgradeModal()}>
           Upgrade plan
         </button>
+
+        <a className='button confirmation' href='https://gumroad.com/library' target='_blank'>
+          Payment details
+        </a>
 
         <a className='button danger' href='https://gumroad.com/library' target='_blank'>
           Cancel subscription
@@ -80,8 +84,8 @@ export default class ReportEditor extends Component {
         <p>
           <small>
             We use <a href='https://gumroad.com' target='_blank'>gumroad.com</a> to mange jsreportonline payments and subscriptions.
-            If you have any issues with payments, please contact gumroad support.<br/> If the plan upgrade is not propagated after
-            several minutes, please contact jsreport support.<br/><br/>
+            If you have any issues with payments, please contact gumroad support.<br /> If the plan upgrade is not propagated after
+            several minutes, please contact jsreport support.<br /><br />
 
             Please cancel the old subscription when upgrading between payed plans.
           </small>
@@ -90,7 +94,7 @@ export default class ReportEditor extends Component {
       <div className='block-item'>
         <h2>billing history</h2>
         <ReactList type='uniform' itemsRenderer={this.renderItems} itemRenderer={(index) => this.renderItem(index)}
-                   length={Studio.authentication.user.billingHistory.length} />
+          length={Studio.authentication.user.billingHistory.length} />
       </div>
     </div>
   }

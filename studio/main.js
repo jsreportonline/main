@@ -404,7 +404,7 @@
 	            { style: { marginLeft: '0rem' }, className: 'button confirmation' },
 	            _jsreportStudio2.default.authentication.user.plan || 'free',
 	            ' ',
-	            Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) + " ",
+	            Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) + ' ',
 	            '/ ',
 	            _jsreportStudio2.default.authentication.user.creditsAvailable
 	          ),
@@ -414,6 +414,11 @@
 	                return _this3.openUpgradeModal();
 	              } },
 	            'Upgrade plan'
+	          ),
+	          _react2.default.createElement(
+	            'a',
+	            { className: 'button confirmation', href: 'https://gumroad.com/library', target: '_blank' },
+	            'Payment details'
 	          ),
 	          _react2.default.createElement(
 	            'a',
