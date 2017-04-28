@@ -1,5 +1,4 @@
 const init = require('../lib/init')
-const passwordHash = require('password-hash')
 const should = require('should')
 
 process.env = require('./basicOptions')

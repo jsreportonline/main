@@ -1,5 +1,4 @@
 const path = require('path')
-const stream = require('stream')
 const awsSDK = require('aws-sdk')
 const Promise = require('bluebird')
 const toArray = Promise.promisify(require('stream-to-array'))

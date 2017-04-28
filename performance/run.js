@@ -5,7 +5,7 @@ const path = require('path')
 const url = require('url')
 const _ = require('underscore')
 
-//const server = 'http://local.net:5488'
+// const server = 'http://local.net:5488'
 const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
@@ -15,9 +15,8 @@ const config = {
 }
 
 var accounts = []
-var templates
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const createAccounts = () => {
   var counter = 0
@@ -168,8 +167,9 @@ const createReports = () => {
   return Promise.all(accounts.map((a) => Promise.all(cases.map((c) => c(a)))))
 }
 
-var renderCounter = 0;
-var errorCounter = 1;
+var renderCounter = 0
+var errorCounter = 1
+
 const run = () => {
   console.log('rendering reports')
   return Promise.all(accounts.map((a) => Promise.map(new Array(config.iterations).fill(1),
@@ -208,4 +208,4 @@ createAccounts()
     const numberOfReports = cases.length * accounts.length * config.iterations
     console.log(`Reports per second ${numberOfReports / (elapsedTime / 1000)}`)
   })
-  .catch((e) => {throw e})
+  .catch((e) => { throw e })

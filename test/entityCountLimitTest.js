@@ -1,5 +1,7 @@
 const init = require('../lib/init')
 const Promise = require('bluebird')
+require('should')
+
 process.env = require('./basicOptions')
 
 describe('entityCountLimit', () => {

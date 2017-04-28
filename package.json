@@ -14,9 +14,21 @@
   },
   "scripts": {
     "build": "jsreport-studio-build",
+    "lint": "standard",
     "test": "mocha --timeout 15000 test"
   },
   "homepage": "https://github.com/jsreportonline/main#readme",
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "studio/main.js",
+      "performance/cases"
+    ],
+    "env": {
+      "node": true,
+      "mocha": true
+    }
+  },
   "dependencies": {
     "aws-sdk": "2.6.1",
     "client-sessions": "0.7.0",

@@ -1,7 +1,6 @@
 const init = require('../lib/init')
-const path = require('path')
-const should = require('should')
 const winston = require('winston')
+require('should')
 
 process.env = require('./basicOptions')
 
@@ -33,7 +32,7 @@ describe('quota', () => {
       })
     }).then(() => jsreport.multitenancyRepository.findTenant('test@test.com').then((t) => {
       t.quotaUsed.should.be.eql(0)
-      t.quotaStart.should.be.ok
+      t.quotaStart.should.be.ok()
     }))
   })
 

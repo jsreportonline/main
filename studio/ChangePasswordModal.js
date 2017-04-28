@@ -13,7 +13,6 @@ export default class ChangePasswordModal extends Component {
   }
 
   async changePassword () {
-    const { entity } = this.props.options
     const { close } = this.props
 
     try {

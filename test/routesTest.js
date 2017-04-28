@@ -1,7 +1,5 @@
 const init = require('../lib/init')
 const request = require('supertest')
-const os = require('os')
-const path = require('path')
 require('should')
 
 process.env = require('./basicOptions')
@@ -44,23 +42,22 @@ describe('routes', () => {
   })
 
   it('should auto login after register', (done) => {
-      request(jsreport.express.app).post('/register')
-        .type('form')
-        .send({ username: 'test@test.cz', name: 'joj', password: 'password', passwordConfirm: 'password', terms: true })
-        .expect('location', '/sign')
-        .end((err, res) => {
-          if (err) {
-            return done(err)
-          }
+    request(jsreport.express.app).post('/register')
+      .type('form')
+      .send({ username: 'test@test.cz', name: 'joj', password: 'password', passwordConfirm: 'password', terms: true })
+      .expect('location', '/sign')
+      .end((err, res) => {
+        if (err) {
+          return done(err)
+        }
 
-          request(jsreport.express.app)
-            .get('/')
-            .set('cookie', res.headers['set-cookie'])
-            .expect('location', /joj/)
-            .expect(302, done)
-        })
-    })
-
+        request(jsreport.express.app)
+          .get('/')
+          .set('cookie', res.headers['set-cookie'])
+          .expect('location', /joj/)
+          .expect(302, done)
+      })
+  })
 
   describe('with registered tenant', () => {
     beforeEach((done) => {

@@ -1,23 +1,10 @@
-const path = require('path')
 const Promise = require('bluebird')
 const MongoDB = require('mongodb')
 Promise.promisifyAll(MongoDB)
 
 console.log('starting migration ' + process.env['connectionString:uri'])
 
-MongoDB.MongoClient.connectAsync(process.env['connectionString:uri']).then((db) => {
-  return updateReportsBlobNames(db)
-
-  return dropsCollections(db)
-    .then(() => templateScripts(db))
-    .then(() => xlsxSettings(db))
-    .then(() => updateRecipes(db))
-    .then(() => updateReportsBlobNames(db))
-    .then(() => console.log('done'))
-}).catch((e) => {
-  console.error(e)
-})
-
+// eslint-disable-next-line no-unused-vars
 const templateScripts = (db) => {
   console.log('updating scripts')
 
@@ -35,6 +22,7 @@ const templateScripts = (db) => {
   })
 }
 
+// eslint-disable-next-line no-unused-vars
 const xlsxSettings = (db) => {
   console.log('updating settings')
 
@@ -53,16 +41,18 @@ const xlsxSettings = (db) => {
   })
 }
 
+// eslint-disable-next-line no-unused-vars
 const dropsCollections = (db) => {
   console.log('dropping settings')
 
   return db.collection('settings').dropAsync()
 }
 
+// eslint-disable-next-line no-unused-vars
 const updateRecipes = (db) => {
-  return db.collection('templates').updateAsync({recipe: 'phantom-pdf'}, { $set: { "phantom.phantomjsVersion": "1.9.8-windows" } }, { multi: true})
-    .then(() => db.collection('templates').updateAsync({recipe: 'wkhtmltopdf'}, { $set: { "wkhtmltopdf.wkhtmltopdfVersion": "0.12.3-windows" } }, { multi: true}))
-    .then(() => db.collection('templates').updateAsync({recipe: 'wrapped-html'}, { $set: { "recipe": "html-with-browser-client" } }, { multi: true}))
+  return db.collection('templates').updateAsync({recipe: 'phantom-pdf'}, { $set: { 'phantom.phantomjsVersion': '1.9.8-windows' } }, { multi: true })
+    .then(() => db.collection('templates').updateAsync({recipe: 'wkhtmltopdf'}, { $set: { 'wkhtmltopdf.wkhtmltopdfVersion': '0.12.3-windows' } }, { multi: true }))
+    .then(() => db.collection('templates').updateAsync({recipe: 'wrapped-html'}, { $set: { 'recipe': 'html-with-browser-client' } }, { multi: true }))
 }
 
 const updateReportsBlobNames = (db) => {
@@ -86,3 +76,16 @@ const updateReportsBlobNames = (db) => {
     }, { concurrency: 1 })
   })
 }
+
+MongoDB.MongoClient.connectAsync(process.env['connectionString:uri']).then((db) => {
+  return updateReportsBlobNames(db)
+
+  // return dropsCollections(db)
+  //   .then(() => templateScripts(db))
+  //   .then(() => xlsxSettings(db))
+  //   .then(() => updateRecipes(db))
+  //   .then(() => updateReportsBlobNames(db))
+  //   .then(() => console.log('done'))
+}).catch((e) => {
+  console.error(e)
+})

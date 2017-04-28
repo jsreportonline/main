@@ -16,7 +16,7 @@ describe('checkBilling', () => {
     update.$set.lastBilledDate.should.be.eql(now)
     update.$set.creditsUsed.should.be.eql(0)
     update.$push.billingHistory.creditsUsed.should.be.eql(100)
-  })   
+  })
 
   it('should charge when current day is the last day of the month and billing day is greater then current', () => {
     var tenant = {
@@ -65,7 +65,7 @@ describe('checkBilling', () => {
       createdOn: new Date('2014-05-05'),
       creditsUsed: 100,
       lastBilledDate: new Date('2014-12-05')
-    }    
+    }
 
     var now = new Date('2015-01-01')
 
@@ -78,7 +78,7 @@ describe('checkBilling', () => {
       createdOn: new Date('2014-05-05'),
       creditsUsed: 100,
       lastBilledDate: new Date('2014-12-05')
-    }    
+    }
 
     var now = new Date('2015-01-06')
 
@@ -86,5 +86,3 @@ describe('checkBilling', () => {
     should(update).be.ok()
   })
 })
-
-
