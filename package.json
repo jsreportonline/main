@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "aws-sdk": "2.6.1",
+    "bluebird": "3.5.0",
     "client-sessions": "0.8.0",
     "ejs": "2.5.6",
     "jsreport-assets": "0.6.6",
@@ -69,7 +70,6 @@
     "passport-local": "1.0.0",
     "password-hash": "1.2.2",
     "phantomjs-exact-2-1-1": "0.1.0",
-    "q": "1.4.1",
     "request": "2.74.0",
     "sendgrid": "4.3.0",
     "shortid": "2.2.8",
