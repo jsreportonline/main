@@ -43,7 +43,7 @@
     "jsreport-debug": "1.0.5",
     "jsreport-ejs": "1.0.4",
     "jsreport-electron-pdf": "2.2.3",
-    "jsreport-express": "1.0.2",
+    "jsreport-express": "1.2.3",
     "jsreport-fop-pdf": "1.1.2",
     "jsreport-fs-store": "1.2.1",
     "jsreport-handlebars": "1.1.2",
