@@ -117,4 +117,13 @@ describe('multitenancyRepository', () => {
         .then((v) => should(v.password).not.be.ok())
     })
   })
+
+  it('update tenant should not be case sensitive', () => {
+    return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password').then(() => {
+      return jsreport.multitenancyRepository.updateTenant('TEST', { $set: { plan: 'bronze' } })
+    }).then(() => {
+      return jsreport.multitenancyRepository.findTenant('test@test.com')
+        .then((v) => v.plan.should.be.eql('bronze'))
+    })
+  })
 })
