@@ -28,7 +28,7 @@
       "ignore": ["Starting rendering request"]
     },
     "tasks": {
-        "allowedModules": ["moment", "underscore"],
+        "allowedModules": ["moment", "underscore", "lodash"],
         "timeout": 5000,
         "nativeModules": [{
             "globalVariableName": "_",
