@@ -3,6 +3,7 @@ import BillingEditor from './BillingEditor.js'
 import superagent from 'superagent'
 import BillingButton from './BillingButton.js'
 import ChangePasswordSettingsButton from './ChangePasswordSettingsButton.js'
+import ContactEmailModal from './ContactEmailModal'
 
 const localStorage = window.localStorage
 
@@ -16,12 +17,22 @@ Studio.previewListeners.push(() => {
 })
 
 Studio.readyListeners.push(async () => {
+  const isModalUsed = () => {
+    return Studio.store.getState().modal.isOpen
+  }
+
+  const contactEmailModal = () => Studio.openModal(ContactEmailModal)
+
   const checkMessages = async () => {
     const request = superagent.get(Studio.resolveUrl('/api/message'))
     // eslint-disable-next-line handle-callback-err
     request.end((err, response) => {
       if (response && response.body) {
         const messageId = localStorage.getItem('messageId')
+
+        if (isModalUsed()) {
+          return
+        }
 
         if (messageId !== response.body.id) {
           localStorage.setItem('messageId', response.body.id)
@@ -37,6 +48,15 @@ Studio.readyListeners.push(async () => {
         }
       }
     })
+  }
+
+  if (
+    !isModalUsed() &&
+    Studio.authentication.user &&
+    Studio.authentication.user.isAdmin &&
+    Studio.authentication.user.contactEmail == null
+  ) {
+    contactEmailModal()
   }
 
   setInterval(checkMessages, 5 * 60 * 1000)

@@ -66,9 +66,15 @@
 	
 	var _ChangePasswordSettingsButton2 = _interopRequireDefault(_ChangePasswordSettingsButton);
 	
+	var _ContactEmailModal = __webpack_require__(10);
+	
+	var _ContactEmailModal2 = _interopRequireDefault(_ContactEmailModal);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+	
+	var localStorage = window.localStorage;
 	
 	_jsreportStudio2.default.addEditorComponent('billing', _BillingEditor2.default);
 	
@@ -97,11 +103,19 @@
 	});
 	
 	_jsreportStudio2.default.readyListeners.push(_asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
-	  var checkMessages;
+	  var isModalUsed, contactEmailModal, checkMessages;
 	  return regeneratorRuntime.wrap(function _callee3$(_context3) {
 	    while (1) {
 	      switch (_context3.prev = _context3.next) {
 	        case 0:
+	          isModalUsed = function isModalUsed() {
+	            return _jsreportStudio2.default.store.getState().modal.isOpen;
+	          };
+	
+	          contactEmailModal = function contactEmailModal() {
+	            return _jsreportStudio2.default.openModal(_ContactEmailModal2.default);
+	          };
+	
 	          checkMessages = function () {
 	            var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
 	              var request;
@@ -110,12 +124,17 @@
 	                  switch (_context2.prev = _context2.next) {
 	                    case 0:
 	                      request = _superagent2.default.get(_jsreportStudio2.default.resolveUrl('/api/message'));
+	                      // eslint-disable-next-line handle-callback-err
 	
 	                      request.end(function (err, response) {
 	                        if (response && response.body) {
 	                          var messageId = localStorage.getItem('messageId');
 	
-	                          if (messageId != response.body.id) {
+	                          if (isModalUsed()) {
+	                            return;
+	                          }
+	
+	                          if (messageId !== response.body.id) {
 	                            localStorage.setItem('messageId', response.body.id);
 	
 	                            _jsreportStudio2.default.openModal(function (props) {
@@ -153,10 +172,14 @@
 	            };
 	          }();
 	
+	          if (!isModalUsed() && _jsreportStudio2.default.authentication.user && _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null) {
+	            contactEmailModal();
+	          }
+	
 	          setInterval(checkMessages, 5 * 60 * 1000);
 	          checkMessages();
 	
-	        case 3:
+	        case 6:
 	        case 'end':
 	          return _context3.stop();
 	      }
@@ -496,10 +519,6 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _jsreportStudio = __webpack_require__(1);
-	
-	var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -693,22 +712,21 @@
 	    key: 'changePassword',
 	    value: function () {
 	      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	        var entity, close, data, response;
+	        var close, data, response;
 	        return regeneratorRuntime.wrap(function _callee$(_context) {
 	          while (1) {
 	            switch (_context.prev = _context.next) {
 	              case 0:
-	                entity = this.props.options.entity;
 	                close = this.props.close;
-	                _context.prev = 2;
+	                _context.prev = 1;
 	                data = {
 	                  newPassword: this.refs.newPassword1.value,
 	                  oldPassword: this.refs.oldPassword.value
 	                };
-	                _context.next = 6;
+	                _context.next = 5;
 	                return _jsreportStudio2.default.api.post('/api/password', { data: data });
 	
-	              case 6:
+	              case 5:
 	                response = _context.sent;
 	
 	
@@ -716,31 +734,31 @@
 	                this.refs.newPassword2.value = '';
 	
 	                if (!(response.code !== 'ok')) {
-	                  _context.next = 12;
+	                  _context.next = 11;
 	                  break;
 	                }
 	
 	                this.setState({ validationError: response.code });
 	                return _context.abrupt('return');
 	
-	              case 12:
+	              case 11:
 	
 	                close();
-	                _context.next = 18;
+	                _context.next = 17;
 	                break;
 	
-	              case 15:
-	                _context.prev = 15;
-	                _context.t0 = _context['catch'](2);
+	              case 14:
+	                _context.prev = 14;
+	                _context.t0 = _context['catch'](1);
 	
 	                this.setState({ apiError: _context.t0.message });
 	
-	              case 18:
+	              case 17:
 	              case 'end':
 	                return _context.stop();
 	            }
 	          }
-	        }, _callee, this, [[2, 15]]);
+	        }, _callee, this, [[1, 14]]);
 	      }));
 	
 	      function changePassword() {
@@ -839,6 +857,175 @@
 	  options: _react.PropTypes.object.isRequired
 	};
 	exports.default = ChangePasswordModal;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _jsreportStudio = __webpack_require__(1);
+	
+	var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ContactEmailModal = function (_Component) {
+	  _inherits(ContactEmailModal, _Component);
+	
+	  function ContactEmailModal(props) {
+	    _classCallCheck(this, ContactEmailModal);
+	
+	    var _this = _possibleConstructorReturn(this, (ContactEmailModal.__proto__ || Object.getPrototypeOf(ContactEmailModal)).call(this, props));
+	
+	    _this.state = {
+	      validationError: null,
+	      apiError: null
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(ContactEmailModal, [{
+	    key: 'saveContactEmail',
+	    value: function () {
+	      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	        var close, data, response;
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	          while (1) {
+	            switch (_context.prev = _context.next) {
+	              case 0:
+	                close = this.props.close;
+	                _context.prev = 1;
+	                data = {
+	                  contactEmail: this.refs.contactEmail.value
+	                };
+	                _context.next = 5;
+	                return _jsreportStudio2.default.api.post('/api/register-contact-email', { data: data });
+	
+	              case 5:
+	                response = _context.sent;
+	
+	
+	                this.refs.contactEmail.value = '';
+	
+	                if (!(response.code !== 'ok')) {
+	                  _context.next = 10;
+	                  break;
+	                }
+	
+	                this.setState({ validationError: response.code });
+	                return _context.abrupt('return');
+	
+	              case 10:
+	
+	                close();
+	                _context.next = 16;
+	                break;
+	
+	              case 13:
+	                _context.prev = 13;
+	                _context.t0 = _context['catch'](1);
+	
+	                this.setState({ apiError: _context.t0.message });
+	
+	              case 16:
+	              case 'end':
+	                return _context.stop();
+	            }
+	          }
+	        }, _callee, this, [[1, 13]]);
+	      }));
+	
+	      function saveContactEmail() {
+	        return _ref.apply(this, arguments);
+	      }
+	
+	      return saveContactEmail;
+	    }()
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'We need to have a contact email in case of any notification about the service or to communicate directly if necessary.',
+	          _react2.default.createElement('br', null),
+	          'Please provide the email of the person who is in charge of any use of the service'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Contact Email'
+	            ),
+	            _react2.default.createElement('input', { type: 'text', placeholder: 'email...', ref: 'contactEmail' })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'span',
+	              { style: { color: 'red', display: this.state.validationError ? 'block' : 'none' } },
+	              this.state.validationError
+	            ),
+	            _react2.default.createElement(
+	              'span',
+	              { style: { color: 'red', display: this.state.apiError ? 'block' : 'none' } },
+	              this.state.apiError
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'button-bar' },
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'button confirmation', onClick: function onClick() {
+	                  return _this2.saveContactEmail();
+	                } },
+	              'save'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return ContactEmailModal;
+	}(_react.Component);
+	
+	ContactEmailModal.propTypes = {
+	  close: _react.PropTypes.func.isRequired,
+	  options: _react.PropTypes.object.isRequired
+	};
+	exports.default = ContactEmailModal;
 
 /***/ }
 /******/ ]);
