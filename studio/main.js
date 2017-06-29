@@ -103,17 +103,94 @@
 	});
 	
 	_jsreportStudio2.default.readyListeners.push(_asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
-	  var isModalUsed, contactEmailModal, checkMessages;
+	  var creditsExceeded, isModalUsed, contactEmailNotRegistered, contactEmailModal, creditsExceededModal, checkMessages, intervalId;
 	  return regeneratorRuntime.wrap(function _callee3$(_context3) {
 	    while (1) {
 	      switch (_context3.prev = _context3.next) {
 	        case 0:
+	          creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.creditsAvailable;
+	
 	          isModalUsed = function isModalUsed() {
-	            return _jsreportStudio2.default.store.getState().modal.isOpen;
+	            if (!_jsreportStudio2.default.isModalOpen) {
+	              return false;
+	            }
+	
+	            return _jsreportStudio2.default.isModalOpen();
+	          };
+	
+	          contactEmailNotRegistered = function contactEmailNotRegistered() {
+	            return _jsreportStudio2.default.authentication.user && _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null;
 	          };
 	
 	          contactEmailModal = function contactEmailModal() {
 	            return _jsreportStudio2.default.openModal(_ContactEmailModal2.default);
+	          };
+	
+	          creditsExceededModal = function creditsExceededModal() {
+	            return _jsreportStudio2.default.openModal(function (props) {
+	              return React.createElement(
+	                'div',
+	                null,
+	                React.createElement(
+	                  'p',
+	                  null,
+	                  'The monthly prepaid credits in your account has been exceeded. Please upgrade your ',
+	                  React.createElement(
+	                    'a',
+	                    { href: 'https://jsreport.net/buy/online', target: '_blank' },
+	                    'jsreportonline plan'
+	                  ),
+	                  ' to avoid service interruption.'
+	                ),
+	                React.createElement(
+	                  'p',
+	                  null,
+	                  React.createElement(
+	                    'b',
+	                    null,
+	                    'Available: ',
+	                    React.createElement(
+	                      'span',
+	                      { style: { color: '#008000' } },
+	                      _jsreportStudio2.default.authentication.user.creditsAvailable
+	                    )
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'b',
+	                    null,
+	                    'Used: ',
+	                    React.createElement(
+	                      'span',
+	                      { style: { color: '#c7a620' } },
+	                      Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000)
+	                    )
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'b',
+	                    null,
+	                    'Excess: ',
+	                    React.createElement(
+	                      'span',
+	                      { style: { color: '#ff0000' } },
+	                      Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) - _jsreportStudio2.default.authentication.user.creditsAvailable
+	                    )
+	                  )
+	                ),
+	                React.createElement(
+	                  'div',
+	                  { className: 'button-bar' },
+	                  React.createElement(
+	                    'button',
+	                    { className: 'button confirmation', onClick: function onClick() {
+	                        return props.close();
+	                      } },
+	                    'ok'
+	                  )
+	                )
+	              );
+	            });
 	          };
 	
 	          checkMessages = function () {
@@ -172,14 +249,31 @@
 	            };
 	          }();
 	
-	          if (!isModalUsed() && _jsreportStudio2.default.authentication.user && _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null) {
-	            contactEmailModal();
+	          if (creditsExceeded) {
+	            intervalId = void 0;
+	
+	
+	            creditsExceededModal();
+	
+	            intervalId = setInterval(function () {
+	              if (!isModalUsed()) {
+	                clearInterval(intervalId);
+	
+	                if (contactEmailNotRegistered()) {
+	                  contactEmailModal();
+	                }
+	              }
+	            }, 2500);
+	          } else {
+	            if (!isModalUsed() && contactEmailNotRegistered()) {
+	              contactEmailModal();
+	            }
 	          }
 	
 	          setInterval(checkMessages, 5 * 60 * 1000);
 	          checkMessages();
 	
-	        case 6:
+	        case 9:
 	        case 'end':
 	          return _context3.stop();
 	      }
