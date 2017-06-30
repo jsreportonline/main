@@ -31,24 +31,38 @@ Studio.readyListeners.push(async () => {
 
   const contactEmailModal = () => Studio.openModal(ContactEmailModal)
 
-  const creditsExceededModal = () => Studio.openModal((props) => (
-    <div>
-      <p>
-        The monthly prepaid credits in your account has been exceeded.
-        Please upgrade your <a href='https://jsreport.net/buy/online' target='_blank'>jsreportonline plan</a> to avoid service interruption.
-      </p>
-      <p>
-        <b>Available: <span style={{ color: '#008000' }}>{Studio.authentication.user.creditsAvailable}</span></b>
-        <br />
-        <b>Used: <span style={{ color: '#c7a620' }}>{Math.round(Studio.authentication.user.creditsUsed / 1000)}</span></b>
-        <br />
-        <b>Excess: <span style={{ color: '#ff0000' }}>{Math.round(Studio.authentication.user.creditsUsed / 1000) - Studio.authentication.user.creditsAvailable}</span></b>
-      </p>
-      <div className='button-bar'>
-        <button className='button confirmation' onClick={() => props.close()}>ok</button>
+  const creditsExceededModal = () => Studio.openModal((props) => {
+    let creditsAvailable = Studio.authentication.user.creditsAvailable
+    let creditsUsed = Math.round(Studio.authentication.user.creditsUsed / 1000)
+
+    return (
+      <div>
+        <p>
+          The monthly prepaid credits in your account has been exceeded.
+          Please upgrade your <a href='https://jsreport.net/buy/online' target='_blank'>jsreportonline plan</a> to avoid service interruption.
+        </p>
+        <p>
+          <b>
+            Available:{' '}
+            <span style={{ color: '#008000' }}>{creditsAvailable}</span>
+          </b>
+          <br />
+          <b>
+            Used:{' '}
+            <span style={{ color: '#c7a620' }}>{creditsUsed}</span>
+          </b>
+          <br />
+          <b>
+            Excess:{' '}
+            <span style={{ color: '#ff0000' }}>{`${creditsUsed - creditsAvailable} (${Math.floor(((creditsUsed - creditsAvailable) / creditsAvailable) * 100)}%)`}</span>
+          </b>
+        </p>
+        <div className='button-bar'>
+          <button className='button confirmation' onClick={() => props.close()}>ok</button>
+        </div>
       </div>
-    </div>
-  ))
+    )
+  })
 
   const checkMessages = async () => {
     const request = superagent.get(Studio.resolveUrl('/api/message'))

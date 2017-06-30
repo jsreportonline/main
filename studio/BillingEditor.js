@@ -87,7 +87,7 @@ export default class ReportEditor extends Component {
             If you have any issues with payments, please contact gumroad support.<br /> If the plan upgrade is not propagated after
             several minutes, please contact jsreport support.<br /><br />
 
-            Please cancel the old subscription when upgrading between payed plans.
+            <b>Please cancel the old subscription when upgrading between payed plans.</b>
           </small>
         </p>
       </div>

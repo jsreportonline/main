@@ -111,11 +111,7 @@
 	          creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.creditsAvailable;
 	
 	          isModalUsed = function isModalUsed() {
-	            if (!_jsreportStudio2.default.isModalOpen) {
-	              return false;
-	            }
-	
-	            return _jsreportStudio2.default.isModalOpen();
+	            return _jsreportStudio2.default.store.getState().modal.isOpen;
 	          };
 	
 	          contactEmailNotRegistered = function contactEmailNotRegistered() {
@@ -128,6 +124,9 @@
 	
 	          creditsExceededModal = function creditsExceededModal() {
 	            return _jsreportStudio2.default.openModal(function (props) {
+	              var creditsAvailable = _jsreportStudio2.default.authentication.user.creditsAvailable;
+	              var creditsUsed = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000);
+	
 	              return React.createElement(
 	                'div',
 	                null,
@@ -148,33 +147,36 @@
 	                  React.createElement(
 	                    'b',
 	                    null,
-	                    'Available: ',
+	                    'Available:',
+	                    ' ',
 	                    React.createElement(
 	                      'span',
 	                      { style: { color: '#008000' } },
-	                      _jsreportStudio2.default.authentication.user.creditsAvailable
+	                      creditsAvailable
 	                    )
 	                  ),
 	                  React.createElement('br', null),
 	                  React.createElement(
 	                    'b',
 	                    null,
-	                    'Used: ',
+	                    'Used:',
+	                    ' ',
 	                    React.createElement(
 	                      'span',
 	                      { style: { color: '#c7a620' } },
-	                      Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000)
+	                      creditsUsed
 	                    )
 	                  ),
 	                  React.createElement('br', null),
 	                  React.createElement(
 	                    'b',
 	                    null,
-	                    'Excess: ',
+	                    'Excess:',
+	                    ' ',
 	                    React.createElement(
 	                      'span',
 	                      { style: { color: '#ff0000' } },
-	                      Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) - _jsreportStudio2.default.authentication.user.creditsAvailable
+	                      creditsUsed - creditsAvailable + ' (' + Math.floor((creditsUsed - creditsAvailable) / creditsAvailable * 100) + '%)'
 	                    )
 	                  )
 	                ),
@@ -559,7 +561,11 @@
 	              ' If the plan upgrade is not propagated after several minutes, please contact jsreport support.',
 	              _react2.default.createElement('br', null),
 	              _react2.default.createElement('br', null),
-	              'Please cancel the old subscription when upgrading between payed plans.'
+	              _react2.default.createElement(
+	                'b',
+	                null,
+	                'Please cancel the old subscription when upgrading between payed plans.'
+	              )
 	            )
 	          )
 	        ),
