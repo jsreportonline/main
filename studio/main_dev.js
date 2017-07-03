@@ -20,7 +20,7 @@ Studio.readyListeners.push(async () => {
   const creditsExceeded = Math.round(Studio.authentication.user.creditsUsed / 1000) > Studio.authentication.user.creditsAvailable
 
   const isModalUsed = () => {
-    return Studio.store.getState().modal.isOpen
+    return Studio.isModalOpen()
   }
 
   const contactEmailNotRegistered = () => (

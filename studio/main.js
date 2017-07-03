@@ -111,7 +111,7 @@
 	          creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.creditsAvailable;
 	
 	          isModalUsed = function isModalUsed() {
-	            return _jsreportStudio2.default.store.getState().modal.isOpen;
+	            return _jsreportStudio2.default.isModalOpen();
 	          };
 	
 	          contactEmailNotRegistered = function contactEmailNotRegistered() {
