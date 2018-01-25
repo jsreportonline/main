@@ -41,7 +41,7 @@
     "jsreport-child-templates": "0.4.6",
     "jsreport-core": "1.3.2",
     "jsreport-data": "1.1.2",
-    "jsreport-debug": "1.0.5",
+    "jsreport-debug": "1.1.0",
     "jsreport-ejs": "1.0.4",
     "jsreport-electron-pdf": "2.7.1",
     "jsreport-express": "1.2.3",
