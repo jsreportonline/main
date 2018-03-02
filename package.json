@@ -49,7 +49,7 @@
     "jsreport-fs-store": "1.2.1",
     "jsreport-handlebars": "1.1.2",
     "jsreport-images": "1.1.1",
-    "jsreport-import-export": "0.4.2",
+    "jsreport-import-export": "0.5.1",
     "jsreport-jade": "2.0.1",
     "jsreport-jsrender": "1.0.2",
     "jsreport-mongodb-store": "0.5.6",
