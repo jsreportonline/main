@@ -5,53 +5,93 @@ require('should')
 process.env = require('./basicOptions')
 
 describe('entityCountLimit', () => {
-  var jsreport
+  let jsreport
 
-  beforeEach(() => {
-    return init().then((j) => (jsreport = j)).then(() => {
-      jsreport.documentStore.provider.db.db(jsreport.options.connectionString.databaseName).dropDatabase()
-      jsreport.documentStore.provider.db.db(jsreport.options.connectionString.rootDatabaseName).dropDatabase()
+  beforeEach(async () => {
+    const j = await init()
+
+    jsreport = j
+
+    await Promise.all([
+      jsreport.documentStore.provider.client.db(jsreport.options.db.databaseName).dropDatabase(),
+      jsreport.documentStore.provider.client.db(jsreport.options.db.rootDatabaseName).dropDatabase()
+    ])
+  })
+
+  afterEach(async () => {
+    if (jsreport) {
+      // NOTE: we are not calling .close because this calls mongoconnection.close() from jsreport-mongodb-store and causes
+      // that tests throws Mongo error "Topology was destroyed", investigate this later
+      // await jsreport.express.server.close()
+
+      jsreport.express.server.close()
+    }
+  })
+
+  it('insert should pass if the limit is below', async () => {
+    const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+
+    await jsreport.documentStore.collection('templates').insert({
+      name: 'demo',
+      content: 'foo',
+      engine: 'none',
+      recipe: 'html'
+    }, {
+      context: {
+        tenant: { name: 'test' },
+        user: { _id: t._id, username: 'test@test.com', admin: true }
+      }
     })
   })
 
-  afterEach(() => jsreport.express.server.close())
-
-  it('insert should pass if the limit is below', () => {
-    return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
-        .then((t) => jsreport.documentStore.collection('templates').insert({
-          content: 'foo',
-          engine: 'none',
-          recipe: 'html'
-        }, { tenant: { name: 'test' }, user: { _id: t._id, username: 'test@test.com', admin: true } }))
-  })
-
-  it('insert should throw if limit set on tenant is reached', () => {
-    const createTemplate = (t) => {
+  it('insert should throw if limit set on tenant is reached', async () => {
+    const createTemplate = (name, t) => {
       return jsreport.documentStore.collection('templates').insert({
+        name,
         content: 'foo',
         engine: 'none',
         recipe: 'html'
-      }, { tenant: { name: 'test', entityCountLimit: 1 }, user: { _id: t._id, username: 'test@test.com', admin: true } })
+      }, {
+        context: {
+          tenant: { name: 'test', entityCountLimit: 1 },
+          user: { _id: t._id, username: 'test@test.com', admin: true }
+        }
+      })
     }
 
-    return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
-        .then((t) => {
-          return createTemplate(t).then(() => createTemplate(t))
-        }).catch(() => 'validated').then((r) => r.should.be.eql('validated'))
+    const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+
+    try {
+      await createTemplate('demo1', t)
+      await createTemplate('demo2', t)
+    } catch (e) {
+      e.should.be.Error()
+      e.message.should.match(/Maximum entity count limit reached/)
+    }
   })
 
-  it('insert should throw if limit set on plan is reached', () => {
-    const createTemplate = (t) => {
+  it('insert should throw if limit set on plan is reached', async () => {
+    const createTemplate = (name, t) => {
       return jsreport.documentStore.collection('templates').insert({
+        name,
         content: 'foo',
         engine: 'none',
         recipe: 'html'
-      }, { tenant: { name: 'test', plan: 'free' }, user: { _id: t._id, username: 'test@test.com', admin: true } })
+      }, {
+        context: {
+          tenant: { name: 'test', plan: 'free' },
+          user: { _id: t._id, username: 'test@test.com', admin: true }
+        }
+      })
     }
 
-    return jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
-        .then((t) => {
-          return Promise.mapSeries(Array(21), (i) => createTemplate(t))
-        }).catch(() => 'validated').then((r) => r.should.be.eql('validated'))
+    const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+
+    try {
+      await Promise.mapSeries(Array(21), (i) => createTemplate('demo', t))
+    } catch (e) {
+      e.should.be.Error()
+      e.message.should.match(/Maximum entity count limit reached/)
+    }
   })
 })

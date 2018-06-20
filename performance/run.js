@@ -5,8 +5,8 @@ const path = require('path')
 const url = require('url')
 const _ = require('underscore')
 
-// const server = 'http://local.net:5488'
-const server = 'https://jsreportonline-test.net'
+const server = 'http://local.net:5488'
+// const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
@@ -14,13 +14,15 @@ const config = {
   iterations: 2000
 }
 
-var accounts = []
+let accounts = []
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const createAccounts = () => {
-  var counter = 0
+  let counter = 0
+
   console.log(`creating ${config.numberOfAccounts} accounts`)
+
   accounts = new Array(config.numberOfAccounts)
     .fill(1)
     .map(() => Math.floor(Math.random() * 100000000))
@@ -32,7 +34,7 @@ const createAccounts = () => {
       delay: (Math.random() * 10000),
       password: 'password',
       passwordConfirm: 'password',
-      authHeader: `Basic ${new Buffer(`${id}@perf.com:password`).toString('base64')}`,
+      authHeader: `Basic ${Buffer.from(`${id}@perf.com:password`).toString('base64')}`,
       terms: true
     }))
 
@@ -48,7 +50,7 @@ const caseInvoice = (a) => {
     body: {
       content: fs.readFileSync(path.join(__dirname, 'cases', 'invoice', 'content.html')).toString(),
       helpers: fs.readFileSync(path.join(__dirname, 'cases', 'invoice', 'helpers.js')).toString(),
-      recipe: 'phantom-pdf',
+      recipe: 'chrome-pdf',
       engine: 'jsrender',
       name: 'invoice'
     },
@@ -167,45 +169,52 @@ const createReports = () => {
   return Promise.all(accounts.map((a) => Promise.all(cases.map((c) => c(a)))))
 }
 
-var renderCounter = 0
-var errorCounter = 1
+let renderCounter = 0
+let errorCounter = 1
 
 const run = () => {
   console.log('rendering reports')
+
   return Promise.all(accounts.map((a) => Promise.map(new Array(config.iterations).fill(1),
-      () => Promise.delay(a.delay).then(() => {
-        const startTime = new Date().getTime()
-        const item = Math.floor(Math.random() * casesRun.length)
-        return request.post({
-          url: `${a.url}/api/report`,
-          body: casesRun[item],
-          json: true,
-          headers: {
-            'Authorization': a.authHeader
-          }
-        }).then((body) => {
-          console.log(`${a.index}: ${++renderCounter}:${new Date().getTime() - startTime}`)
-        }).catch((e) => {
-          if (e.statusCode !== 429) {
-            console.error('Failed item + ' + item + ' : ' + e.toString())
-          } else {
-            console.log(`${a.index}: 429: ${++errorCounter}`)
-          }
-          return Promise.delay(5000)
-        })
-      }), { concurrency: 1 })
+    () => Promise.delay(a.delay).then(() => {
+      const startTime = new Date().getTime()
+      const item = Math.floor(Math.random() * casesRun.length)
+      return request.post({
+        url: `${a.url}/api/report`,
+        body: casesRun[item],
+        json: true,
+        headers: {
+          'Authorization': a.authHeader
+        }
+      }).then((body) => {
+        console.log(`${a.index}: ${++renderCounter}:${new Date().getTime() - startTime}`)
+      }).catch((e) => {
+        if (e.statusCode !== 429) {
+          console.error('Failed item + ' + item + ' : ' + e.toString())
+        } else {
+          console.log(`${a.index}: 429: ${++errorCounter}`)
+        }
+        return Promise.delay(5000)
+      })
+    }), { concurrency: 1 })
   ))
 }
 
 const start = new Date().getTime()
-createAccounts()
-  .then(createReports)
-  .then(run)
-  .then(() => {
+
+;(async () => {
+  try {
+    await createAccounts()
+    await createReports()
+    await run()
+
     console.log('done')
     const elapsedTime = new Date().getTime() - start
     console.log(`Elapsed time ${elapsedTime} ms`)
     const numberOfReports = cases.length * accounts.length * config.iterations
     console.log(`Reports per second ${numberOfReports / (elapsedTime / 1000)}`)
-  })
-  .catch((e) => { throw e })
+  } catch (e) {
+    console.error(e)
+    process.exit(1)
+  }
+})()
