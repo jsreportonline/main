@@ -69,7 +69,7 @@
     "jsreport-version-control": "1.0.6",
     "jsreport-wkhtmltopdf": "2.0.3",
     "jsreport-worker-docker-manager": "github:jsreport/jsreport-worker-docker-manager",
-    "jsreport-xlsx": "2.0.0",
+    "jsreport-xlsx": "2.0.1",
     "nanoid": "1.0.2",
     "passport": "0.3.2",
     "passport-http": "0.3.0",
