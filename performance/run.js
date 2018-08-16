@@ -5,13 +5,13 @@ const path = require('path')
 const url = require('url')
 const _ = require('underscore')
 
-const server = 'http://local.net:5488'
+const server = 'http://localtest.me:5488'
 // const server = 'https://jsreportonline-test.net'
 const serverUrl = url.parse(server)
 
 const config = {
-  numberOfAccounts: 24,
-  iterations: 2000
+  numberOfAccounts: 10,
+  iterations: 20
 }
 
 let accounts = []
@@ -170,15 +170,22 @@ const createReports = () => {
 }
 
 let renderCounter = 0
-let errorCounter = 1
+let successCounter = 0
+let errorCounter = 0
+let tooManyRequestsError = 0
 
 const run = () => {
-  console.log('rendering reports')
+  console.log(`rendering reports (${config.iterations} report case(s) will be run per each account. total accounts: ${accounts.length})`)
 
   return Promise.all(accounts.map((a) => Promise.map(new Array(config.iterations).fill(1),
     () => Promise.delay(a.delay).then(() => {
       const startTime = new Date().getTime()
       const item = Math.floor(Math.random() * casesRun.length)
+
+      renderCounter++
+
+      const requestNumber = renderCounter
+
       return request.post({
         url: `${a.url}/api/report`,
         body: casesRun[item],
@@ -187,12 +194,16 @@ const run = () => {
           'Authorization': a.authHeader
         }
       }).then((body) => {
-        console.log(`${a.index}: ${++renderCounter}:${new Date().getTime() - startTime}`)
+        successCounter++
+        console.log(`Success! account: ${a.index}, case item: ${item}, render counter: ${requestNumber}, time: ${new Date().getTime() - startTime}ms`)
       }).catch((e) => {
+        errorCounter++
+
         if (e.statusCode !== 429) {
-          console.error('Failed item + ' + item + ' : ' + e.toString())
+          console.error(`Failed! account: ${a.index}, case item ${item}, render counter: ${requestNumber}: ${e.toString()}`)
         } else {
-          console.log(`${a.index}: 429: ${++errorCounter}`)
+          tooManyRequestsError++
+          console.log(`Failed! account: ${a.index}, case item: ${item}, render counter: ${requestNumber}. 429 error`)
         }
         return Promise.delay(5000)
       })
@@ -206,13 +217,21 @@ const start = new Date().getTime()
   try {
     await createAccounts()
     await createReports()
+
+    const renderStart = new Date().getTime()
+
     await run()
 
     console.log('done')
     const elapsedTime = new Date().getTime() - start
-    console.log(`Elapsed time ${elapsedTime} ms`)
-    const numberOfReports = cases.length * accounts.length * config.iterations
-    console.log(`Reports per second ${numberOfReports / (elapsedTime / 1000)}`)
+    const renderTime = new Date().getTime() - renderStart
+    console.log(`Total Elapsed time ${elapsedTime} ms`)
+    console.log(`Total Render time: ${renderTime} ms`)
+    const numberOfReports = accounts.length * config.iterations
+    console.log(`Rendered a total of ${numberOfReports} report(s)`)
+    console.log(`Requests ok: ${successCounter}`)
+    console.log(`Requests with error: ${errorCounter} (429 errors: ${tooManyRequestsError})`)
+    console.log(`Reports per second ${numberOfReports / (renderTime / 1000)}`)
   } catch (e) {
     console.error(e)
     process.exit(1)
