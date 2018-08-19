@@ -7,9 +7,7 @@ describe('multitenancyRepository', () => {
   let jsreport
 
   beforeEach(async () => {
-    const j = await init()
-
-    jsreport = j
+    jsreport = await init()
 
     await Promise.all([
       jsreport.documentStore.provider.client.db(jsreport.options.db.databaseName).dropDatabase(),
@@ -17,15 +15,7 @@ describe('multitenancyRepository', () => {
     ])
   })
 
-  afterEach(async () => {
-    if (jsreport) {
-      // NOTE: we are not calling .close because this calls mongoconnection.close() from jsreport-mongodb-store and causes
-      // that tests throws Mongo error "Topology was destroyed", investigate this later
-      // await jsreport.express.server.close()
-
-      jsreport.express.server.close()
-    }
-  })
+  afterEach(() => jsreport.close())
 
   it('registerTenant should pass', async () => {
     await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
