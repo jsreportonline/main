@@ -39,7 +39,13 @@ module.exports = async (db, logger) => {
         continue
       }
 
-      let assetName = `${image.name}.${image.contentType.split('/')[1]}`
+      let extensionPart = image.contentType.split('/')[1].trim()
+
+      if (extensionPart === 'svg+xml') {
+        extensionPart = 'svg'
+      }
+
+      let assetName = `${image.name}.${extensionPart}`
       let asset
 
       do {
