@@ -2,6 +2,7 @@ const MongoClient = require('mongodb').MongoClient
 const winston = require('winston')
 const convertImagesToAssets = require('./v1-v2-steps/convertImagesToAssets')
 const detectScriptsWithBreakingChanges = require('./v1-v2-steps/detectScriptsWithBreakingChanges')
+const convertHelpersWithGlobalVarUsage = require('./v1-v2-steps/convertHelpersWithGlobarVarUsage')
 const connectionString = 'mongodb://localhost:27017'
 const database = 'multitenant'
 
@@ -14,6 +15,10 @@ const logger = new (winston.Logger)({
   ]
 })
 
+if (justDetection) {
+  logger.info('Running with just detection mode activated')
+}
+
 async function migrate () {
   logger.info(`connecting to ${connectionString}, db: ${database}`)
   const client = await MongoClient.connect(connectionString)
@@ -21,6 +26,7 @@ async function migrate () {
 
   if (!justDetection) {
     await convertImagesToAssets(db, logger)
+    await convertHelpersWithGlobalVarUsage(db, logger)
   }
 
   await detectScriptsWithBreakingChanges(db, logger, justDetection)

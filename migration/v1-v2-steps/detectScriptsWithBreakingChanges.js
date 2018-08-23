@@ -26,7 +26,7 @@ module.exports = async (db, logger, justDetection) => {
       logger.info(`processing ${tCounter}/${tenants.length} tenants`)
     }
 
-    const scripts = await db.collection('scripts').find({ tenantId: tid, migrated: { $ne: true } }).toArray()
+    const scripts = await db.collection('scripts').find({ tenantId: tid, scriptsMigrated: { $ne: true } }).toArray()
 
     for (const script of scripts.filter((s) => s.content)) {
       scriptsEvaluated++
@@ -123,7 +123,7 @@ module.exports = async (db, logger, justDetection) => {
           })
 
           if (script.content !== newContent && !justDetection) {
-            await db.collection('scripts').update({ _id: script._id }, { $set: { content: newContent, migrated: true } })
+            await db.collection('scripts').update({ _id: script._id }, { $set: { content: newContent, scriptsMigrated: true } })
           }
         }
       }
@@ -131,8 +131,13 @@ module.exports = async (db, logger, justDetection) => {
   }
 
   logger.info(`${scriptsEvaluated} scripts(s) were evaluated in total`)
-  logger.warn(`${scriptsWithNoHookDetected.length} scripts(s) were detected with no beforeRender/afterRender function hook, ${serializeObjectIds(scriptsWithNoHookDetected)}`)
-  logger.info(`${scriptsWithHookWithOneArgument.length} scripts(s) were detected with just one argument in function hook and were updated to function with three arguments, ${serializeObjectIds(scriptsWithHookWithOneArgument)}`)
+  logger.warn(`${scriptsWithNoHookDetected.length} scripts(s) were detected with no beforeRender/afterRender function hook (manual check is needed and manual update if necessary), ${serializeObjectIds(scriptsWithNoHookDetected)}`)
+
+  if (!justDetection) {
+    logger.info(`${scriptsWithHookWithOneArgument.length} scripts(s) were detected with just one argument in function hook and were updated to function with three arguments, ${serializeObjectIds(scriptsWithHookWithOneArgument)}`)
+  } else {
+    logger.info(`${scriptsWithHookWithOneArgument.length} scripts(s) were detected with just one argument in function hook, ${serializeObjectIds(scriptsWithHookWithOneArgument)}`)
+  }
 
   if (!justDetection) {
     logger.warn(`${scriptsWithOneArgRequestUsage.length} scripts(s) were using one argument (now these are migrated to three args) in hooks and was detected "request" usage (manual check is needed and manual update if necessary), ${serializeObjectIds(scriptsWithOneArgRequestUsage)}`)

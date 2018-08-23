@@ -25,7 +25,7 @@ module.exports = async (db, logger) => {
       logger.info(`processing ${tCounter}/${tenants.length} tenants`)
     }
 
-    const images = await db.collection('images').find({ tenantId: tid, migrated: { $ne: true } }).toArray()
+    const images = await db.collection('images').find({ tenantId: tid, imagesToAssetsMigrated: { $ne: true } }).toArray()
     const templates = await db.collection('templates').find({ tenantId: tid }).toArray()
     const scripts = await db.collection('scripts').find({ tenantId: tid }).toArray()
 
@@ -57,7 +57,7 @@ module.exports = async (db, logger) => {
       await db.collection('images').updateOne({
         _id: image._id
       }, {
-        $set: { migrated: true }
+        $set: { imagesToAssetsMigrated: true }
       })
 
       imageToAssetMap[image.name] = assetName
