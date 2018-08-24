@@ -56,7 +56,20 @@ module.exports = async (db, logger) => {
         }
       } while (asset)
 
-      asset = { name: assetName, content: image.content, shortid: image.shortid, tenantId: tid }
+      asset = {
+        name: assetName,
+        content: image.content,
+        shortid: image.shortid,
+        tenantId: tid
+      }
+
+      if (image.readPermissions) {
+        asset.readPermissions = image.readPermissions
+      }
+
+      if (image.editPermissions) {
+        asset.editPermissions = image.editPermissions
+      }
 
       await db.collection('assets').insert(asset)
 
