@@ -1,10 +1,11 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 MAINTAINER Jan Blaha
-EXPOSE 5488
 
-RUN apt-get update && apt-get install -y curl sudo git bzip2 && \
-    curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - && \
-    apt-get install -y nodejs
+RUN apt-get update && apt-get install -y curl sudo git gnupg bzip2 && \
+    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends nodejs docker.io && \
+    npm i -g npm
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

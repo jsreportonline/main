@@ -38,6 +38,11 @@ jspm_packages
 
 .idea
 
+# configuration
+prod.config.json
+dev.config.json
+jsreport.config.json
+
 .idea/*
 
 data

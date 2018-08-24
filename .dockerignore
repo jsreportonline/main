@@ -1,1 +1,4 @@
 node_modules
+jsreport.config.json
+dev.config.json
+prod.config.json
