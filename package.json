@@ -15,7 +15,7 @@
   "scripts": {
     "build": "jsreport-studio-build",
     "lint": "standard",
-    "test": "mocha --timeout 15000 --exit test"
+    "test": "docker pull jsreportonline/worker&&mocha --timeout 15000 --exit test"
   },
   "homepage": "https://github.com/jsreportonline/main#readme",
   "standard": {
