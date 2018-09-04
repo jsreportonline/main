@@ -113,6 +113,7 @@ Studio.readyListeners.push(async () => {
 
 Studio.initializeListeners.push(async () => {
   Studio.authentication.user.billingHistory = Studio.authentication.user.billingHistory || []
+  Studio.authentication.user.billingHistory.sort((a, b) => b.billedDate.getTime() - a.billedDate.getTime())
 
   Studio.addToolbarComponent(BillingButton, 'right')
   Studio.addToolbarComponent(() => <div

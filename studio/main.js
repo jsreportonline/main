@@ -265,6 +265,9 @@
 	      switch (_context3.prev = _context3.next) {
 	        case 0:
 	          _jsreportStudio2.default.authentication.user.billingHistory = _jsreportStudio2.default.authentication.user.billingHistory || [];
+	          _jsreportStudio2.default.authentication.user.billingHistory.sort(function (a, b) {
+	            return b.billedDate.getTime() - a.billedDate.getTime();
+	          });
 	
 	          _jsreportStudio2.default.addToolbarComponent(_BillingButton2.default, 'right');
 	          _jsreportStudio2.default.addToolbarComponent(function () {
@@ -282,7 +285,7 @@
 	
 	          _jsreportStudio2.default.addToolbarComponent(_ChangePasswordSettingsButton2.default, 'settings');
 	
-	        case 4:
+	        case 5:
 	        case 'end':
 	          return _context3.stop();
 	      }
