@@ -9,13 +9,6 @@ const localStorage = window.localStorage
 
 Studio.addEditorComponent('billing', BillingEditor)
 
-Studio.previewListeners.push(() => {
-  setTimeout(async () => {
-    const response = await Studio.api.get('/api/settings')
-    Studio.authentication.user.creditsUsed = response.tenant.creditsUsed
-  }, 5000)
-})
-
 Studio.readyListeners.push(async () => {
   const creditsExceeded = Math.round(Studio.authentication.user.creditsUsed / 1000) > Studio.authentication.user.creditsAvailable
 

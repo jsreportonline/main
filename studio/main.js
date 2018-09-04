@@ -78,35 +78,11 @@
 	
 	_jsreportStudio2.default.addEditorComponent('billing', _BillingEditor2.default);
 	
-	_jsreportStudio2.default.previewListeners.push(function () {
-	  setTimeout(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	    var response;
-	    return regeneratorRuntime.wrap(function _callee$(_context) {
-	      while (1) {
-	        switch (_context.prev = _context.next) {
-	          case 0:
-	            _context.next = 2;
-	            return _jsreportStudio2.default.api.get('/api/settings');
-	
-	          case 2:
-	            response = _context.sent;
-	
-	            _jsreportStudio2.default.authentication.user.creditsUsed = response.tenant.creditsUsed;
-	
-	          case 4:
-	          case 'end':
-	            return _context.stop();
-	        }
-	      }
-	    }, _callee, undefined);
-	  })), 5000);
-	});
-	
-	_jsreportStudio2.default.readyListeners.push(_asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+	_jsreportStudio2.default.readyListeners.push(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
 	  var creditsExceeded, isModalUsed, contactEmailNotRegistered, contactEmailModal, creditsExceededModal, checkMessages, intervalId;
-	  return regeneratorRuntime.wrap(function _callee3$(_context3) {
+	  return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	    while (1) {
-	      switch (_context3.prev = _context3.next) {
+	      switch (_context2.prev = _context2.next) {
 	        case 0:
 	          creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.creditsAvailable;
 	
@@ -196,11 +172,11 @@
 	          };
 	
 	          checkMessages = function () {
-	            var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+	            var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
 	              var request;
-	              return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	              return regeneratorRuntime.wrap(function _callee$(_context) {
 	                while (1) {
-	                  switch (_context2.prev = _context2.next) {
+	                  switch (_context.prev = _context.next) {
 	                    case 0:
 	                      request = _superagent2.default.get(_jsreportStudio2.default.resolveUrl('/api/message'));
 	                      // eslint-disable-next-line handle-callback-err
@@ -240,14 +216,14 @@
 	
 	                    case 2:
 	                    case 'end':
-	                      return _context2.stop();
+	                      return _context.stop();
 	                  }
 	                }
-	              }, _callee2, undefined);
+	              }, _callee, undefined);
 	            }));
 	
 	            return function checkMessages() {
-	              return _ref3.apply(this, arguments);
+	              return _ref2.apply(this, arguments);
 	            };
 	          }();
 	
@@ -277,16 +253,16 @@
 	
 	        case 9:
 	        case 'end':
-	          return _context3.stop();
+	          return _context2.stop();
 	      }
 	    }
-	  }, _callee3, undefined);
+	  }, _callee2, undefined);
 	})));
 	
-	_jsreportStudio2.default.initializeListeners.push(_asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
-	  return regeneratorRuntime.wrap(function _callee4$(_context4) {
+	_jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+	  return regeneratorRuntime.wrap(function _callee3$(_context3) {
 	    while (1) {
-	      switch (_context4.prev = _context4.next) {
+	      switch (_context3.prev = _context3.next) {
 	        case 0:
 	          _jsreportStudio2.default.authentication.user.billingHistory = _jsreportStudio2.default.authentication.user.billingHistory || [];
 	
@@ -308,10 +284,10 @@
 	
 	        case 4:
 	        case 'end':
-	          return _context4.stop();
+	          return _context3.stop();
 	      }
 	    }
-	  }, _callee4, undefined);
+	  }, _callee3, undefined);
 	})));
 
 /***/ },
@@ -431,7 +407,7 @@
 	  }, {
 	    key: 'updatePlan',
 	    value: function () {
-	      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
 	        var response;
 	        return regeneratorRuntime.wrap(function _callee$(_context) {
 	          while (1) {
@@ -811,7 +787,7 @@
 	  _createClass(ChangePasswordModal, [{
 	    key: 'changePassword',
 	    value: function () {
-	      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
 	        var close, data, response;
 	        return regeneratorRuntime.wrap(function _callee$(_context) {
 	          while (1) {
@@ -1006,7 +982,7 @@
 	  _createClass(ContactEmailModal, [{
 	    key: 'saveContactEmail',
 	    value: function () {
-	      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
 	        var close, data, response;
 	        return regeneratorRuntime.wrap(function _callee$(_context) {
 	          while (1) {
