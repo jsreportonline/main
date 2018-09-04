@@ -45,6 +45,16 @@ describe('multitenancyRepository', () => {
     t.email.should.be.eql('test@test.com')
   })
 
+  it('findTenantByName should return clones', async () => {
+    await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+
+    const t = await jsreport.multitenancyRepository.findTenantByName('test')
+    const t2 = await jsreport.multitenancyRepository.findTenantByName('test')
+
+    t.name = 'foo'
+    t2.name.should.not.be.eql('foo')
+  })
+
   it('authenticate should pass with correct credentials', async () => {
     await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
     await jsreport.multitenancyRepository.authenticate('test@test.com', 'password')
@@ -128,6 +138,16 @@ describe('multitenancyRepository', () => {
     const v = await jsreport.multitenancyRepository.findTenant('test@test.com')
 
     should(v.password).not.be.ok()
+  })
+
+  it('findTenant should return clones', async () => {
+    await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+
+    const t = await jsreport.multitenancyRepository.findTenant('test@test.com')
+    const t2 = await jsreport.multitenancyRepository.findTenant('test@test.com')
+
+    t.name = 'foo'
+    t2.name.should.not.be.eql('foo')
   })
 
   it('update tenant should not be case sensitive', async () => {

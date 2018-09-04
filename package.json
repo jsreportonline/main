@@ -72,6 +72,7 @@
     "jsreport-xlsx": "2.0.1",
     "mkdirp": "0.5.1",
     "nanoid": "1.2.2",
+    "node.extend": "2.0.0",
     "parse-duration": "0.1.1",
     "passport": "0.4.0",
     "passport-http": "0.3.0",
