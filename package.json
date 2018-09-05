@@ -69,7 +69,7 @@
     "jsreport-version-control": "1.1.0",
     "jsreport-wkhtmltopdf": "2.0.3",
     "jsreport-worker-docker-manager": "1.0.9",
-    "jsreport-xlsx": "2.0.1",
+    "jsreport-xlsx": "2.0.2",
     "mkdirp": "0.5.1",
     "nanoid": "1.2.2",
     "node.extend": "2.0.0",
