@@ -4,6 +4,7 @@ const convertImagesToAssets = require('./v1-v2-steps/convertImagesToAssets')
 const detectScriptsWithBreakingChanges = require('./v1-v2-steps/detectScriptsWithBreakingChanges')
 const convertHelpersWithGlobalVarUsage = require('./v1-v2-steps/convertHelpersWithGlobarVarUsage')
 const ensureHtmlToXlsxDefaultToPhantom = require('./v1-v2-steps/ensureHtmlToXlsxDefaultToPhantom')
+const removeNullPermissions = require('./v1-v2-steps/removeNullPermissions')
 const connectionString = 'mongodb://localhost:27017'
 const database = 'multitenant'
 
@@ -29,6 +30,7 @@ async function migrate () {
     await convertImagesToAssets(db, logger)
     await convertHelpersWithGlobalVarUsage(db, logger)
     await ensureHtmlToXlsxDefaultToPhantom(db, logger)
+    await removeNullPermissions(db, logger)
   }
 
   await detectScriptsWithBreakingChanges(db, logger, justDetection)
