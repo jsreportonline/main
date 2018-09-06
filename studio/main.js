@@ -54,19 +54,19 @@
 	
 	var _BillingEditor2 = _interopRequireDefault(_BillingEditor);
 	
-	var _superagent = __webpack_require__(6);
+	var _superagent = __webpack_require__(5);
 	
 	var _superagent2 = _interopRequireDefault(_superagent);
 	
-	var _BillingButton = __webpack_require__(7);
+	var _BillingButton = __webpack_require__(6);
 	
 	var _BillingButton2 = _interopRequireDefault(_BillingButton);
 	
-	var _ChangePasswordSettingsButton = __webpack_require__(8);
+	var _ChangePasswordSettingsButton = __webpack_require__(7);
 	
 	var _ChangePasswordSettingsButton2 = _interopRequireDefault(_ChangePasswordSettingsButton);
 	
-	var _ContactEmailModal = __webpack_require__(10);
+	var _ContactEmailModal = __webpack_require__(9);
 	
 	var _ContactEmailModal2 = _interopRequireDefault(_ContactEmailModal);
 	
@@ -311,11 +311,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _reactList = __webpack_require__(3);
-	
-	var _reactList2 = _interopRequireDefault(_reactList);
-	
-	var _react = __webpack_require__(4);
+	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
@@ -323,7 +319,7 @@
 	
 	var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
 	
-	var _UpgradePlanModal = __webpack_require__(5);
+	var _UpgradePlanModal = __webpack_require__(4);
 	
 	var _UpgradePlanModal2 = _interopRequireDefault(_UpgradePlanModal);
 	
@@ -347,56 +343,6 @@
 	  }
 	
 	  _createClass(ReportEditor, [{
-	    key: 'renderItem',
-	    value: function renderItem(index) {
-	      var item = _jsreportStudio2.default.authentication.user.billingHistory[index];
-	      return _react2.default.createElement(
-	        'tr',
-	        { key: index },
-	        _react2.default.createElement(
-	          'td',
-	          null,
-	          item.billedDate.toLocaleString()
-	        ),
-	        _react2.default.createElement(
-	          'td',
-	          null,
-	          Math.round(item.creditsUsed / 1000)
-	        )
-	      );
-	    }
-	  }, {
-	    key: 'renderItems',
-	    value: function renderItems(items, ref) {
-	      return _react2.default.createElement(
-	        'table',
-	        { className: 'table', ref: ref },
-	        _react2.default.createElement(
-	          'thead',
-	          null,
-	          _react2.default.createElement(
-	            'tr',
-	            null,
-	            _react2.default.createElement(
-	              'th',
-	              null,
-	              'billed date'
-	            ),
-	            _react2.default.createElement(
-	              'th',
-	              null,
-	              'credits spent'
-	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'tbody',
-	          null,
-	          items
-	        )
-	      );
-	    }
-	  }, {
 	    key: 'openUpgradeModal',
 	    value: function openUpgradeModal() {
 	      this.upgradeModalOpenned = true;
@@ -463,7 +409,7 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'block custom-editor' },
+	        { className: 'block custom-editor', style: { overflow: 'auto', minHeight: 0, height: 'auto' } },
 	        _react2.default.createElement(
 	          'div',
 	          null,
@@ -550,16 +496,54 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'block-item' },
+	          null,
 	          _react2.default.createElement(
 	            'h2',
 	            null,
 	            'billing history'
 	          ),
-	          _react2.default.createElement(_reactList2.default, { type: 'uniform', itemsRenderer: this.renderItems, itemRenderer: function itemRenderer(index) {
-	              return _this3.renderItem(index);
-	            },
-	            length: _jsreportStudio2.default.authentication.user.billingHistory.length })
+	          _react2.default.createElement(
+	            'table',
+	            { className: 'table' },
+	            _react2.default.createElement(
+	              'thead',
+	              null,
+	              _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                  'th',
+	                  null,
+	                  'billed date'
+	                ),
+	                _react2.default.createElement(
+	                  'th',
+	                  null,
+	                  'credits spent'
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'tbody',
+	              null,
+	              _jsreportStudio2.default.authentication.user.billingHistory.map(function (item, index) {
+	                return _react2.default.createElement(
+	                  'tr',
+	                  { key: index },
+	                  _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    item.billedDate.toLocaleString()
+	                  ),
+	                  _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    Math.round(item.creditsUsed / 1000)
+	                  )
+	                );
+	              })
+	            )
+	          )
 	        )
 	      );
 	    }
@@ -574,16 +558,10 @@
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = Studio.libraries['react-list'];
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
 	module.exports = Studio.libraries['react'];
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -594,7 +572,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _react = __webpack_require__(4);
+	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
@@ -636,13 +614,13 @@
 	exports.default = UpgradePlanModal;
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports) {
 
 	module.exports = Studio.libraries['superagent'];
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -653,7 +631,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _react = __webpack_require__(4);
+	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
@@ -708,7 +686,7 @@
 	exports.default = ReportsButton;
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -717,7 +695,7 @@
 	  value: true
 	});
 	
-	var _ChangePasswordModal = __webpack_require__(9);
+	var _ChangePasswordModal = __webpack_require__(8);
 	
 	var _ChangePasswordModal2 = _interopRequireDefault(_ChangePasswordModal);
 	
@@ -746,7 +724,7 @@
 	};
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -757,7 +735,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _react = __webpack_require__(4);
+	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
@@ -938,7 +916,7 @@
 	exports.default = ChangePasswordModal;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -949,7 +927,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _react = __webpack_require__(4);
+	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
 	

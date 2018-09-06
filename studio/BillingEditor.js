@@ -1,31 +1,8 @@
-import ReactList from 'react-list'
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import Studio from 'jsreport-studio'
 import UpgradePlanModal from './UpgradePlanModal.js'
 
 export default class ReportEditor extends Component {
-  renderItem (index) {
-    const item = Studio.authentication.user.billingHistory[index]
-    return <tr key={index}>
-      <td>{item.billedDate.toLocaleString()}</td>
-      <td>{Math.round(item.creditsUsed / 1000)}</td>
-    </tr>
-  }
-
-  renderItems (items, ref) {
-    return <table className='table' ref={ref}>
-      <thead>
-        <tr>
-          <th>billed date</th>
-          <th>credits spent</th>
-        </tr>
-      </thead>
-      <tbody>
-        {items}
-      </tbody>
-    </table>
-  }
-
   openUpgradeModal () {
     this.upgradeModalOpenned = true
     Studio.openModal(UpgradePlanModal, {})
@@ -54,7 +31,7 @@ export default class ReportEditor extends Component {
   }
 
   render () {
-    return <div className='block custom-editor'>
+    return <div className='block custom-editor' style={{ overflow: 'auto', minHeight: 0, height: 'auto' }}>
       <div>
         <h1><i className='fa fa-home' /> {Studio.authentication.user.name} </h1>
         <small>created on: {Studio.authentication.user.createdOn.toLocaleString()}</small>
@@ -91,10 +68,24 @@ export default class ReportEditor extends Component {
           </small>
         </p>
       </div>
-      <div className='block-item'>
+      <div>
         <h2>billing history</h2>
-        <ReactList type='uniform' itemsRenderer={this.renderItems} itemRenderer={(index) => this.renderItem(index)}
-          length={Studio.authentication.user.billingHistory.length} />
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>billed date</th>
+              <th>credits spent</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Studio.authentication.user.billingHistory.map((item, index) =>
+              <tr key={index}>
+                <td>{item.billedDate.toLocaleString()}</td>
+                <td>{Math.round(item.creditsUsed / 1000)}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   }
