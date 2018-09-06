@@ -109,6 +109,8 @@ module.exports = async (db, logger) => {
 
       const newContent = await asyncReplace(template.content, /{#image (.{0,150})}/g, replaceCallback)
       let newHelpersContent
+      let newPhantomHeaderContent
+      let newPhantomFooterContent
 
       if (template.content !== newContent) {
         await db.collection('templates').update({ _id: template._id }, { $set: { content: newContent } })
@@ -122,9 +124,33 @@ module.exports = async (db, logger) => {
         }
       }
 
+      if (template.phantom && template.phantom.header != null) {
+        newPhantomHeaderContent = await asyncReplace(template.phantom.header, /{#image (.{0,150})}/g, replaceCallback)
+
+        if (template.phantom.header !== newPhantomHeaderContent) {
+          await db.collection('templates').update(
+            { _id: template._id },
+            { $set: { 'phantom.header': newPhantomHeaderContent } }
+          )
+        }
+      }
+
+      if (template.phantom && template.phantom.footer != null) {
+        newPhantomFooterContent = await asyncReplace(template.phantom.footer, /{#image (.{0,150})}/g, replaceCallback)
+
+        if (template.phantom.footer !== newPhantomFooterContent) {
+          await db.collection('templates').update(
+            { _id: template._id },
+            { $set: { 'phantom.footer': newPhantomFooterContent } }
+          )
+        }
+      }
+
       if (
         template.content !== newContent ||
-        (template.helpers != null && template.helpers !== newHelpersContent)
+        (template.helpers != null && template.helpers !== newHelpersContent) ||
+        (template.phantom && template.phantom.header != null && template.phantom.header !== newPhantomHeaderContent) ||
+        (template.phantom && template.phantom.footer != null && template.phantom.footer !== newPhantomFooterContent)
       ) {
         templatesUpdated++
       }

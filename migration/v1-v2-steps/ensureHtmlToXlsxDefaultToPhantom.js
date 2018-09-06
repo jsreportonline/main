@@ -5,7 +5,7 @@ module.exports = async (db, logger) => {
 
   const tenants = await db.collection('templates').distinct('tenantId')
 
-  logger.info(`found ${tenants.length} tenants with images`)
+  logger.info(`found ${tenants.length} tenants with templates`)
 
   let tCounter = 1
 
