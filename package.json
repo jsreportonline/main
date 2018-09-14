@@ -71,6 +71,7 @@
     "jsreport-worker-docker-manager": "1.0.9",
     "jsreport-xlsx": "2.0.2",
     "mkdirp": "0.5.1",
+    "moment": "2.22.1",
     "nanoid": "1.2.3",
     "node.extend": "2.0.0",
     "parse-duration": "0.1.1",
