@@ -21,9 +21,11 @@ module.exports = extend(true, {}, process.env, {
     mongodbStore: {
       uri: 'mongodb://localhost:27017/multitenant-test?'
     },
-    workerDockerManager: {
-      maxContainers: 2,
-      containerImage: 'jsreportonline/worker'
+    dockerWorkers: {
+      numberOfWorkers: 2,
+      container: {
+        image: 'jsreportonline/worker'
+      }
     },
     authentication: {
       cookieSession: {
