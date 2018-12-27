@@ -1,6 +1,6 @@
 const os = require('os')
 const path = require('path')
-const extend = require('node.extend')
+const extend = require('node.extend.without.arrays')
 const ip = require('ip')
 
 module.exports = extend(true, {}, process.env, {
