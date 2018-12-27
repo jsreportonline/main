@@ -52,7 +52,7 @@
     "jsreport-handlebars": "2.0.0",
     "jsreport-html-to-xlsx": "2.1.3",
     "jsreport-images": "1.1.1",
-    "jsreport-import-export": "1.1.1",
+    "jsreport-import-export": "github:jsreport/jsreport-import-export",
     "jsreport-jsrender": "2.0.0",
     "jsreport-mongodb-store": "1.1.1",
     "jsreport-pdf-utils": "1.2.0",
