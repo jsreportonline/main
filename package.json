@@ -63,7 +63,7 @@
     "jsreport-resources": "2.0.2",
     "jsreport-scheduling": "2.0.4",
     "jsreport-scripts": "2.0.8",
-    "jsreport-studio": "2.2.2",
+    "jsreport-studio": "github:jsreport/jsreport-studio",
     "jsreport-tags": "2.1.0",
     "jsreport-templates": "2.1.0",
     "jsreport-text": "2.0.0",
