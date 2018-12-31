@@ -84,4 +84,21 @@ describe('entityCountLimit', () => {
       e.message.should.match(/Maximum entity count limit reached/)
     }
   })
+
+  it('insert should pass if limit set on plan is reached but entity is folders', async () => {
+    const createFolder = (name, t) => {
+      return jsreport.documentStore.collection('templates').insert({
+        name
+      }, {
+        context: {
+          tenant: { name: 'test', plan: 'free' },
+          user: { _id: t._id, username: 'test@test.com', admin: true }
+        }
+      })
+    }
+
+    const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+
+    await Promise.mapSeries(Array(21), (i) => createFolder(`demo${i}`, t))
+  })
 })
