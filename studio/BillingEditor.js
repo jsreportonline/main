@@ -34,14 +34,20 @@ export default class ReportEditor extends Component {
     return <div className='block custom-editor' style={{ overflow: 'auto', minHeight: 0, height: 'auto' }}>
       <div>
         <h1><i className='fa fa-home' /> {Studio.authentication.user.name} </h1>
-        <small>created on: {Studio.authentication.user.createdOn.toLocaleString()}</small>
+        <small><b>created on:</b> {Studio.authentication.user.createdOn.toLocaleString()}</small>
         <br />
-        <small>admin email: {Studio.authentication.user.email}</small>
+        <small><b>admin email:</b> {Studio.authentication.user.email}</small>
+        {Studio.authentication.user.contactEmail != null && (
+          <br />
+        )}
+        {Studio.authentication.user.contactEmail != null && (
+          <small><b>contact email:</b> {Studio.authentication.user.contactEmail}</small>
+        )}
       </div>
       <div>
         <h2>current billing plan</h2>
 
-        <button style={{marginLeft: '0rem'}} className='button confirmation'>
+        <button style={{ marginLeft: '0rem' }} className='button confirmation'>
           {Studio.authentication.user.plan || 'free'} {Math.round(Studio.authentication.user.creditsUsed / 1000) + ' '}
           / {Studio.authentication.user.creditsAvailable}
         </button>
