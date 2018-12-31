@@ -47,20 +47,20 @@ export default class ReportEditor extends Component {
       <div>
         <h2>current billing plan</h2>
 
-        <button style={{ marginLeft: '0rem' }} className='button confirmation'>
+        <button style={{ marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }} className='button confirmation'>
           {Studio.authentication.user.plan || 'free'} {Math.round(Studio.authentication.user.creditsUsed / 1000) + ' '}
           / {Studio.authentication.user.creditsAvailable}
         </button>
 
-        <button className='button confirmation' onClick={() => this.openUpgradeModal()}>
+        <button className='button confirmation' style={{ marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }} onClick={() => this.openUpgradeModal()}>
           Upgrade plan
         </button>
 
-        <a className='button confirmation' href='https://gumroad.com/library' target='_blank'>
+        <a className='button confirmation' style={{ display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }} href='https://gumroad.com/library' target='_blank'>
           Payment details
         </a>
 
-        <a className='button danger' href='https://gumroad.com/library' target='_blank'>
+        <a className='button danger' style={{ display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }} href='https://gumroad.com/library' target='_blank'>
           Cancel subscription
         </a>
 
