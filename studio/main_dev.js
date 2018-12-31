@@ -116,11 +116,23 @@ Studio.initializeListeners.push(async () => {
   Studio.authentication.user.billingHistory.sort((a, b) => b.billedDate.getTime() - a.billedDate.getTime())
 
   Studio.addToolbarComponent(BillingButton, 'right')
-  Studio.addToolbarComponent(() => <div
-    className='toolbar-button'
-    onClick={() => Studio.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' })}>
-    <i className='fa fa-usd' /> Billing
-  </div>, 'settings')
+
+  Studio.addToolbarComponent(() => (
+    <div className='toolbar-button'>
+      <a href='https://jsreport.net/learn/online-faq' target='_blank' style={{ color: 'inherit', textDecoration: 'none' }}>
+        <i className='fa fa-info-circle' /> FAQ
+      </a>
+    </div>
+  ), 'settings')
+
+  Studio.addToolbarComponent(() => (
+    <div
+      className='toolbar-button'
+      onClick={() => Studio.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' })}
+    >
+      <i className='fa fa-usd' /> Billing
+    </div>
+  ), 'settings')
 
   Studio.addToolbarComponent(ChangePasswordSettingsButton, 'settings')
 })
