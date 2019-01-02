@@ -1,3 +1,4 @@
+const Request = require('jsreport-core').Request
 const init = require('../lib/init')
 const Promise = require('bluebird')
 require('should')
@@ -26,12 +27,12 @@ describe('entityCountLimit', () => {
       content: 'foo',
       engine: 'none',
       recipe: 'html'
-    }, {
+    }, Request({
       context: {
         tenant: { name: 'test' },
         user: { _id: t._id, username: 'test@test.com', admin: true }
       }
-    })
+    }))
   })
 
   it('insert should throw if limit set on tenant is reached', async () => {
@@ -41,12 +42,12 @@ describe('entityCountLimit', () => {
         content: 'foo',
         engine: 'none',
         recipe: 'html'
-      }, {
+      }, Request({
         context: {
           tenant: { name: 'test', entityCountLimit: 1 },
           user: { _id: t._id, username: 'test@test.com', admin: true }
         }
-      })
+      }))
     }
 
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
@@ -67,18 +68,18 @@ describe('entityCountLimit', () => {
         content: 'foo',
         engine: 'none',
         recipe: 'html'
-      }, {
+      }, Request({
         context: {
           tenant: { name: 'test', plan: 'free' },
           user: { _id: t._id, username: 'test@test.com', admin: true }
         }
-      })
+      }))
     }
 
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
 
     try {
-      await Promise.mapSeries(Array(21), (i) => createTemplate('demo', t))
+      await Promise.mapSeries(Array(21), (item, i) => createTemplate(`demo${i}`, t))
     } catch (e) {
       e.should.be.Error()
       e.message.should.match(/Maximum entity count limit reached/)
@@ -87,18 +88,18 @@ describe('entityCountLimit', () => {
 
   it('insert should pass if limit set on plan is reached but entity is folders', async () => {
     const createFolder = (name, t) => {
-      return jsreport.documentStore.collection('templates').insert({
+      return jsreport.documentStore.collection('folders').insert({
         name
-      }, {
+      }, Request({
         context: {
           tenant: { name: 'test', plan: 'free' },
           user: { _id: t._id, username: 'test@test.com', admin: true }
         }
-      })
+      }))
     }
 
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
 
-    await Promise.mapSeries(Array(21), (i) => createFolder(`demo${i}`, t))
+    await Promise.mapSeries(Array(21), (item, i) => createFolder(`demo${i}`, t))
   })
 })
