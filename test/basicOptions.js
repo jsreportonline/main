@@ -8,7 +8,7 @@ module.exports = extend(true, {}, process.env, {
   stack: 'test',
   ip: ip.address(),
   NODE_ENV: 'development',
-  tempDirectory: path.join(os.tmpdir(), 'jsreport'),
+  tempDirectory: path.join(os.platform() === 'darwin' ? '/tmp' : os.tmpdir(), 'jsreport'),
   db: {
     rootDatabaseName: 'multitenant-root-test',
     databaseName: 'multitenant-test'
