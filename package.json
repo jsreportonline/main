@@ -44,7 +44,7 @@
     "jsreport-core": "2.3.3",
     "jsreport-data": "2.0.2",
     "jsreport-debug": "2.0.2",
-    "jsreport-docker-workers": "1.2.0",
+    "jsreport-docker-workers": "github:jsreport/jsreport-docker-workers",
     "jsreport-ejs": "2.0.1",
     "jsreport-electron-pdf": "3.0.0",
     "jsreport-express": "2.2.4",
