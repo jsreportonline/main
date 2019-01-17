@@ -19,7 +19,7 @@ describe('checkBilling', () => {
     update.$push.billingHistory.creditsUsed.should.be.eql(100)
   })
 
-  it('should charge when current day is the last day of the month and billing day is greater then current', () => {
+  it('should charge when current day is the last day of the month and billing day is greater than current', () => {
     const tenant = {
       createdOn: new Date(2014, 0, 31),
       creditsUsed: 100,
@@ -66,12 +66,12 @@ describe('checkBilling', () => {
 
   it('should NOT charge in the first day of the next year', () => {
     const tenant = {
-      createdOn: new Date('2014-05-05'),
+      createdOn: new Date(2014, 4, 5),
       creditsUsed: 100,
-      lastBilledDate: new Date('2014-12-05')
+      lastBilledDate: new Date(2014, 11, 5)
     }
 
-    const now = new Date('2015-01-01')
+    const now = new Date(2015, 0, 1)
 
     const update = billing.checkBilling(tenant, now)
 
@@ -80,12 +80,12 @@ describe('checkBilling', () => {
 
   it('should charge in first month of the year', () => {
     const tenant = {
-      createdOn: new Date('2014-05-05'),
+      createdOn: new Date(2014, 4, 5),
       creditsUsed: 100,
-      lastBilledDate: new Date('2014-12-05')
+      lastBilledDate: new Date(2014, 11, 5)
     }
 
-    const now = new Date('2015-01-06')
+    const now = new Date(2015, 0, 6)
 
     const update = billing.checkBilling(tenant, now)
 
