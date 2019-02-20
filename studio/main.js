@@ -270,6 +270,20 @@
 	          });
 	
 	          _jsreportStudio2.default.addToolbarComponent(_BillingButton2.default, 'right');
+	
+	          _jsreportStudio2.default.addToolbarComponent(function () {
+	            return React.createElement(
+	              'div',
+	              { className: 'toolbar-button' },
+	              React.createElement(
+	                'a',
+	                { href: 'https://jsreport.net/learn/online-faq', target: '_blank', style: { color: 'inherit', textDecoration: 'none' } },
+	                React.createElement('i', { className: 'fa fa-info-circle' }),
+	                ' FAQ'
+	              )
+	            );
+	          }, 'settings');
+	
 	          _jsreportStudio2.default.addToolbarComponent(function () {
 	            return React.createElement(
 	              'div',
@@ -277,7 +291,8 @@
 	                className: 'toolbar-button',
 	                onClick: function onClick() {
 	                  return _jsreportStudio2.default.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' });
-	                } },
+	                }
+	              },
 	              React.createElement('i', { className: 'fa fa-usd' }),
 	              ' Billing'
 	            );
@@ -285,7 +300,7 @@
 	
 	          _jsreportStudio2.default.addToolbarComponent(_ChangePasswordSettingsButton2.default, 'settings');
 	
-	        case 5:
+	        case 6:
 	        case 'end':
 	          return _context3.stop();
 	      }
@@ -424,15 +439,37 @@
 	          _react2.default.createElement(
 	            'small',
 	            null,
-	            'created on: ',
+	            _react2.default.createElement(
+	              'b',
+	              null,
+	              'created on:'
+	            ),
+	            ' ',
 	            _jsreportStudio2.default.authentication.user.createdOn.toLocaleString()
 	          ),
 	          _react2.default.createElement('br', null),
 	          _react2.default.createElement(
 	            'small',
 	            null,
-	            'admin email: ',
+	            _react2.default.createElement(
+	              'b',
+	              null,
+	              'admin email:'
+	            ),
+	            ' ',
 	            _jsreportStudio2.default.authentication.user.email
+	          ),
+	          _jsreportStudio2.default.authentication.user.contactEmail != null && _react2.default.createElement('br', null),
+	          _jsreportStudio2.default.authentication.user.contactEmail != null && _react2.default.createElement(
+	            'small',
+	            null,
+	            _react2.default.createElement(
+	              'b',
+	              null,
+	              'contact email:'
+	            ),
+	            ' ',
+	            _jsreportStudio2.default.authentication.user.contactEmail
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -445,7 +482,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { style: { marginLeft: '0rem' }, className: 'button confirmation' },
+	            { style: { marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, className: 'button confirmation' },
 	            _jsreportStudio2.default.authentication.user.plan || 'free',
 	            ' ',
 	            Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) + ' ',
@@ -454,19 +491,19 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { className: 'button confirmation', onClick: function onClick() {
+	            { className: 'button confirmation', style: { marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, onClick: function onClick() {
 	                return _this3.openUpgradeModal();
 	              } },
 	            'Upgrade plan'
 	          ),
 	          _react2.default.createElement(
 	            'a',
-	            { className: 'button confirmation', href: 'https://gumroad.com/library', target: '_blank' },
+	            { className: 'button confirmation', style: { display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, href: 'https://gumroad.com/library', target: '_blank' },
 	            'Payment details'
 	          ),
 	          _react2.default.createElement(
 	            'a',
-	            { className: 'button danger', href: 'https://gumroad.com/library', target: '_blank' },
+	            { className: 'button danger', style: { display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, href: 'https://gumroad.com/library', target: '_blank' },
 	            'Cancel subscription'
 	          ),
 	          _react2.default.createElement(
