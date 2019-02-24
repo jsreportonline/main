@@ -5,16 +5,14 @@ require('should')
 
 process.env = require('./basicOptions')
 
-describe('entityCountLimit', () => {
+describe.only('entityCountLimit', () => {
   let jsreport
 
   beforeEach(async () => {
     jsreport = await init()
 
-    await Promise.all([
-      jsreport.documentStore.provider.client.db(jsreport.options.db.databaseName).dropDatabase(),
-      jsreport.documentStore.provider.client.db(jsreport.options.db.rootDatabaseName).dropDatabase()
-    ])
+    await jsreport.documentStore.provider.client.db(jsreport.options.db.databaseName).dropDatabase()
+    await jsreport.documentStore.provider.client.db(jsreport.options.db.rootDatabaseName).dropDatabase()
   })
 
   afterEach(() => jsreport.close())
