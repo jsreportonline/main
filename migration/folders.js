@@ -179,8 +179,6 @@ async function migrate () {
   }
 
   async function createFolder (name, tenantId, parentFolderShortid, returnExisting = true, duplicateCount = 0) {
-    let exists = false
-
     const existsQuery = {
       name,
       tenantId
@@ -202,49 +200,23 @@ async function migrate () {
       }
     }
 
-    for (const c of collections) {
-      const query = {
-        [collectionFieldNameMap[c]]: name,
-        tenantId
-      }
+    const doc = {
+      name,
+      shortid: nanoid(8),
+      tenantId
+    }
 
-      if (parentFolderShortid != null) {
-        query.folder = {
-          shortid: parentFolderShortid
-        }
-      }
-
-      const found = await db.collection(c).findOne(query)
-
-      if (found) {
-        exists = true
-        break
+    if (parentFolderShortid != null) {
+      doc.folder = {
+        shortid: parentFolderShortid
       }
     }
 
-    let folder
+    const insertResult = await db.collection('folders').insertOne(doc)
 
-    if (exists) {
-      folder = await createFolder(`${name}(${duplicateCount + 1})`, tenantId, parentFolderShortid, returnExisting, duplicateCount + 1)
-    } else {
-      const doc = {
-        name,
-        shortid: nanoid(8),
-        tenantId
-      }
-
-      if (parentFolderShortid != null) {
-        doc.folder = {
-          shortid: parentFolderShortid
-        }
-      }
-
-      const insertResult = await db.collection('folders').insertOne(doc)
-
-      folder = await db.collection('folders').findOne({
-        _id: insertResult.insertedId
-      })
-    }
+    const folder = await db.collection('folders').findOne({
+      _id: insertResult.insertedId
+    })
 
     return folder
   }
