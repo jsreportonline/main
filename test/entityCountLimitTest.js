@@ -15,7 +15,7 @@ describe.only('entityCountLimit', () => {
     await jsreport.documentStore.provider.client.db(jsreport.options.db.rootDatabaseName).dropDatabase()
   })
 
-  afterEach(() => jsreport.close())
+  afterEach(() => jsreport && jsreport.close())
 
   it('insert should pass if the limit is below', async () => {
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
