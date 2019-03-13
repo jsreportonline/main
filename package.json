@@ -60,7 +60,7 @@
     "jsreport-pug": "3.0.0",
     "jsreport-reports": "2.1.1",
     "jsreport-resources": "2.0.2",
-    "jsreport-scheduling": "2.0.4",
+    "jsreport-scheduling": "github:jsreport/jsreport-scheduling#2.0.4-with-patch-for-jo",
     "jsreport-scripts": "2.0.8",
     "jsreport-studio": "2.2.2",
     "jsreport-tags": "2.1.0",
