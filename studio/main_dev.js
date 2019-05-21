@@ -118,12 +118,14 @@ Studio.initializeListeners.push(async () => {
 
   Studio.addToolbarComponent(BillingButton, 'right')
 
-  Studio.addToolbarComponent(() => (
-    <div
-      onClick={() => Studio.openModal(AboutModal)}>
-      <i className='fa fa-info-circle' /> About
-    </div>
-  ), 'settings')
+  setTimeout(() => {
+    Studio.addToolbarComponent(() => (
+      <div
+        onClick={() => Studio.openModal(AboutModal)}>
+        <i className='fa fa-info-circle' /> About
+      </div>
+    ), 'settings')
+  }, 0)
 
   Studio.addToolbarComponent(() => (
     <div className='toolbar-button'>
