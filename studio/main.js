@@ -66,7 +66,11 @@
 	
 	var _ChangePasswordSettingsButton2 = _interopRequireDefault(_ChangePasswordSettingsButton);
 	
-	var _ContactEmailModal = __webpack_require__(9);
+	var _AboutModal = __webpack_require__(9);
+	
+	var _AboutModal2 = _interopRequireDefault(_AboutModal);
+	
+	var _ContactEmailModal = __webpack_require__(10);
 	
 	var _ContactEmailModal2 = _interopRequireDefault(_ContactEmailModal);
 	
@@ -274,6 +278,18 @@
 	          _jsreportStudio2.default.addToolbarComponent(function () {
 	            return React.createElement(
 	              'div',
+	              {
+	                onClick: function onClick() {
+	                  return _jsreportStudio2.default.openModal(_AboutModal2.default);
+	                } },
+	              React.createElement('i', { className: 'fa fa-info-circle' }),
+	              ' About'
+	            );
+	          }, 'settings');
+	
+	          _jsreportStudio2.default.addToolbarComponent(function () {
+	            return React.createElement(
+	              'div',
 	              { className: 'toolbar-button' },
 	              React.createElement(
 	                'a',
@@ -300,7 +316,7 @@
 	
 	          _jsreportStudio2.default.addToolbarComponent(_ChangePasswordSettingsButton2.default, 'settings');
 	
-	        case 6:
+	        case 7:
 	        case 'end':
 	          return _context3.stop();
 	      }
@@ -954,6 +970,62 @@
 
 /***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var AboutModal = function (_Component) {
+	  _inherits(AboutModal, _Component);
+	
+	  function AboutModal() {
+	    _classCallCheck(this, AboutModal);
+	
+	    return _possibleConstructorReturn(this, (AboutModal.__proto__ || Object.getPrototypeOf(AboutModal)).apply(this, arguments));
+	  }
+	
+	  _createClass(AboutModal, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'About'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return AboutModal;
+	}(_react.Component);
+	
+	AboutModal.propTypes = {
+	  options: _react.PropTypes.object.isRequired
+	};
+	exports.default = AboutModal;
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

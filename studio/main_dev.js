@@ -3,6 +3,7 @@ import BillingEditor from './BillingEditor.js'
 import superagent from 'superagent'
 import BillingButton from './BillingButton.js'
 import ChangePasswordSettingsButton from './ChangePasswordSettingsButton.js'
+import AboutModal from './AboutModal'
 import ContactEmailModal from './ContactEmailModal'
 
 const localStorage = window.localStorage
@@ -116,6 +117,13 @@ Studio.initializeListeners.push(async () => {
   Studio.authentication.user.billingHistory.sort((a, b) => b.billedDate.getTime() - a.billedDate.getTime())
 
   Studio.addToolbarComponent(BillingButton, 'right')
+
+  Studio.addToolbarComponent(() => (
+    <div
+      onClick={() => Studio.openModal(AboutModal)}>
+      <i className='fa fa-info-circle' /> About
+    </div>
+  ), 'settings')
 
   Studio.addToolbarComponent(() => (
     <div className='toolbar-button'>
