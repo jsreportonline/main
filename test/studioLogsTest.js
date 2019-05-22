@@ -8,7 +8,7 @@ process.env.extensions = process.env.extensions || {}
 process.env.extensions.studio = process.env.extensions.studio || {}
 process.env.extensions.studio.flushLogsInterval = 100
 
-describe.skip('studio logs flush with discriminatorPath', () => {
+describe('studio logs flush with discriminatorPath', () => {
   let reporter
   let testTenant
   let test2Tenant
