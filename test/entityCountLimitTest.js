@@ -5,7 +5,7 @@ require('should')
 
 process.env = require('./basicOptions')
 
-describe.only('entityCountLimit', () => {
+describe('entityCountLimit', () => {
   let jsreport
 
   beforeEach(async () => {
