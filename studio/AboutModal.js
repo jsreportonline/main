@@ -7,7 +7,7 @@ class AboutModal extends Component {
     options: PropTypes.object.isRequired
   }
 
-  render() {
+  render () {
     return (
       <div>
         <h2>About</h2>
@@ -15,7 +15,7 @@ class AboutModal extends Component {
           <img src={logo} style={{ width: '100px', height: 'auto', marginBottom: '15px' }} />
         </div>
         <div>
-          jsreportonline version: <b>1.0.0</b>
+          jsreportonline version: <b>1.0.1</b>
         </div>
         <div>
           jsreport version: <b>2.4.0</b>
@@ -24,9 +24,9 @@ class AboutModal extends Component {
         <br />
         <div>
           See more information about the jsreportonline release process and also release notes
-        </div>       
+        </div>
         <br />
-        <div>          
+        <div>
           <a
             className='button confirmation'
             href={`https://jsreport.net/learn/online-versions`}
@@ -34,7 +34,7 @@ class AboutModal extends Component {
             style={{ marginLeft: 0 }}
           >
             jsreportonline releases
-        </a>
+          </a>
         </div>
       </div>
     )
