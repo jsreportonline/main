@@ -378,7 +378,6 @@
 	  _createClass(ReportEditor, [{
 	    key: 'openUpgradeModal',
 	    value: function openUpgradeModal() {
-	      this.upgradeModalOpenned = true;
 	      _jsreportStudio2.default.openModal(_UpgradePlanModal2.default, {});
 	    }
 	  }, {
@@ -389,30 +388,55 @@
 	  }, {
 	    key: 'updatePlan',
 	    value: function () {
-	      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-	        var response;
-	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+	        var _this2 = this;
+	
+	        return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	          while (1) {
-	            switch (_context.prev = _context.next) {
+	            switch (_context2.prev = _context2.next) {
 	              case 0:
+	                if (!this.updatePlanStarted) {
+	                  _context2.next = 2;
+	                  break;
+	                }
+	
+	                return _context2.abrupt('return');
+	
+	              case 2:
+	                this.updatePlanStarted = true;
 	                _jsreportStudio2.default.startProgress();
-	                _context.next = 3;
-	                return _jsreportStudio2.default.api.get('/api/settings');
+	                setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+	                  var response;
+	                  return regeneratorRuntime.wrap(function _callee$(_context) {
+	                    while (1) {
+	                      switch (_context.prev = _context.next) {
+	                        case 0:
+	                          _context.next = 2;
+	                          return _jsreportStudio2.default.api.get('/api/settings');
 	
-	              case 3:
-	                response = _context.sent;
+	                        case 2:
+	                          response = _context.sent;
 	
-	                _jsreportStudio2.default.authentication.user.plan = response.tenant.plan;
-	                _jsreportStudio2.default.authentication.user.creditsAvailable = response.tenant.creditsAvailable;
-	                _jsreportStudio2.default.stopProgress();
-	                this.forceUpdate();
+	                          _jsreportStudio2.default.authentication.user.plan = response.tenant.plan;
+	                          _jsreportStudio2.default.authentication.user.creditsAvailable = response.tenant.creditsAvailable;
+	                          _jsreportStudio2.default.stopProgress();
+	                          _this2.forceUpdate();
+	                          _this2.updatePlanStarted = false;
 	
-	              case 8:
+	                        case 8:
+	                        case 'end':
+	                          return _context.stop();
+	                      }
+	                    }
+	                  }, _callee, _this2);
+	                })), 6000);
+	
+	              case 5:
 	              case 'end':
-	                return _context.stop();
+	                return _context2.stop();
 	            }
 	          }
-	        }, _callee, this);
+	        }, _callee2, this);
 	      }));
 	
 	      function updatePlan() {
@@ -424,16 +448,7 @@
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
-	      var _this2 = this;
-	
-	      if (this.upgradeModalOpenned) {
-	        _jsreportStudio2.default.startProgress();
-	        setTimeout(function () {
-	          return _this2.updatePlan();
-	        }, 6000);
-	      }
-	
-	      this.upgradeModalOpenned = false;
+	      this.updatePlan();
 	    }
 	  }, {
 	    key: 'render',

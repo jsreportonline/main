@@ -19,8 +19,28 @@
     }
 </style>
 
+<script>   
+    document.addEventListener('click', printMousePos, true);
+    var cursorX
+    var cursorY
+    function printMousePos(e){
+        cursorX = e.pageX
+        cursorY = e.pageY
+    }
+        function buy(id) {         
+        var btn = document.getElementById(id)
+        btn.style.left = (cursorX - 200) + 'px'
+        btn.style.top = (cursorY - 200) + 'px'              
+        btn.click()
+        
+        setTimeout(function () {           
+            btn.style.left = -3000            
+        }, 2000)
+    }
+</script>
+
 <div class="plans">
-    <button style="background-color: #60a917" onclick='document.getElementById("gumroadFree").click()'>
+    <button style="background-color: #60a917" onclick='buy("gumroadFree")'>
         <h3>FREE</h3>
         <hr>
         <span>monthly price</span>
@@ -32,7 +52,7 @@
         <h3>200</h3>
     </button>
 
-    <button style="background-color: #00aba9" onclick='document.getElementById("gumroadBronze").click()'>
+    <button style="background-color: #00aba9" onclick='buy("gumroadBronze")'>
         <h3>BRONZE</h3>
         <hr>
         <span>monthly price</span>
@@ -44,7 +64,7 @@
         <h3>10 000</h3>
     </button>
 
-    <button style="background-color: #647687" onclick='document.getElementById("gumroadSilver").click()'>
+    <button style="background-color: #647687" onclick='buy("gumroadSilver")'>
         <h3>SILVER</h3>
         <hr>
         <span>monthly price</span>
@@ -56,7 +76,7 @@
         <h3>100 000</h3>
     </button>
 
-    <button style="background-color: #e3c800" onclick='document.getElementById("gumroadGold").click()'>
+    <button style="background-color: #e3c800" onclick='buy("gumroadGold")'>
         <h3>GOLD</h3>
         <hr>
         <span>monthly price</span>
@@ -71,9 +91,9 @@
 </div>
 
 <script type='text/javascript' src='https://gumroad.com/js/gumroad.js'></script>
-<div style='display:none'>
-    <a id='gumroadFree' href='https://gumroad.com/l/GQMaL' target='_blank' data-gumroad-single-product='true'>Buy my product</a>
-    <a id='gumroadBronze' href='https://gumroad.com/l/iBPRh' target='_blank' data-gumroad-single-product='true'>Buy my product</a>
-    <a id='gumroadSilver' href='https://gumroad.com/l/zgDSN' target='_blank' data-gumroad-single-product='true'>Buy my product</a>
-    <a id='gumroadGold' href='https://gum.co/YxcE?wanted=true' target='_blank' data-gumroad-single-product='true'>Buy my product</a>
+<div>
+    <a style="z-index:10000;position:absolute;width:400px;height:400px;left:-3000px;opacity:0.01;display:block" id='gumroadFree' href='https://gumroad.com/l/GQMaL?wanted=true' target='_blank' data-gumroad-single-product='true'>Buy my product</a>
+    <a style="z-index:10000;position:absolute;width:400px;height:400px;left:-3000px;opacity:0.01;display:block" id='gumroadBronze' href='https://gumroad.com/l/iBPRh?wanted=true' target='_blank' data-gumroad-single-product='true'>Buy my product</a>
+    <a style="z-index:10000;position:absolute;width:400px;height:400px;left:-3000px;opacity:0.01;display:block" id='gumroadSilver' href='https://gumroad.com/l/zgDSN?wanted=true' target='_blank' data-gumroad-single-product='true'>Buy my product</a>
+    <a style="z-index:10000;position:absolute;width:400px;height:400px;left:-3000px;opacity:0.01;display:block" id='gumroadGold' href='https://gum.co/YxcE?wanted=true?wanted=true' target='_blank' data-gumroad-single-product='true'>Buy my product</a>
 </div>

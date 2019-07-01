@@ -4,7 +4,6 @@ import UpgradePlanModal from './UpgradePlanModal.js'
 
 export default class ReportEditor extends Component {
   openUpgradeModal () {
-    this.upgradeModalOpenned = true
     Studio.openModal(UpgradePlanModal, {})
   }
 
@@ -13,21 +12,23 @@ export default class ReportEditor extends Component {
   }
 
   async updatePlan () {
+    if (this.updatePlanStarted) {
+      return
+    }
+    this.updatePlanStarted = true
     Studio.startProgress()
-    const response = await Studio.api.get('/api/settings')
-    Studio.authentication.user.plan = response.tenant.plan
-    Studio.authentication.user.creditsAvailable = response.tenant.creditsAvailable
-    Studio.stopProgress()
-    this.forceUpdate()
+    setTimeout(async () => {
+      const response = await Studio.api.get('/api/settings')
+      Studio.authentication.user.plan = response.tenant.plan
+      Studio.authentication.user.creditsAvailable = response.tenant.creditsAvailable
+      Studio.stopProgress()
+      this.forceUpdate()
+      this.updatePlanStarted = false
+    }, 6000)
   }
 
   componentDidUpdate () {
-    if (this.upgradeModalOpenned) {
-      Studio.startProgress()
-      setTimeout(() => this.updatePlan(), 6000)
-    }
-
-    this.upgradeModalOpenned = false
+    this.updatePlan()
   }
 
   render () {
