@@ -15,7 +15,7 @@ class AboutModal extends Component {
           <img src={logo} style={{ width: '100px', height: 'auto', marginBottom: '15px' }} />
         </div>
         <div>
-          jsreportonline version: <b>1.0.1</b>
+          jsreportonline version: <b>1.0.2</b>
         </div>
         <div>
           jsreport version: <b>2.4.0</b>

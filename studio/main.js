@@ -1043,7 +1043,7 @@
 	          _react2.default.createElement(
 	            'b',
 	            null,
-	            '1.0.1'
+	            '1.0.2'
 	          )
 	        ),
 	        _react2.default.createElement(
