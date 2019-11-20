@@ -24,7 +24,7 @@ describe('reports', () => {
 
   it('should do autocleanup', async () => {
     const tenant = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
-    await jsreport.multitenancyRepository.updateTenant('test', { reportsCleanupTreshold: '10ms' })
+    await jsreport.multitenancyRepository.updateTenant('test', { $set: { reportsCleanupTreshold: '10ms' } })
 
     await jsreport.render({
       template: {
