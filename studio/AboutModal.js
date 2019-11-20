@@ -8,6 +8,9 @@ class AboutModal extends Component {
   }
 
   render () {
+    const { extensions } = this.props.options
+    const { version, jsreportVersion } = extensions.jo.options
+
     return (
       <div>
         <h2>About</h2>
@@ -15,10 +18,10 @@ class AboutModal extends Component {
           <img src={logo} style={{ width: '100px', height: 'auto', marginBottom: '15px' }} />
         </div>
         <div>
-          jsreportonline version: <b>1.0.2</b>
+          jsreportonline version: <b>{version}</b>
         </div>
         <div>
-          jsreport version: <b>2.4.0</b>
+          jsreport version: <b>{jsreportVersion}</b>
         </div>
         <br />
         <br />

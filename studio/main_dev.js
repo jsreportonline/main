@@ -10,6 +10,8 @@ const localStorage = window.localStorage
 
 Studio.addEditorComponent('billing', BillingEditor)
 
+Studio.setAboutModal(AboutModal)
+
 Studio.readyListeners.push(async () => {
   const creditsExceeded = Math.round(Studio.authentication.user.creditsUsed / 1000) > Studio.authentication.user.creditsAvailable
 
@@ -117,15 +119,6 @@ Studio.initializeListeners.push(async () => {
   Studio.authentication.user.billingHistory.sort((a, b) => b.billedDate.getTime() - a.billedDate.getTime())
 
   Studio.addToolbarComponent(BillingButton, 'right')
-
-  setTimeout(() => {
-    Studio.addToolbarComponent(() => (
-      <div
-        onClick={() => Studio.openModal(AboutModal)}>
-        <i className='fa fa-info-circle' /> About
-      </div>
-    ), 'settings')
-  }, 0)
 
   Studio.addToolbarComponent(() => (
     <div className='toolbar-button'>
