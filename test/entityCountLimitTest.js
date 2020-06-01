@@ -28,7 +28,7 @@ describe('entityCountLimit', () => {
     }, Request({
       context: {
         tenant: { name: 'test' },
-        user: { _id: t._id, username: 'test@test.com', admin: true }
+        user: { _id: t._id, username: 'test@test.com', isAdmin: true }
       }
     }))
   })
@@ -43,7 +43,7 @@ describe('entityCountLimit', () => {
       }, Request({
         context: {
           tenant: { name: 'test', entityCountLimit: 1 },
-          user: { _id: t._id, username: 'test@test.com', admin: true }
+          user: { _id: t._id, username: 'test@test.com', isAdmin: true }
         }
       }))
     }
@@ -69,7 +69,7 @@ describe('entityCountLimit', () => {
       }, Request({
         context: {
           tenant: { name: 'test', plan: 'free' },
-          user: { _id: t._id, username: 'test@test.com', admin: true }
+          user: { _id: t._id, username: 'test@test.com', isAdmin: true }
         }
       }))
     }
@@ -91,7 +91,7 @@ describe('entityCountLimit', () => {
       }, Request({
         context: {
           tenant: { name: 'test', plan: 'free' },
-          user: { _id: t._id, username: 'test@test.com', admin: true }
+          user: { _id: t._id, username: 'test@test.com', isAdmin: true }
         }
       }))
     }
