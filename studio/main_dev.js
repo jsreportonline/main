@@ -2,7 +2,8 @@ import Studio from 'jsreport-studio'
 import BillingEditor from './BillingEditor.js'
 import superagent from 'superagent'
 import BillingButton from './BillingButton.js'
-import ChangePasswordSettingsButton from './ChangePasswordSettingsButton.js'
+import ChangePasswordSettingsButton from './ChangePasswordSettingsButton'
+import ChangeEmailSettingsButton from './ChangeEmailSettingsButton'
 import AboutModal from './AboutModal'
 import WindowsDeprecationModal from './WindowsDeprecationModal'
 import ContactEmailModal from './ContactEmailModal'
@@ -159,6 +160,8 @@ Studio.initializeListeners.push(async () => {
   ), 'settings')
 
   Studio.addToolbarComponent(ChangePasswordSettingsButton, 'settings')
+
+  Studio.addToolbarComponent(ChangeEmailSettingsButton, 'settings')
 })
 
 async function getTemplatesUsingWindowsExecution () {

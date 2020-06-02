@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React, { Component, PropTypes } from 'react'
 import Studio from 'jsreport-studio'
 
 export default class ChangePasswordModal extends Component {
@@ -60,9 +60,9 @@ export default class ChangePasswordModal extends Component {
         <input type='password' ref='newPassword2' onChange={() => this.validatePassword()} />
       </div>
       <div className='form-group'>
-        <span style={{color: 'red', display: this.state.validationError ? 'block' : 'none'}}>{this.state.validationError}</span>
-        <span style={{color: 'red', display: this.state.passwordError ? 'block' : 'none'}}>password doesn't match</span>
-        <span style={{color: 'red', display: this.state.apiError ? 'block' : 'none'}}>{this.state.apiError}</span>
+        <span style={{ color: 'red', display: this.state.validationError ? 'block' : 'none' }}>{this.state.validationError}</span>
+        <span style={{ color: 'red', display: this.state.passwordError ? 'block' : 'none' }}>password doesn't match</span>
+        <span style={{ color: 'red', display: this.state.apiError ? 'block' : 'none' }}>{this.state.apiError}</span>
       </div>
       <div className='button-bar'>
         <button className='button confirmation' onClick={() => this.changePassword()}>ok</button>

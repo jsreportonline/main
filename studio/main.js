@@ -191,15 +191,19 @@ var _ChangePasswordSettingsButton = __webpack_require__(7);
 
 var _ChangePasswordSettingsButton2 = _interopRequireDefault(_ChangePasswordSettingsButton);
 
-var _AboutModal = __webpack_require__(9);
+var _ChangeEmailSettingsButton = __webpack_require__(9);
+
+var _ChangeEmailSettingsButton2 = _interopRequireDefault(_ChangeEmailSettingsButton);
+
+var _AboutModal = __webpack_require__(11);
 
 var _AboutModal2 = _interopRequireDefault(_AboutModal);
 
-var _WindowsDeprecationModal = __webpack_require__(10);
+var _WindowsDeprecationModal = __webpack_require__(12);
 
 var _WindowsDeprecationModal2 = _interopRequireDefault(_WindowsDeprecationModal);
 
-var _ContactEmailModal = __webpack_require__(11);
+var _ContactEmailModal = __webpack_require__(13);
 
 var _ContactEmailModal2 = _interopRequireDefault(_ContactEmailModal);
 
@@ -475,7 +479,9 @@ _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__
 
           _jsreportStudio2.default.addToolbarComponent(_ChangePasswordSettingsButton2.default, 'settings');
 
-        case 6:
+          _jsreportStudio2.default.addToolbarComponent(_ChangeEmailSettingsButton2.default, 'settings');
+
+        case 7:
         case 'end':
           return _context3.stop();
       }
@@ -1172,6 +1178,305 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _ChangeEmailModal = __webpack_require__(10);
+
+var _ChangeEmailModal2 = _interopRequireDefault(_ChangeEmailModal);
+
+var _jsreportStudio = __webpack_require__(0);
+
+var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (props) {
+  return _jsreportStudio2.default.authentication.user.isAdmin ? React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'a',
+      {
+        id: 'changeEmail',
+        onClick: function onClick() {
+          return _jsreportStudio2.default.openModal(_ChangeEmailModal2.default, { entity: _jsreportStudio2.default.authentication.user });
+        },
+        style: { cursor: 'pointer' } },
+      React.createElement('i', { className: 'fa fa-at' }),
+      ' Change email'
+    )
+  ) : React.createElement('div', null);
+};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _jsreportStudio = __webpack_require__(0);
+
+var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ChangeEmailModal = function (_Component) {
+  _inherits(ChangeEmailModal, _Component);
+
+  function ChangeEmailModal() {
+    _classCallCheck(this, ChangeEmailModal);
+
+    var _this = _possibleConstructorReturn(this, (ChangeEmailModal.__proto__ || Object.getPrototypeOf(ChangeEmailModal)).call(this));
+
+    _this.state = { loading: false, completed: false };
+    return _this;
+  }
+
+  _createClass(ChangeEmailModal, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.refs.newEmail) {
+        this.refs.newEmail.focus();
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      if (this.completed) {
+        window.location.reload();
+      }
+    }
+  }, {
+    key: 'changeEmail',
+    value: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var data, response;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                data = {
+                  newEmail: this.refs.newEmail.value
+                };
+
+
+                this.setState({ loading: true });
+
+                _context.next = 5;
+                return _jsreportStudio2.default.api.post('/api/account-email', { data: data });
+
+              case 5:
+                response = _context.sent;
+
+
+                this.setState({ loading: false });
+
+                this.refs.newEmail.value = '';
+
+                if (!(response.code !== 'ok')) {
+                  _context.next = 11;
+                  break;
+                }
+
+                this.setState({ validationError: response.code });
+                return _context.abrupt('return');
+
+              case 11:
+
+                this.setState({ completed: true });
+                this.completed = true;
+                _context.next = 18;
+                break;
+
+              case 15:
+                _context.prev = 15;
+                _context.t0 = _context['catch'](0);
+
+                this.setState({ loading: false, apiError: _context.t0.message });
+
+              case 18:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 15]]);
+      }));
+
+      function changeEmail() {
+        return _ref.apply(this, arguments);
+      }
+
+      return changeEmail;
+    }()
+  }, {
+    key: 'confirm',
+    value: function confirm() {
+      var close = this.props.close;
+
+
+      close();
+      window.location.reload();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var close = this.props.close;
+      var _state = this.state,
+          loading = _state.loading,
+          completed = _state.completed;
+
+
+      if (completed) {
+        return _react2.default.createElement(
+          'div',
+          { key: 'info' },
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group' },
+            _react2.default.createElement(
+              'i',
+              null,
+              'Email changed successfully. Now we need to reload the studio..'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'button-bar' },
+            _react2.default.createElement(
+              'button',
+              { autoFocus: true, className: 'button confirmation', onClick: function onClick() {
+                  return _this2.confirm();
+                } },
+              'Ok'
+            )
+          )
+        );
+      }
+
+      return _react2.default.createElement(
+        'div',
+        { key: 'edit' },
+        _react2.default.createElement(
+          'p',
+          null,
+          'Please understand the change of the administrator email can break your API calls in case you use it in the authorization header. In this case, we recommend creating a custom jsreport user and use it in the API calls instead.'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Afterward, it is safe to change the administrator email.'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Please note that after the email is changed, you will be logged out and log in will be required.'
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group' },
+          _react2.default.createElement(
+            'label',
+            null,
+            'current email'
+          ),
+          _react2.default.createElement(
+            'span',
+            null,
+            _react2.default.createElement(
+              'b',
+              null,
+              _jsreportStudio2.default.authentication.user.username
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group' },
+          _react2.default.createElement(
+            'label',
+            null,
+            'new email'
+          ),
+          _react2.default.createElement('input', { type: 'email', ref: 'newEmail', onFocus: function onFocus() {
+              return _this2.setState({ validationError: null, apiError: null });
+            } })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group' },
+          _react2.default.createElement(
+            'span',
+            { style: { color: 'red', display: this.state.validationError ? 'block' : 'none' } },
+            this.state.validationError
+          ),
+          _react2.default.createElement(
+            'span',
+            { style: { color: 'red', display: this.state.apiError ? 'block' : 'none' } },
+            this.state.apiError
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'button-bar' },
+          _react2.default.createElement(
+            'button',
+            { className: 'button danger', disabled: loading, onClick: function onClick() {
+                return close();
+              } },
+            'cancel'
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'button confirmation', disabled: loading, onClick: function onClick() {
+                return _this2.changeEmail();
+              } },
+            'save'
+          )
+        )
+      );
+    }
+  }]);
+
+  return ChangeEmailModal;
+}(_react.Component);
+
+ChangeEmailModal.propTypes = {
+  close: _react.PropTypes.func.isRequired,
+  options: _react.PropTypes.object.isRequired
+};
+exports.default = ChangeEmailModal;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(1);
@@ -1274,7 +1579,7 @@ AboutModal.propTypes = {
 exports.default = AboutModal;
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1365,7 +1670,7 @@ WindowsDeprecationModal.propTypes = {
 exports.default = WindowsDeprecationModal;
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
