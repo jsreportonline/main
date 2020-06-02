@@ -4,6 +4,7 @@ import superagent from 'superagent'
 import BillingButton from './BillingButton.js'
 import ChangePasswordSettingsButton from './ChangePasswordSettingsButton.js'
 import AboutModal from './AboutModal'
+import WindowsDeprecationModal from './WindowsDeprecationModal'
 import ContactEmailModal from './ContactEmailModal'
 
 const localStorage = window.localStorage
@@ -13,6 +14,7 @@ Studio.addEditorComponent('billing', BillingEditor)
 Studio.setAboutModal(AboutModal)
 
 Studio.readyListeners.push(async () => {
+  const pendingModalsLaunch = []
   const creditsExceeded = Math.round(Studio.authentication.user.creditsUsed / 1000) > Studio.authentication.user.creditsAvailable
 
   const isModalUsed = () => {
@@ -24,6 +26,8 @@ Studio.readyListeners.push(async () => {
     Studio.authentication.user.isAdmin &&
     Studio.authentication.user.contactEmail == null
   )
+
+  const windowsDeprecationModal = (templates) => Studio.openModal(WindowsDeprecationModal, templates != null ? { templates } : undefined)
 
   const contactEmailModal = () => Studio.openModal(ContactEmailModal)
 
@@ -87,31 +91,48 @@ Studio.readyListeners.push(async () => {
     })
   }
 
-  if (creditsExceeded) {
-    let intervalId
-
-    creditsExceededModal()
-
-    intervalId = setInterval(() => {
-      if (!isModalUsed()) {
-        clearInterval(intervalId)
-
-        if (contactEmailNotRegistered()) {
-          contactEmailModal()
-        }
-      }
-    }, 2500)
-  } else {
-    if (
-      !isModalUsed() &&
-      contactEmailNotRegistered()
-    ) {
-      contactEmailModal()
+  // interval for modal launching
+  setInterval(() => {
+    if (pendingModalsLaunch.length === 0 || Studio.isModalOpen()) {
+      return
     }
+
+    const toLaunch = pendingModalsLaunch.splice(0, 1)
+
+    toLaunch[0]()
+  }, 300)
+
+  if (creditsExceeded) {
+    pendingModalsLaunch.push(creditsExceededModal)
+  }
+
+  try {
+    const templatesUsingWindowsExecution = await getTemplatesUsingWindowsExecution()
+
+    if (templatesUsingWindowsExecution.length > 0) {
+      pendingModalsLaunch.push(() => windowsDeprecationModal(templatesUsingWindowsExecution))
+    }
+  } catch (e) {
+    console.error('Error trying to detect templates with windows execution:')
+    console.error(e)
+  }
+
+  if (contactEmailNotRegistered()) {
+    pendingModalsLaunch.push(contactEmailModal)
   }
 
   setInterval(checkMessages, 5 * 60 * 1000)
   checkMessages()
+
+  Studio.previewListeners.push((request, entities) => {
+    if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'wkhtmltopdf') {
+      return
+    }
+
+    if (isTemplateUsingWindows(request.template)) {
+      pendingModalsLaunch.push(windowsDeprecationModal)
+    }
+  })
 })
 
 Studio.initializeListeners.push(async () => {
@@ -139,3 +160,61 @@ Studio.initializeListeners.push(async () => {
 
   Studio.addToolbarComponent(ChangePasswordSettingsButton, 'settings')
 })
+
+async function getTemplatesUsingWindowsExecution () {
+  let templates = Studio.getReferences().templates.filter((t) => {
+    return t.recipe === 'phantom-pdf' || t.recipe === 'wkhtmltopdf'
+  })
+
+  if (templates.length === 0) {
+    return templates
+  }
+
+  templates = await Promise.all(templates.map(async (t) => {
+    const freshTemplate = await Studio.loadEntity(t._id, true)
+    return freshTemplate
+  }))
+
+  return templates.filter((t) => isTemplateUsingWindows(t))
+}
+
+function isTemplateUsingWindows (t) {
+  if (t == null) {
+    return false
+  }
+
+  const defaultPhantomjsChange = new Date(2016, 9, 18)
+  let usingWindows = false
+  let isOldTenant = false
+
+  if (
+    Studio.authentication.user.createdOn != null &&
+    Studio.authentication.user.createdOn < defaultPhantomjsChange
+  ) {
+    isOldTenant = true
+  }
+
+  const phantomWin = (
+    t.recipe === 'phantom-pdf' && ((
+      t.phantom != null &&
+      t.phantom.phantomjsVersion === '1.9.8-windows'
+    ) || (
+      // requests for old tenants should get the windows fallback
+      isOldTenant &&
+      (!t.phantom ||
+      !t.phantom.phantomjsVersion)
+    ))
+  )
+
+  const wkhtmltopdfWin = (
+    t.recipe === 'wkhtmltopdf' &&
+    t.wkhtmltopdf != null &&
+    t.wkhtmltopdf.wkhtmltopdfVersion === '0.12.3-windows'
+  )
+
+  if (phantomWin || wkhtmltopdfWin) {
+    usingWindows = true
+  }
+
+  return usingWindows
+}

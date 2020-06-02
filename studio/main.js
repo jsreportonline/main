@@ -103,6 +103,74 @@ module.exports = Studio.libraries['react'];
 "use strict";
 
 
+var getTemplatesUsingWindowsExecution = function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+    var _this = this;
+
+    var templates;
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            templates = _jsreportStudio2.default.getReferences().templates.filter(function (t) {
+              return t.recipe === 'phantom-pdf' || t.recipe === 'wkhtmltopdf';
+            });
+
+            if (!(templates.length === 0)) {
+              _context5.next = 3;
+              break;
+            }
+
+            return _context5.abrupt('return', templates);
+
+          case 3:
+            _context5.next = 5;
+            return Promise.all(templates.map(function () {
+              var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(t) {
+                var freshTemplate;
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                  while (1) {
+                    switch (_context4.prev = _context4.next) {
+                      case 0:
+                        _context4.next = 2;
+                        return _jsreportStudio2.default.loadEntity(t._id, true);
+
+                      case 2:
+                        freshTemplate = _context4.sent;
+                        return _context4.abrupt('return', freshTemplate);
+
+                      case 4:
+                      case 'end':
+                        return _context4.stop();
+                    }
+                  }
+                }, _callee4, _this);
+              }));
+
+              return function (_x) {
+                return _ref5.apply(this, arguments);
+              };
+            }()));
+
+          case 5:
+            templates = _context5.sent;
+            return _context5.abrupt('return', templates.filter(function (t) {
+              return isTemplateUsingWindows(t);
+            }));
+
+          case 7:
+          case 'end':
+            return _context5.stop();
+        }
+      }
+    }, _callee5, this);
+  }));
+
+  return function getTemplatesUsingWindowsExecution() {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
 var _jsreportStudio = __webpack_require__(0);
 
 var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
@@ -127,7 +195,11 @@ var _AboutModal = __webpack_require__(9);
 
 var _AboutModal2 = _interopRequireDefault(_AboutModal);
 
-var _ContactEmailModal = __webpack_require__(10);
+var _WindowsDeprecationModal = __webpack_require__(10);
+
+var _WindowsDeprecationModal2 = _interopRequireDefault(_WindowsDeprecationModal);
+
+var _ContactEmailModal = __webpack_require__(11);
 
 var _ContactEmailModal2 = _interopRequireDefault(_ContactEmailModal);
 
@@ -142,11 +214,12 @@ _jsreportStudio2.default.addEditorComponent('billing', _BillingEditor2.default);
 _jsreportStudio2.default.setAboutModal(_AboutModal2.default);
 
 _jsreportStudio2.default.readyListeners.push(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-  var creditsExceeded, isModalUsed, contactEmailNotRegistered, contactEmailModal, creditsExceededModal, checkMessages, intervalId;
+  var pendingModalsLaunch, creditsExceeded, isModalUsed, contactEmailNotRegistered, windowsDeprecationModal, contactEmailModal, creditsExceededModal, checkMessages, templatesUsingWindowsExecution;
   return regeneratorRuntime.wrap(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
+          pendingModalsLaunch = [];
           creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.creditsAvailable;
 
           isModalUsed = function isModalUsed() {
@@ -155,6 +228,10 @@ _jsreportStudio2.default.readyListeners.push(_asyncToGenerator( /*#__PURE__*/reg
 
           contactEmailNotRegistered = function contactEmailNotRegistered() {
             return _jsreportStudio2.default.authentication.user && _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null;
+          };
+
+          windowsDeprecationModal = function windowsDeprecationModal(templates) {
+            return _jsreportStudio2.default.openModal(_WindowsDeprecationModal2.default, templates != null ? { templates: templates } : undefined);
           };
 
           contactEmailModal = function contactEmailModal() {
@@ -290,36 +367,71 @@ _jsreportStudio2.default.readyListeners.push(_asyncToGenerator( /*#__PURE__*/reg
             };
           }();
 
-          if (creditsExceeded) {
-            intervalId = void 0;
+          // interval for modal launching
 
 
-            creditsExceededModal();
-
-            intervalId = setInterval(function () {
-              if (!isModalUsed()) {
-                clearInterval(intervalId);
-
-                if (contactEmailNotRegistered()) {
-                  contactEmailModal();
-                }
-              }
-            }, 2500);
-          } else {
-            if (!isModalUsed() && contactEmailNotRegistered()) {
-              contactEmailModal();
+          setInterval(function () {
+            if (pendingModalsLaunch.length === 0 || _jsreportStudio2.default.isModalOpen()) {
+              return;
             }
+
+            var toLaunch = pendingModalsLaunch.splice(0, 1);
+
+            toLaunch[0]();
+          }, 300);
+
+          if (creditsExceeded) {
+            pendingModalsLaunch.push(creditsExceededModal);
+          }
+
+          _context2.prev = 10;
+          _context2.next = 13;
+          return getTemplatesUsingWindowsExecution();
+
+        case 13:
+          templatesUsingWindowsExecution = _context2.sent;
+
+
+          if (templatesUsingWindowsExecution.length > 0) {
+            pendingModalsLaunch.push(function () {
+              return windowsDeprecationModal(templatesUsingWindowsExecution);
+            });
+          }
+          _context2.next = 21;
+          break;
+
+        case 17:
+          _context2.prev = 17;
+          _context2.t0 = _context2['catch'](10);
+
+          console.error('Error trying to detect templates with windows execution:');
+          console.error(_context2.t0);
+
+        case 21:
+
+          if (contactEmailNotRegistered()) {
+            pendingModalsLaunch.push(contactEmailModal);
           }
 
           setInterval(checkMessages, 5 * 60 * 1000);
           checkMessages();
 
-        case 9:
+          _jsreportStudio2.default.previewListeners.push(function (request, entities) {
+            if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'wkhtmltopdf') {
+              return;
+            }
+
+            if (isTemplateUsingWindows(request.template)) {
+              pendingModalsLaunch.push(windowsDeprecationModal);
+            }
+          });
+
+        case 25:
         case 'end':
           return _context2.stop();
       }
     }
-  }, _callee2, undefined);
+  }, _callee2, undefined, [[10, 17]]);
 })));
 
 _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
@@ -370,6 +482,32 @@ _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__
     }
   }, _callee3, undefined);
 })));
+
+function isTemplateUsingWindows(t) {
+  if (t == null) {
+    return false;
+  }
+
+  var defaultPhantomjsChange = new Date(2016, 9, 18);
+  var usingWindows = false;
+  var isOldTenant = false;
+
+  if (_jsreportStudio2.default.authentication.user.createdOn != null && _jsreportStudio2.default.authentication.user.createdOn < defaultPhantomjsChange) {
+    isOldTenant = true;
+  }
+
+  var phantomWin = t.recipe === 'phantom-pdf' && (t.phantom != null && t.phantom.phantomjsVersion === '1.9.8-windows' ||
+  // requests for old tenants should get the windows fallback
+  isOldTenant && (!t.phantom || !t.phantom.phantomjsVersion));
+
+  var wkhtmltopdfWin = t.recipe === 'wkhtmltopdf' && t.wkhtmltopdf != null && t.wkhtmltopdf.wkhtmltopdfVersion === '0.12.3-windows';
+
+  if (phantomWin || wkhtmltopdfWin) {
+    usingWindows = true;
+  }
+
+  return usingWindows;
+}
 
 /***/ }),
 /* 3 */
@@ -1137,6 +1275,97 @@ exports.default = AboutModal;
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _jsreportStudio = __webpack_require__(0);
+
+var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var WindowsDeprecationModal = function (_Component) {
+  _inherits(WindowsDeprecationModal, _Component);
+
+  function WindowsDeprecationModal() {
+    _classCallCheck(this, WindowsDeprecationModal);
+
+    return _possibleConstructorReturn(this, (WindowsDeprecationModal.__proto__ || Object.getPrototypeOf(WindowsDeprecationModal)).apply(this, arguments));
+  }
+
+  _createClass(WindowsDeprecationModal, [{
+    key: 'render',
+    value: function render() {
+      var templates = this.props.options.templates;
+
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'p',
+          null,
+          'The windows based rendering is deprecated and will be removed in the future.'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Please read more information ',
+          _react2.default.createElement(
+            'a',
+            { target: '_blank', href: 'https://jsreport.net/learn/online-faq#windows-recipes' },
+            'here'
+          )
+        ),
+        templates && _react2.default.createElement(
+          'div',
+          null,
+          'The following templates are affected',
+          _react2.default.createElement(
+            'ul',
+            null,
+            templates.map(function (t) {
+              return _react2.default.createElement(
+                'li',
+                { key: t._id },
+                _jsreportStudio2.default.resolveEntityPath(t)
+              );
+            })
+          )
+        )
+      );
+    }
+  }]);
+
+  return WindowsDeprecationModal;
+}(_react.Component);
+
+WindowsDeprecationModal.propTypes = {
+  close: _react.PropTypes.func.isRequired,
+  options: _react.PropTypes.object.isRequired
+};
+exports.default = WindowsDeprecationModal;
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
