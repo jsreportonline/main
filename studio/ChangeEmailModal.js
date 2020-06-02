@@ -101,8 +101,8 @@ export default class ChangeEmailModal extends Component {
           <span style={{ color: 'red', display: this.state.apiError ? 'block' : 'none' }}>{this.state.apiError}</span>
         </div>
         <div className='button-bar'>
-          <button className='button danger' disabled={loading} onClick={() => close()}>cancel</button>
-          <button className='button confirmation' disabled={loading} onClick={() => this.changeEmail()}>save</button>
+          <button className='button danger' disabled={loading} onClick={() => this.changeEmail()}>Save</button>
+          <button className='button confirmation' disabled={loading} onClick={() => close()}>Cancel</button>
         </div>
       </div>
     )
