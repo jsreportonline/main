@@ -14,7 +14,7 @@ Studio.addEditorComponent('billing', BillingEditor)
 
 Studio.setAboutModal(AboutModal)
 
-Studio.readyListeners.push(async () => {
+Studio.readyListeners.push(() => {
   const pendingModalsLaunch = []
   const creditsExceeded = Math.round(Studio.authentication.user.creditsUsed / 1000) > Studio.authentication.user.creditsAvailable
 
@@ -107,16 +107,14 @@ Studio.readyListeners.push(async () => {
     pendingModalsLaunch.push(creditsExceededModal)
   }
 
-  try {
-    const templatesUsingWindowsExecution = await getTemplatesUsingWindowsExecution()
-
+  getTemplatesUsingWindowsExecution().then((templatesUsingWindowsExecution) => {
     if (templatesUsingWindowsExecution.length > 0) {
       pendingModalsLaunch.push(() => windowsDeprecationModal(templatesUsingWindowsExecution))
     }
-  } catch (e) {
+  }).catch((e) => {
     console.error('Error trying to detect templates with windows execution:')
     console.error(e)
-  }
+  })
 
   if (contactEmailNotRegistered()) {
     pendingModalsLaunch.push(contactEmailModal)

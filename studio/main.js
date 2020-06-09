@@ -104,70 +104,70 @@ module.exports = Studio.libraries['react'];
 
 
 var getTemplatesUsingWindowsExecution = function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
     var _this = this;
 
     var templates;
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
             templates = _jsreportStudio2.default.getReferences().templates.filter(function (t) {
               return t.recipe === 'phantom-pdf' || t.recipe === 'wkhtmltopdf';
             });
 
             if (!(templates.length === 0)) {
-              _context5.next = 3;
+              _context4.next = 3;
               break;
             }
 
-            return _context5.abrupt('return', templates);
+            return _context4.abrupt('return', templates);
 
           case 3:
-            _context5.next = 5;
+            _context4.next = 5;
             return Promise.all(templates.map(function () {
-              var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(t) {
+              var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(t) {
                 var freshTemplate;
-                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
                   while (1) {
-                    switch (_context4.prev = _context4.next) {
+                    switch (_context3.prev = _context3.next) {
                       case 0:
-                        _context4.next = 2;
+                        _context3.next = 2;
                         return _jsreportStudio2.default.loadEntity(t._id, true);
 
                       case 2:
-                        freshTemplate = _context4.sent;
-                        return _context4.abrupt('return', freshTemplate);
+                        freshTemplate = _context3.sent;
+                        return _context3.abrupt('return', freshTemplate);
 
                       case 4:
                       case 'end':
-                        return _context4.stop();
+                        return _context3.stop();
                     }
                   }
-                }, _callee4, _this);
+                }, _callee3, _this);
               }));
 
               return function (_x) {
-                return _ref5.apply(this, arguments);
+                return _ref4.apply(this, arguments);
               };
             }()));
 
           case 5:
-            templates = _context5.sent;
-            return _context5.abrupt('return', templates.filter(function (t) {
+            templates = _context4.sent;
+            return _context4.abrupt('return', templates.filter(function (t) {
               return isTemplateUsingWindows(t);
             }));
 
           case 7:
           case 'end':
-            return _context5.stop();
+            return _context4.stop();
         }
       }
-    }, _callee5, this);
+    }, _callee4, this);
   }));
 
   return function getTemplatesUsingWindowsExecution() {
-    return _ref4.apply(this, arguments);
+    return _ref3.apply(this, arguments);
   };
 }();
 
@@ -217,231 +217,203 @@ _jsreportStudio2.default.addEditorComponent('billing', _BillingEditor2.default);
 
 _jsreportStudio2.default.setAboutModal(_AboutModal2.default);
 
-_jsreportStudio2.default.readyListeners.push(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-  var pendingModalsLaunch, creditsExceeded, isModalUsed, contactEmailNotRegistered, windowsDeprecationModal, contactEmailModal, creditsExceededModal, checkMessages, templatesUsingWindowsExecution;
+_jsreportStudio2.default.readyListeners.push(function () {
+  var pendingModalsLaunch = [];
+  var creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.creditsAvailable;
+
+  var isModalUsed = function isModalUsed() {
+    return _jsreportStudio2.default.isModalOpen();
+  };
+
+  var contactEmailNotRegistered = function contactEmailNotRegistered() {
+    return _jsreportStudio2.default.authentication.user && _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null;
+  };
+
+  var windowsDeprecationModal = function windowsDeprecationModal(templates) {
+    return _jsreportStudio2.default.openModal(_WindowsDeprecationModal2.default, templates != null ? { templates: templates } : undefined);
+  };
+
+  var contactEmailModal = function contactEmailModal() {
+    return _jsreportStudio2.default.openModal(_ContactEmailModal2.default);
+  };
+
+  var creditsExceededModal = function creditsExceededModal() {
+    return _jsreportStudio2.default.openModal(function (props) {
+      var creditsAvailable = _jsreportStudio2.default.authentication.user.creditsAvailable;
+      var creditsUsed = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000);
+
+      return React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'p',
+          null,
+          'The monthly prepaid credits in your account has been exceeded. Please upgrade your ',
+          React.createElement(
+            'a',
+            { href: 'https://jsreport.net/buy/online', target: '_blank' },
+            'jsreportonline plan'
+          ),
+          ' to avoid service interruption.'
+        ),
+        React.createElement(
+          'p',
+          null,
+          React.createElement(
+            'b',
+            null,
+            'Available:',
+            ' ',
+            React.createElement(
+              'span',
+              { style: { color: '#008000' } },
+              creditsAvailable
+            )
+          ),
+          React.createElement('br', null),
+          React.createElement(
+            'b',
+            null,
+            'Used:',
+            ' ',
+            React.createElement(
+              'span',
+              { style: { color: '#c7a620' } },
+              creditsUsed
+            )
+          ),
+          React.createElement('br', null),
+          React.createElement(
+            'b',
+            null,
+            'Excess:',
+            ' ',
+            React.createElement(
+              'span',
+              { style: { color: '#ff0000' } },
+              creditsUsed - creditsAvailable + ' (' + Math.floor((creditsUsed - creditsAvailable) / creditsAvailable * 100) + '%)'
+            )
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'button-bar' },
+          React.createElement(
+            'button',
+            { className: 'button confirmation', onClick: function onClick() {
+                return props.close();
+              } },
+            'ok'
+          )
+        )
+      );
+    });
+  };
+
+  var checkMessages = function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var request;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              request = _superagent2.default.get(_jsreportStudio2.default.resolveUrl('/api/message'));
+              // eslint-disable-next-line handle-callback-err
+
+              request.end(function (err, response) {
+                if (response && response.body) {
+                  var messageId = localStorage.getItem('messageId');
+
+                  if (isModalUsed()) {
+                    return;
+                  }
+
+                  if (messageId !== response.body.id) {
+                    localStorage.setItem('messageId', response.body.id);
+
+                    _jsreportStudio2.default.openModal(function (props) {
+                      return React.createElement(
+                        'div',
+                        null,
+                        React.createElement('div', { dangerouslySetInnerHTML: { __html: response.body.content } }),
+                        React.createElement(
+                          'div',
+                          { className: 'button-bar' },
+                          React.createElement(
+                            'button',
+                            { className: 'button confirmation', onClick: function onClick() {
+                                return props.close();
+                              } },
+                            'ok'
+                          )
+                        )
+                      );
+                    });
+                  }
+                }
+              });
+
+            case 2:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, undefined);
+    }));
+
+    return function checkMessages() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  // interval for modal launching
+  setInterval(function () {
+    if (pendingModalsLaunch.length === 0 || _jsreportStudio2.default.isModalOpen()) {
+      return;
+    }
+
+    var toLaunch = pendingModalsLaunch.splice(0, 1);
+
+    toLaunch[0]();
+  }, 300);
+
+  if (creditsExceeded) {
+    pendingModalsLaunch.push(creditsExceededModal);
+  }
+
+  getTemplatesUsingWindowsExecution().then(function (templatesUsingWindowsExecution) {
+    if (templatesUsingWindowsExecution.length > 0) {
+      pendingModalsLaunch.push(function () {
+        return windowsDeprecationModal(templatesUsingWindowsExecution);
+      });
+    }
+  }).catch(function (e) {
+    console.error('Error trying to detect templates with windows execution:');
+    console.error(e);
+  });
+
+  if (contactEmailNotRegistered()) {
+    pendingModalsLaunch.push(contactEmailModal);
+  }
+
+  setInterval(checkMessages, 5 * 60 * 1000);
+  checkMessages();
+
+  _jsreportStudio2.default.previewListeners.push(function (request, entities) {
+    if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'wkhtmltopdf') {
+      return;
+    }
+
+    if (isTemplateUsingWindows(request.template)) {
+      pendingModalsLaunch.push(windowsDeprecationModal);
+    }
+  });
+});
+
+_jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
   return regeneratorRuntime.wrap(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
-        case 0:
-          pendingModalsLaunch = [];
-          creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.creditsAvailable;
-
-          isModalUsed = function isModalUsed() {
-            return _jsreportStudio2.default.isModalOpen();
-          };
-
-          contactEmailNotRegistered = function contactEmailNotRegistered() {
-            return _jsreportStudio2.default.authentication.user && _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null;
-          };
-
-          windowsDeprecationModal = function windowsDeprecationModal(templates) {
-            return _jsreportStudio2.default.openModal(_WindowsDeprecationModal2.default, templates != null ? { templates: templates } : undefined);
-          };
-
-          contactEmailModal = function contactEmailModal() {
-            return _jsreportStudio2.default.openModal(_ContactEmailModal2.default);
-          };
-
-          creditsExceededModal = function creditsExceededModal() {
-            return _jsreportStudio2.default.openModal(function (props) {
-              var creditsAvailable = _jsreportStudio2.default.authentication.user.creditsAvailable;
-              var creditsUsed = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000);
-
-              return React.createElement(
-                'div',
-                null,
-                React.createElement(
-                  'p',
-                  null,
-                  'The monthly prepaid credits in your account has been exceeded. Please upgrade your ',
-                  React.createElement(
-                    'a',
-                    { href: 'https://jsreport.net/buy/online', target: '_blank' },
-                    'jsreportonline plan'
-                  ),
-                  ' to avoid service interruption.'
-                ),
-                React.createElement(
-                  'p',
-                  null,
-                  React.createElement(
-                    'b',
-                    null,
-                    'Available:',
-                    ' ',
-                    React.createElement(
-                      'span',
-                      { style: { color: '#008000' } },
-                      creditsAvailable
-                    )
-                  ),
-                  React.createElement('br', null),
-                  React.createElement(
-                    'b',
-                    null,
-                    'Used:',
-                    ' ',
-                    React.createElement(
-                      'span',
-                      { style: { color: '#c7a620' } },
-                      creditsUsed
-                    )
-                  ),
-                  React.createElement('br', null),
-                  React.createElement(
-                    'b',
-                    null,
-                    'Excess:',
-                    ' ',
-                    React.createElement(
-                      'span',
-                      { style: { color: '#ff0000' } },
-                      creditsUsed - creditsAvailable + ' (' + Math.floor((creditsUsed - creditsAvailable) / creditsAvailable * 100) + '%)'
-                    )
-                  )
-                ),
-                React.createElement(
-                  'div',
-                  { className: 'button-bar' },
-                  React.createElement(
-                    'button',
-                    { className: 'button confirmation', onClick: function onClick() {
-                        return props.close();
-                      } },
-                    'ok'
-                  )
-                )
-              );
-            });
-          };
-
-          checkMessages = function () {
-            var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-              var request;
-              return regeneratorRuntime.wrap(function _callee$(_context) {
-                while (1) {
-                  switch (_context.prev = _context.next) {
-                    case 0:
-                      request = _superagent2.default.get(_jsreportStudio2.default.resolveUrl('/api/message'));
-                      // eslint-disable-next-line handle-callback-err
-
-                      request.end(function (err, response) {
-                        if (response && response.body) {
-                          var messageId = localStorage.getItem('messageId');
-
-                          if (isModalUsed()) {
-                            return;
-                          }
-
-                          if (messageId !== response.body.id) {
-                            localStorage.setItem('messageId', response.body.id);
-
-                            _jsreportStudio2.default.openModal(function (props) {
-                              return React.createElement(
-                                'div',
-                                null,
-                                React.createElement('div', { dangerouslySetInnerHTML: { __html: response.body.content } }),
-                                React.createElement(
-                                  'div',
-                                  { className: 'button-bar' },
-                                  React.createElement(
-                                    'button',
-                                    { className: 'button confirmation', onClick: function onClick() {
-                                        return props.close();
-                                      } },
-                                    'ok'
-                                  )
-                                )
-                              );
-                            });
-                          }
-                        }
-                      });
-
-                    case 2:
-                    case 'end':
-                      return _context.stop();
-                  }
-                }
-              }, _callee, undefined);
-            }));
-
-            return function checkMessages() {
-              return _ref2.apply(this, arguments);
-            };
-          }();
-
-          // interval for modal launching
-
-
-          setInterval(function () {
-            if (pendingModalsLaunch.length === 0 || _jsreportStudio2.default.isModalOpen()) {
-              return;
-            }
-
-            var toLaunch = pendingModalsLaunch.splice(0, 1);
-
-            toLaunch[0]();
-          }, 300);
-
-          if (creditsExceeded) {
-            pendingModalsLaunch.push(creditsExceededModal);
-          }
-
-          _context2.prev = 10;
-          _context2.next = 13;
-          return getTemplatesUsingWindowsExecution();
-
-        case 13:
-          templatesUsingWindowsExecution = _context2.sent;
-
-
-          if (templatesUsingWindowsExecution.length > 0) {
-            pendingModalsLaunch.push(function () {
-              return windowsDeprecationModal(templatesUsingWindowsExecution);
-            });
-          }
-          _context2.next = 21;
-          break;
-
-        case 17:
-          _context2.prev = 17;
-          _context2.t0 = _context2['catch'](10);
-
-          console.error('Error trying to detect templates with windows execution:');
-          console.error(_context2.t0);
-
-        case 21:
-
-          if (contactEmailNotRegistered()) {
-            pendingModalsLaunch.push(contactEmailModal);
-          }
-
-          setInterval(checkMessages, 5 * 60 * 1000);
-          checkMessages();
-
-          _jsreportStudio2.default.previewListeners.push(function (request, entities) {
-            if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'wkhtmltopdf') {
-              return;
-            }
-
-            if (isTemplateUsingWindows(request.template)) {
-              pendingModalsLaunch.push(windowsDeprecationModal);
-            }
-          });
-
-        case 25:
-        case 'end':
-          return _context2.stop();
-      }
-    }
-  }, _callee2, undefined, [[10, 17]]);
-})));
-
-_jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-  return regeneratorRuntime.wrap(function _callee3$(_context3) {
-    while (1) {
-      switch (_context3.prev = _context3.next) {
         case 0:
           _jsreportStudio2.default.authentication.user.billingHistory = _jsreportStudio2.default.authentication.user.billingHistory || [];
           _jsreportStudio2.default.authentication.user.billingHistory.sort(function (a, b) {
@@ -483,10 +455,10 @@ _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__
 
         case 7:
         case 'end':
-          return _context3.stop();
+          return _context2.stop();
       }
     }
-  }, _callee3, undefined);
+  }, _callee2, undefined);
 })));
 
 function isTemplateUsingWindows(t) {
@@ -1441,16 +1413,16 @@ var ChangeEmailModal = function (_Component) {
           _react2.default.createElement(
             'button',
             { className: 'button danger', disabled: loading, onClick: function onClick() {
-                return close();
+                return _this2.changeEmail();
               } },
-            'cancel'
+            'Save'
           ),
           _react2.default.createElement(
             'button',
             { className: 'button confirmation', disabled: loading, onClick: function onClick() {
-                return _this2.changeEmail();
+                return close();
               } },
-            'save'
+            'Cancel'
           )
         )
       );
