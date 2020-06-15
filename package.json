@@ -1,6 +1,6 @@
 {
   "name": "main",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -38,7 +38,7 @@
     "handlebars": "4.7.6",
     "jsreport-assets": "github:jsreport/jsreport-assets#03aa1eaacbfb424e014a22e33cc6e35e0282e5e5",
     "jsreport-authentication": "2.5.0",
-    "jsreport-authorization": "2.3.0",
+    "jsreport-authorization": "github:jsreport/jsreport-authorization",
     "jsreport-browser-client": "2.2.2",
     "jsreport-child-templates": "github:jsreport/jsreport-child-templates#926d2ec5afb461bc41526e55a08b8d9a6d6bbd9a",
     "jsreport-chrome-pdf": "1.8.0",
