@@ -55,7 +55,7 @@
     "jsreport-html-to-xlsx": "2.6.0",
     "jsreport-import-export": "1.6.0",
     "jsreport-jsrender": "2.1.1",
-    "jsreport-mongodb-store": "1.3.2",
+    "jsreport-mongodb-store": "1.3.3",
     "jsreport-pdf-utils": "1.7.0",
     "jsreport-phantom-pdf": "2.5.1",
     "jsreport-pptx": "0.6.0",
