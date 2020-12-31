@@ -71,7 +71,7 @@
     "jsreport-tags": "2.5.0",
     "jsreport-templates": "2.4.0",
     "jsreport-text": "2.0.0",
-    "jsreport-version-control": "1.6.0",
+    "jsreport-version-control": "github:jsreport/jsreport-version-control",
     "jsreport-wkhtmltopdf": "2.3.0",
     "jsreport-xlsx": "2.5.0",
     "lodash.get": "4.4.2",
