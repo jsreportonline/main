@@ -943,7 +943,7 @@ exports.default = function (props) {
       React.createElement('i', { className: 'fa fa-key' }),
       ' Change password'
     )
-  ) : React.createElement('div', null);
+  ) : null;
 };
 
 /***/ }),
@@ -1175,7 +1175,7 @@ exports.default = function (props) {
       React.createElement('i', { className: 'fa fa-at' }),
       ' Change email'
     )
-  ) : React.createElement('div', null);
+  ) : null;
 };
 
 /***/ }),

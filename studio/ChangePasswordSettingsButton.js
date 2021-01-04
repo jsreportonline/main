@@ -10,5 +10,5 @@ export default (props) => {
         style={{ cursor: 'pointer' }}><i className='fa fa-key' /> Change password
       </a>
     </div>
-  ) : <div />
+  ) : null
 }

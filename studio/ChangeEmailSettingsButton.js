@@ -10,5 +10,5 @@ export default (props) => {
         style={{ cursor: 'pointer' }}><i className='fa fa-at' /> Change email
       </a>
     </div>
-  ) : <div />
+  ) : null
 }
