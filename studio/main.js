@@ -646,7 +646,7 @@ var ReportEditor = function (_Component) {
               'admin email:'
             ),
             ' ',
-            _jsreportStudio2.default.authentication.user.email
+            _jsreportStudio2.default.authentication.user.adminEmail
           ),
           _jsreportStudio2.default.authentication.user.contactEmail != null && _react2.default.createElement('br', null),
           _jsreportStudio2.default.authentication.user.contactEmail != null && _react2.default.createElement(

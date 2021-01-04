@@ -37,7 +37,7 @@ export default class ReportEditor extends Component {
         <h1><i className='fa fa-home' /> {Studio.authentication.user.name} </h1>
         <small><b>created on:</b> {Studio.authentication.user.createdOn.toLocaleString()}</small>
         <br />
-        <small><b>admin email:</b> {Studio.authentication.user.email}</small>
+        <small><b>admin email:</b> {Studio.authentication.user.adminEmail}</small>
         {Studio.authentication.user.contactEmail != null && (
           <br />
         )}
