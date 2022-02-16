@@ -163,18 +163,9 @@ Studio.initializeListeners.push(async () => {
 })
 
 async function getTemplatesUsingWindowsExecution () {
-  let templates = Studio.getReferences().templates.filter((t) => {
-    return t.recipe === 'phantom-pdf' || t.recipe === 'wkhtmltopdf'
-  })
-
-  if (templates.length === 0) {
-    return templates
-  }
-
-  templates = await Promise.all(templates.map(async (t) => {
-    const freshTemplate = await Studio.loadEntity(t._id, true)
-    return freshTemplate
-  }))
+  // using Studio.load is a bad idea, because it changes the state of the entities in store
+  const response = await Studio.api.get(`/odata/templates?$filter=recipe eq 'phantom-pdf' or recipe eq 'wkhtmltopdf'`)
+  const templates = response.value
 
   return templates.filter((t) => isTemplateUsingWindows(t))
 }

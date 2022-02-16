@@ -104,66 +104,28 @@ module.exports = Studio.libraries['react'];
 
 
 var getTemplatesUsingWindowsExecution = function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
-    var _this = this;
-
-    var templates;
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+    var response, templates;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            templates = _jsreportStudio2.default.getReferences().templates.filter(function (t) {
-              return t.recipe === 'phantom-pdf' || t.recipe === 'wkhtmltopdf';
-            });
+            _context3.next = 2;
+            return _jsreportStudio2.default.api.get('/odata/templates?$filter=recipe eq \'phantom-pdf\' or recipe eq \'wkhtmltopdf\'');
 
-            if (!(templates.length === 0)) {
-              _context4.next = 3;
-              break;
-            }
-
-            return _context4.abrupt('return', templates);
-
-          case 3:
-            _context4.next = 5;
-            return Promise.all(templates.map(function () {
-              var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(t) {
-                var freshTemplate;
-                return regeneratorRuntime.wrap(function _callee3$(_context3) {
-                  while (1) {
-                    switch (_context3.prev = _context3.next) {
-                      case 0:
-                        _context3.next = 2;
-                        return _jsreportStudio2.default.loadEntity(t._id, true);
-
-                      case 2:
-                        freshTemplate = _context3.sent;
-                        return _context3.abrupt('return', freshTemplate);
-
-                      case 4:
-                      case 'end':
-                        return _context3.stop();
-                    }
-                  }
-                }, _callee3, _this);
-              }));
-
-              return function (_x) {
-                return _ref4.apply(this, arguments);
-              };
-            }()));
-
-          case 5:
-            templates = _context4.sent;
-            return _context4.abrupt('return', templates.filter(function (t) {
+          case 2:
+            response = _context3.sent;
+            templates = response.value;
+            return _context3.abrupt('return', templates.filter(function (t) {
               return isTemplateUsingWindows(t);
             }));
 
-          case 7:
+          case 5:
           case 'end':
-            return _context4.stop();
+            return _context3.stop();
         }
       }
-    }, _callee4, this);
+    }, _callee3, this);
   }));
 
   return function getTemplatesUsingWindowsExecution() {
