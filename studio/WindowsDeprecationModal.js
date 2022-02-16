@@ -13,10 +13,10 @@ export default class WindowsDeprecationModal extends Component {
     return (
       <div>
         <p>
-          The windows based rendering is deprecated and will be removed in the future.
+          <b>Important!</b> jsreportonline is about to stop support for  windows based rendering.
         </p>
         <p>
-          Please read more information <a target='_blank' href='https://jsreport.net/learn/online-faq#windows-recipes'>here</a>
+          Please read more information <a target='_blank' href='https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline'>here</a>
         </p>
         {templates && (
           <div>

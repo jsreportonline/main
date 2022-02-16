@@ -1600,7 +1600,12 @@ var WindowsDeprecationModal = function (_Component) {
         _react2.default.createElement(
           'p',
           null,
-          'The windows based rendering is deprecated and will be removed in the future.'
+          _react2.default.createElement(
+            'b',
+            null,
+            'Important!'
+          ),
+          ' jsreportonline is about to stop support for  windows based rendering.'
         ),
         _react2.default.createElement(
           'p',
@@ -1608,7 +1613,7 @@ var WindowsDeprecationModal = function (_Component) {
           'Please read more information ',
           _react2.default.createElement(
             'a',
-            { target: '_blank', href: 'https://jsreport.net/learn/online-faq#windows-recipes' },
+            { target: '_blank', href: 'https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline' },
             'here'
           )
         ),
