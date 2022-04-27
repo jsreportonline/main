@@ -103,36 +103,6 @@ module.exports = Studio.libraries['react'];
 "use strict";
 
 
-var getTemplatesUsingWindowsExecution = function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-    var response, templates;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.next = 2;
-            return _jsreportStudio2.default.api.get('/odata/templates?$filter=recipe eq \'phantom-pdf\' or recipe eq \'wkhtmltopdf\'');
-
-          case 2:
-            response = _context3.sent;
-            templates = response.value;
-            return _context3.abrupt('return', templates.filter(function (t) {
-              return isTemplateUsingWindows(t);
-            }));
-
-          case 5:
-          case 'end':
-            return _context3.stop();
-        }
-      }
-    }, _callee3, this);
-  }));
-
-  return function getTemplatesUsingWindowsExecution() {
-    return _ref3.apply(this, arguments);
-  };
-}();
-
 var _jsreportStudio = __webpack_require__(0);
 
 var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
@@ -187,12 +157,12 @@ _jsreportStudio2.default.readyListeners.push(function () {
     return _jsreportStudio2.default.isModalOpen();
   };
 
-  var contactEmailNotRegistered = function contactEmailNotRegistered() {
-    return _jsreportStudio2.default.authentication.user && _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null;
-  };
+  var contactEmailNotRegistered = _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null;
 
-  var windowsDeprecationModal = function windowsDeprecationModal(templates) {
-    return _jsreportStudio2.default.openModal(_WindowsDeprecationModal2.default, templates != null ? { templates: templates } : undefined);
+  var tenantHadWindowsRecipes = _jsreportStudio2.default.authentication.user.windowsMigrated === true && _jsreportStudio2.default.authentication.user.windowsStoppedInformed !== true;
+
+  var windowsDeprecationModal = function windowsDeprecationModal() {
+    return _jsreportStudio2.default.openModal(_WindowsDeprecationModal2.default);
   };
 
   var contactEmailModal = function contactEmailModal() {
@@ -343,33 +313,16 @@ _jsreportStudio2.default.readyListeners.push(function () {
     pendingModalsLaunch.push(creditsExceededModal);
   }
 
-  getTemplatesUsingWindowsExecution().then(function (templatesUsingWindowsExecution) {
-    if (templatesUsingWindowsExecution.length > 0) {
-      pendingModalsLaunch.push(function () {
-        return windowsDeprecationModal(templatesUsingWindowsExecution);
-      });
-    }
-  }).catch(function (e) {
-    console.error('Error trying to detect templates with windows execution:');
-    console.error(e);
-  });
-
-  if (contactEmailNotRegistered()) {
+  if (contactEmailNotRegistered) {
     pendingModalsLaunch.push(contactEmailModal);
+  }
+
+  if (tenantHadWindowsRecipes) {
+    pendingModalsLaunch.push(windowsDeprecationModal);
   }
 
   setInterval(checkMessages, 5 * 60 * 1000);
   checkMessages();
-
-  _jsreportStudio2.default.previewListeners.push(function (request, entities) {
-    if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'wkhtmltopdf') {
-      return;
-    }
-
-    if (isTemplateUsingWindows(request.template)) {
-      pendingModalsLaunch.push(windowsDeprecationModal);
-    }
-  });
 });
 
 _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
@@ -422,32 +375,6 @@ _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__
     }
   }, _callee2, undefined);
 })));
-
-function isTemplateUsingWindows(t) {
-  if (t == null) {
-    return false;
-  }
-
-  var defaultPhantomjsChange = new Date(2016, 9, 18);
-  var usingWindows = false;
-  var isOldTenant = false;
-
-  if (_jsreportStudio2.default.authentication.user.createdOn != null && _jsreportStudio2.default.authentication.user.createdOn < defaultPhantomjsChange) {
-    isOldTenant = true;
-  }
-
-  var phantomWin = t.recipe === 'phantom-pdf' && (t.phantom != null && t.phantom.phantomjsVersion === '1.9.8-windows' ||
-  // requests for old tenants should get the windows fallback
-  isOldTenant && (!t.phantom || !t.phantom.phantomjsVersion));
-
-  var wkhtmltopdfWin = t.recipe === 'wkhtmltopdf' && t.wkhtmltopdf != null && t.wkhtmltopdf.wkhtmltopdfVersion === '0.12.3-windows';
-
-  if (phantomWin || wkhtmltopdfWin) {
-    usingWindows = true;
-  }
-
-  return usingWindows;
-}
 
 /***/ }),
 /* 3 */
@@ -1535,6 +1462,8 @@ var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1551,10 +1480,46 @@ var WindowsDeprecationModal = function (_Component) {
   }
 
   _createClass(WindowsDeprecationModal, [{
+    key: 'saveTenantInformed',
+    value: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var close;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                close = this.props.close;
+                _context.prev = 1;
+                _context.next = 4;
+                return _jsreportStudio2.default.api.post('/api/tenant-windows-stopped-inform', {});
+
+              case 4:
+                close();
+
+              case 5:
+                _context.prev = 5;
+
+                close();
+                return _context.finish(5);
+
+              case 8:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[1,, 5, 8]]);
+      }));
+
+      function saveTenantInformed() {
+        return _ref.apply(this, arguments);
+      }
+
+      return saveTenantInformed;
+    }()
+  }, {
     key: 'render',
     value: function render() {
-      var templates = this.props.options.templates;
-
+      var _this2 = this;
 
       return _react2.default.createElement(
         'div',
@@ -1567,32 +1532,28 @@ var WindowsDeprecationModal = function (_Component) {
             null,
             'Important!'
           ),
-          ' jsreportonline is about to stop support for  windows based rendering.'
+          ' We migrated some of your templates from the old windows deprecated infrastructure to the current linux. You can find the details in ',
+          _react2.default.createElement(
+            'a',
+            { target: '_blank', href: 'https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline' },
+            'this blog post'
+          ),
+          '.'
         ),
         _react2.default.createElement(
           'p',
           null,
-          'Please read more information ',
-          _react2.default.createElement(
-            'a',
-            { target: '_blank', href: 'https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline' },
-            'here'
-          )
+          'This change may cause layout issues because linux uses different sizes. In case you aren\'t able to quickly fix them, you can contact our support at support@jsreport.net and we can give you windows rendering temporarily back.'
         ),
-        templates && _react2.default.createElement(
+        _react2.default.createElement(
           'div',
-          null,
-          'The following templates are affected',
+          { className: 'button-bar' },
           _react2.default.createElement(
-            'ul',
-            null,
-            templates.map(function (t) {
-              return _react2.default.createElement(
-                'li',
-                { key: t._id },
-                _jsreportStudio2.default.resolveEntityPath(t)
-              );
-            })
+            'button',
+            { className: 'button confirmation', onClick: function onClick() {
+                return _this2.saveTenantInformed();
+              } },
+            'ok'
           )
         )
       );

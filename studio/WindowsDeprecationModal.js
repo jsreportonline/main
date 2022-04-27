@@ -7,27 +7,32 @@ export default class WindowsDeprecationModal extends Component {
     options: PropTypes.object.isRequired
   }
 
-  render () {
-    const { templates } = this.props.options
+  async saveTenantInformed () {
+    const { close } = this.props
 
+    try {
+      await Studio.api.post(`/api/tenant-windows-stopped-inform`, { })
+      close()
+    } finally {
+      close()
+    }
+  }
+
+  render () {
     return (
       <div>
         <p>
-          <b>Important!</b> jsreportonline is about to stop support for  windows based rendering.
+          <b>Important!</b> We migrated some of your templates from the old windows deprecated infrastructure to the current linux.
+          You can find the details in <a target='_blank' href='https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline'>this blog post</a>.
         </p>
         <p>
-          Please read more information <a target='_blank' href='https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline'>here</a>
+          This change may cause layout issues because linux uses different sizes.
+          In case you aren't able to quickly fix them, you can contact our support at support@jsreport.net and we can give you windows rendering temporarily back.
         </p>
-        {templates && (
-          <div>
-            The following templates are affected
-            <ul>
-              {templates.map((t) => (
-                <li key={t._id}>{Studio.resolveEntityPath(t)}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+
+        <div className='button-bar'>
+          <button className='button confirmation' onClick={() => this.saveTenantInformed()}>ok</button>
+        </div>
       </div>
     )
   }

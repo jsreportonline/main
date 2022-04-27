@@ -22,13 +22,11 @@ Studio.readyListeners.push(() => {
     return Studio.isModalOpen()
   }
 
-  const contactEmailNotRegistered = () => (
-    Studio.authentication.user &&
-    Studio.authentication.user.isAdmin &&
-    Studio.authentication.user.contactEmail == null
-  )
+  const contactEmailNotRegistered = Studio.authentication.user.isAdmin && Studio.authentication.user.contactEmail == null
 
-  const windowsDeprecationModal = (templates) => Studio.openModal(WindowsDeprecationModal, templates != null ? { templates } : undefined)
+  const tenantHadWindowsRecipes = Studio.authentication.user.windowsMigrated === true && Studio.authentication.user.windowsStoppedInformed !== true
+
+  const windowsDeprecationModal = () => Studio.openModal(WindowsDeprecationModal)
 
   const contactEmailModal = () => Studio.openModal(ContactEmailModal)
 
@@ -107,31 +105,16 @@ Studio.readyListeners.push(() => {
     pendingModalsLaunch.push(creditsExceededModal)
   }
 
-  getTemplatesUsingWindowsExecution().then((templatesUsingWindowsExecution) => {
-    if (templatesUsingWindowsExecution.length > 0) {
-      pendingModalsLaunch.push(() => windowsDeprecationModal(templatesUsingWindowsExecution))
-    }
-  }).catch((e) => {
-    console.error('Error trying to detect templates with windows execution:')
-    console.error(e)
-  })
-
-  if (contactEmailNotRegistered()) {
+  if (contactEmailNotRegistered) {
     pendingModalsLaunch.push(contactEmailModal)
+  }
+
+  if (tenantHadWindowsRecipes) {
+    pendingModalsLaunch.push(windowsDeprecationModal)
   }
 
   setInterval(checkMessages, 5 * 60 * 1000)
   checkMessages()
-
-  Studio.previewListeners.push((request, entities) => {
-    if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'wkhtmltopdf') {
-      return
-    }
-
-    if (isTemplateUsingWindows(request.template)) {
-      pendingModalsLaunch.push(windowsDeprecationModal)
-    }
-  })
 })
 
 Studio.initializeListeners.push(async () => {
@@ -161,52 +144,3 @@ Studio.initializeListeners.push(async () => {
 
   Studio.addToolbarComponent(ChangeEmailSettingsButton, 'settings')
 })
-
-async function getTemplatesUsingWindowsExecution () {
-  // using Studio.load is a bad idea, because it changes the state of the entities in store
-  const response = await Studio.api.get(`/odata/templates?$filter=recipe eq 'phantom-pdf' or recipe eq 'wkhtmltopdf'`)
-  const templates = response.value
-
-  return templates.filter((t) => isTemplateUsingWindows(t))
-}
-
-function isTemplateUsingWindows (t) {
-  if (t == null) {
-    return false
-  }
-
-  const defaultPhantomjsChange = new Date(2016, 9, 18)
-  let usingWindows = false
-  let isOldTenant = false
-
-  if (
-    Studio.authentication.user.createdOn != null &&
-    Studio.authentication.user.createdOn < defaultPhantomjsChange
-  ) {
-    isOldTenant = true
-  }
-
-  const phantomWin = (
-    t.recipe === 'phantom-pdf' && ((
-      t.phantom != null &&
-      t.phantom.phantomjsVersion === '1.9.8-windows'
-    ) || (
-      // requests for old tenants should get the windows fallback
-      isOldTenant &&
-      (!t.phantom ||
-      !t.phantom.phantomjsVersion)
-    ))
-  )
-
-  const wkhtmltopdfWin = (
-    t.recipe === 'wkhtmltopdf' &&
-    t.wkhtmltopdf != null &&
-    t.wkhtmltopdf.wkhtmltopdfVersion === '0.12.3-windows'
-  )
-
-  if (phantomWin || wkhtmltopdfWin) {
-    usingWindows = true
-  }
-
-  return usingWindows
-}
