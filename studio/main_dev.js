@@ -15,19 +15,19 @@ Studio.setAboutModal(AboutModal)
 
 Studio.readyListeners.push(() => {
   const pendingModalsLaunch = []
-  const creditsExceeded = Math.round(Studio.authentication.user.creditsUsed / 1000) > Studio.authentication.user.creditsAvailable
+  const creditsExceeded = Math.round(Studio.authentication.user.tenant.creditsUsed / 1000) > Studio.authentication.user.tenant.creditsAvailable
 
   const isModalUsed = () => {
     return Studio.isModalOpen()
   }
 
-  const contactEmailNotRegistered = Studio.authentication.user.isAdmin && Studio.authentication.user.contactEmail == null
+  const contactEmailNotRegistered = Studio.authentication.user.isAdmin && Studio.authentication.user.tenant.contactEmail == null
 
   const contactEmailModal = () => Studio.openModal(ContactEmailModal)
 
   const creditsExceededModal = () => Studio.openModal((props) => {
-    const creditsAvailable = Studio.authentication.user.creditsAvailable
-    const creditsUsed = Math.round(Studio.authentication.user.creditsUsed / 1000)
+    const creditsAvailable = Studio.authentication.user.tenant.creditsAvailable
+    const creditsUsed = Math.round(Studio.authentication.user.tenant.creditsUsed / 1000)
 
     return (
       <div>
@@ -113,8 +113,8 @@ Studio.readyListeners.push(() => {
 })
 
 Studio.initializeListeners.push(async () => {
-  Studio.authentication.user.billingHistory = Studio.authentication.user.billingHistory || []
-  Studio.authentication.user.billingHistory.sort((a, b) => b.billedDate.getTime() - a.billedDate.getTime())
+  Studio.authentication.user.tenant.billingHistory = Studio.authentication.user.tenant.billingHistory || []
+  Studio.authentication.user.tenant.billingHistory.sort((a, b) => b.billedDate.getTime() - a.billedDate.getTime())
 
   Studio.addToolbarComponent(BillingButton, 'right')
 

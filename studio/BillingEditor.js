@@ -18,8 +18,8 @@ class BillingEditor extends Component {
     Studio.startProgress()
     setTimeout(async () => {
       const response = await Studio.api.get('/api/settings')
-      Studio.authentication.user.plan = response.tenant.plan
-      Studio.authentication.user.creditsAvailable = response.tenant.creditsAvailable
+      Studio.authentication.user.tenant.plan = response.tenant.plan
+      Studio.authentication.user.tenant.creditsAvailable = response.tenant.creditsAvailable
       Studio.stopProgress()
       this.forceUpdate()
       this.updatePlanStarted = false
@@ -34,23 +34,23 @@ class BillingEditor extends Component {
     return (
       <div className='block custom-editor' style={{ overflow: 'auto', minHeight: 0, height: 'auto' }}>
         <div>
-          <h1><i className='fa fa-home' /> {Studio.authentication.user.name} </h1>
-          <small><b>created on:</b> {Studio.authentication.user.createdOn.toLocaleString()}</small>
+          <h1><i className='fa fa-home' /> {Studio.authentication.user.tenant.name} </h1>
+          <small><b>created on:</b> {Studio.authentication.user.tenant.createdOn.toLocaleString()}</small>
           <br />
           <small><b>admin email:</b> {Studio.authentication.user.adminEmail}</small>
-          {Studio.authentication.user.contactEmail != null && (
+          {Studio.authentication.user.tenant.contactEmail != null && (
             <br />
           )}
-          {Studio.authentication.user.contactEmail != null && (
-            <small><b>contact email:</b> {Studio.authentication.user.contactEmail}</small>
+          {Studio.authentication.user.tenant.contactEmail != null && (
+            <small><b>contact email:</b> {Studio.authentication.user.tenant.contactEmail}</small>
           )}
         </div>
         <div>
           <h2>current billing plan</h2>
 
           <button style={{ marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }} className='button confirmation'>
-            {Studio.authentication.user.plan || 'free'} {Math.round(Studio.authentication.user.creditsUsed / 1000) + ' '}
-            / {Studio.authentication.user.creditsAvailable}
+            {Studio.authentication.user.tenant.plan || 'free'} {Math.round(Studio.authentication.user.tenant.creditsUsed / 1000) + ' '}
+            / {Studio.authentication.user.tenant.creditsAvailable}
           </button>
 
           <button className='button confirmation' style={{ marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }} onClick={() => this.openUpgradeModal()}>
@@ -85,7 +85,7 @@ class BillingEditor extends Component {
               </tr>
             </thead>
             <tbody>
-              {Studio.authentication.user.billingHistory.map((item, index) =>
+              {Studio.authentication.user.tenant.billingHistory.map((item, index) =>
                 <tr key={index}>
                   <td>{item.billedDate.toLocaleString()}</td>
                   <td>{Math.round(item.creditsUsed / 1000)}</td>

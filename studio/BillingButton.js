@@ -9,7 +9,7 @@ class BillingButton extends Component {
   render () {
     return (
       <div onClick={() => this.openBilling()} className='toolbar-button'>
-        <i className='fa fa-usd' /> {Math.round(Studio.authentication.user.creditsUsed / 1000)} / {Studio.authentication.user.creditsAvailable}
+        <i className='fa fa-usd' /> {Math.round(Studio.authentication.user.tenant.creditsUsed / 1000)} / {Studio.authentication.user.tenant.creditsAvailable}
       </div>
     )
   }

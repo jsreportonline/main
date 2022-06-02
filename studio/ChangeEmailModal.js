@@ -92,7 +92,7 @@ class ChangeEmailModal extends Component {
         </p>
         <div className='form-group'>
           <label>current email</label>
-          <span><b>{Studio.authentication.user.username}</b></span>
+          <span><b>{Studio.authentication.user.name}</b></span>
         </div>
         <div className='form-group'>
           <label>new email</label>

@@ -19,7 +19,8 @@ describe('quota', () => {
   afterEach(() => jsreport.close())
 
   it('beforeRenderListeners should set quotaUsed and quotaStart', async () => {
-    let t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+    const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+    const tUser = await jsreport.multitenancyRepository.findTenantUser('test@test.com')
 
     const req = createRequest({
       template: {
@@ -29,7 +30,7 @@ describe('quota', () => {
       },
       context: {
         id: 1,
-        user: t,
+        user: tUser,
         tenant: t,
         profiling: {
           mode: 'disabled',
@@ -43,14 +44,15 @@ describe('quota', () => {
       meta: {}
     })
 
-    t = await jsreport.multitenancyRepository.findTenant('test@test.com')
+    const tenant = (await jsreport.multitenancyRepository.find({ email: 'test@test.com' }))[0]
 
-    t.quotaUsed.should.be.eql(0)
-    t.quotaStart.should.be.ok()
+    tenant.quotaUsed.should.be.eql(0)
+    tenant.quotaStart.should.be.ok()
   })
 
   it('beforeRenderListeners should throw if quotaUsed exceeds', async () => {
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+    const tUser = await jsreport.multitenancyRepository.findTenantUser('test@test.com')
 
     const req = createRequest({
       template: {
@@ -60,7 +62,7 @@ describe('quota', () => {
       },
       context: {
         id: 1,
-        user: t,
+        user: tUser,
         tenant: Object.assign(t, {
           quotaStart: new Date(),
           quotaUsed: 1000000
@@ -85,6 +87,7 @@ describe('quota', () => {
 
   it('beforeRenderListeners should not throw if quotaUsed exceeds but quotaStart long time before', async () => {
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
+    const tUser = await jsreport.multitenancyRepository.findTenantUser('test@test.com')
 
     const req = createRequest({
       template: {
@@ -94,7 +97,7 @@ describe('quota', () => {
       },
       context: {
         id: 1,
-        user: t,
+        user: tUser,
         tenant: Object.assign(t, {
           quotaStart: new Date(new Date().getTime() - 60 * 10 * 1000),
           quotaUsed: 1000000

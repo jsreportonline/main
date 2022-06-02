@@ -153,13 +153,13 @@ _jsreportStudio2.default.setAboutModal(_AboutModal2.default);
 
 _jsreportStudio2.default.readyListeners.push(function () {
   var pendingModalsLaunch = [];
-  var creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.creditsAvailable;
+  var creditsExceeded = Math.round(_jsreportStudio2.default.authentication.user.tenant.creditsUsed / 1000) > _jsreportStudio2.default.authentication.user.tenant.creditsAvailable;
 
   var isModalUsed = function isModalUsed() {
     return _jsreportStudio2.default.isModalOpen();
   };
 
-  var contactEmailNotRegistered = _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null;
+  var contactEmailNotRegistered = _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.tenant.contactEmail == null;
 
   var contactEmailModal = function contactEmailModal() {
     return _jsreportStudio2.default.openModal(_ContactEmailModal2.default);
@@ -167,8 +167,8 @@ _jsreportStudio2.default.readyListeners.push(function () {
 
   var creditsExceededModal = function creditsExceededModal() {
     return _jsreportStudio2.default.openModal(function (props) {
-      var creditsAvailable = _jsreportStudio2.default.authentication.user.creditsAvailable;
-      var creditsUsed = Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000);
+      var creditsAvailable = _jsreportStudio2.default.authentication.user.tenant.creditsAvailable;
+      var creditsUsed = Math.round(_jsreportStudio2.default.authentication.user.tenant.creditsUsed / 1000);
 
       return React.createElement(
         'div',
@@ -326,8 +326,8 @@ _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          _jsreportStudio2.default.authentication.user.billingHistory = _jsreportStudio2.default.authentication.user.billingHistory || [];
-          _jsreportStudio2.default.authentication.user.billingHistory.sort(function (a, b) {
+          _jsreportStudio2.default.authentication.user.tenant.billingHistory = _jsreportStudio2.default.authentication.user.tenant.billingHistory || [];
+          _jsreportStudio2.default.authentication.user.tenant.billingHistory.sort(function (a, b) {
             return b.billedDate.getTime() - a.billedDate.getTime();
           });
 
@@ -458,8 +458,8 @@ var BillingEditor = function (_Component) {
                         case 2:
                           response = _context.sent;
 
-                          _jsreportStudio2.default.authentication.user.plan = response.tenant.plan;
-                          _jsreportStudio2.default.authentication.user.creditsAvailable = response.tenant.creditsAvailable;
+                          _jsreportStudio2.default.authentication.user.tenant.plan = response.tenant.plan;
+                          _jsreportStudio2.default.authentication.user.tenant.creditsAvailable = response.tenant.creditsAvailable;
                           _jsreportStudio2.default.stopProgress();
                           _this2.forceUpdate();
                           _this2.updatePlanStarted = false;
@@ -507,7 +507,7 @@ var BillingEditor = function (_Component) {
             null,
             _react2.default.createElement('i', { className: 'fa fa-home' }),
             ' ',
-            _jsreportStudio2.default.authentication.user.name,
+            _jsreportStudio2.default.authentication.user.tenant.name,
             ' '
           ),
           _react2.default.createElement(
@@ -519,7 +519,7 @@ var BillingEditor = function (_Component) {
               'created on:'
             ),
             ' ',
-            _jsreportStudio2.default.authentication.user.createdOn.toLocaleString()
+            _jsreportStudio2.default.authentication.user.tenant.createdOn.toLocaleString()
           ),
           _react2.default.createElement('br', null),
           _react2.default.createElement(
@@ -533,8 +533,8 @@ var BillingEditor = function (_Component) {
             ' ',
             _jsreportStudio2.default.authentication.user.adminEmail
           ),
-          _jsreportStudio2.default.authentication.user.contactEmail != null && _react2.default.createElement('br', null),
-          _jsreportStudio2.default.authentication.user.contactEmail != null && _react2.default.createElement(
+          _jsreportStudio2.default.authentication.user.tenant.contactEmail != null && _react2.default.createElement('br', null),
+          _jsreportStudio2.default.authentication.user.tenant.contactEmail != null && _react2.default.createElement(
             'small',
             null,
             _react2.default.createElement(
@@ -543,7 +543,7 @@ var BillingEditor = function (_Component) {
               'contact email:'
             ),
             ' ',
-            _jsreportStudio2.default.authentication.user.contactEmail
+            _jsreportStudio2.default.authentication.user.tenant.contactEmail
           )
         ),
         _react2.default.createElement(
@@ -557,11 +557,11 @@ var BillingEditor = function (_Component) {
           _react2.default.createElement(
             'button',
             { style: { marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, className: 'button confirmation' },
-            _jsreportStudio2.default.authentication.user.plan || 'free',
+            _jsreportStudio2.default.authentication.user.tenant.plan || 'free',
             ' ',
-            Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000) + ' ',
+            Math.round(_jsreportStudio2.default.authentication.user.tenant.creditsUsed / 1000) + ' ',
             '/ ',
-            _jsreportStudio2.default.authentication.user.creditsAvailable
+            _jsreportStudio2.default.authentication.user.tenant.creditsAvailable
           ),
           _react2.default.createElement(
             'button',
@@ -637,7 +637,7 @@ var BillingEditor = function (_Component) {
             _react2.default.createElement(
               'tbody',
               null,
-              _jsreportStudio2.default.authentication.user.billingHistory.map(function (item, index) {
+              _jsreportStudio2.default.authentication.user.tenant.billingHistory.map(function (item, index) {
                 return _react2.default.createElement(
                   'tr',
                   { key: index },
@@ -784,9 +784,9 @@ var BillingButton = function (_Component) {
           }, className: 'toolbar-button' },
         _react2.default.createElement('i', { className: 'fa fa-usd' }),
         ' ',
-        Math.round(_jsreportStudio2.default.authentication.user.creditsUsed / 1000),
+        Math.round(_jsreportStudio2.default.authentication.user.tenant.creditsUsed / 1000),
         ' / ',
-        _jsreportStudio2.default.authentication.user.creditsAvailable
+        _jsreportStudio2.default.authentication.user.tenant.creditsAvailable
       );
     }
   }]);
@@ -1296,7 +1296,7 @@ var ChangeEmailModal = function (_Component) {
             _react2.default.createElement(
               'b',
               null,
-              _jsreportStudio2.default.authentication.user.username
+              _jsreportStudio2.default.authentication.user.name
             )
           )
         ),
