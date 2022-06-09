@@ -62,7 +62,6 @@
     "client-sessions": "0.8.0",
     "ejs": "3.1.8",
     "handlebars": "4.7.7",
-    "lodash.get": "4.4.2",
     "lodash.omit": "4.5.0",
     "moment": "2.29.3",
     "mongodb": "3.6.5",
