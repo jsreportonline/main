@@ -1,6 +1,7 @@
-import React, {Component, PropTypes} from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-export default class UpgradePlanModal extends Component {
+class UpgradePlanModal extends Component {
   static propTypes = {
     close: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired
@@ -14,3 +15,5 @@ export default class UpgradePlanModal extends Component {
     )
   }
 }
+
+export default UpgradePlanModal

@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Studio from 'jsreport-studio'
 
-export default class ContactEmailModal extends Component {
+class ContactEmailModal extends Component {
   static propTypes = {
     close: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired
@@ -14,19 +15,21 @@ export default class ContactEmailModal extends Component {
       validationError: null,
       apiError: null
     }
+
+    this.contactEmailRef = React.createRef()
   }
 
   async saveContactEmail () {
     const { close } = this.props
 
     try {
-      let data = {
-        contactEmail: this.refs.contactEmail.value
+      const data = {
+        contactEmail: this.contactEmailRef.current.value
       }
 
-      const response = await Studio.api.post(`/api/register-contact-email`, { data: data })
+      const response = await Studio.api.post('/api/register-contact-email', { data: data })
 
-      this.refs.contactEmail.value = ''
+      this.contactEmailRef.current.value = ''
 
       if (response.code !== 'ok') {
         this.setState({ validationError: response.code })
@@ -50,11 +53,11 @@ export default class ContactEmailModal extends Component {
         <div>
           <div className='form-group'>
             <label>Contact Email</label>
-            <input type='text' placeholder='email...' ref='contactEmail' />
+            <input type='text' placeholder='email...' ref={this.contactEmailRef} />
           </div>
           <div className='form-group'>
-            <span style={{color: 'red', display: this.state.validationError ? 'block' : 'none'}}>{this.state.validationError}</span>
-            <span style={{color: 'red', display: this.state.apiError ? 'block' : 'none'}}>{this.state.apiError}</span>
+            <span style={{ color: 'red', display: this.state.validationError ? 'block' : 'none' }}>{this.state.validationError}</span>
+            <span style={{ color: 'red', display: this.state.apiError ? 'block' : 'none' }}>{this.state.apiError}</span>
           </div>
           <div className='button-bar'>
             <button className='button confirmation' onClick={() => this.saveContactEmail()}>save</button>
@@ -64,3 +67,5 @@ export default class ContactEmailModal extends Component {
     )
   }
 }
+
+export default ContactEmailModal

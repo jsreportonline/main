@@ -7,6 +7,7 @@ const _ = require('underscore')
 
 const server = 'http://localtest.me:5488'
 // const server = 'https://jsreportonline-test.net'
+// eslint-disable-next-line node/no-deprecated-api
 const serverUrl = url.parse(server)
 
 const config = {
@@ -56,7 +57,7 @@ const caseInvoice = (a) => {
     },
     json: true,
     headers: {
-      'Authorization': a.authHeader
+      Authorization: a.authHeader
     }
   })
 }
@@ -70,7 +71,7 @@ const caseScript = (a) => {
     },
     json: true,
     headers: {
-      'Authorization': a.authHeader
+      Authorization: a.authHeader
     }
   }).then((body) => {
     return request.post({
@@ -86,7 +87,7 @@ const caseScript = (a) => {
       },
       json: true,
       headers: {
-        'Authorization': a.authHeader
+        Authorization: a.authHeader
       }
     })
   })
@@ -104,7 +105,7 @@ const caseXlsx = (a) => {
     },
     json: true,
     headers: {
-      'Authorization': a.authHeader
+      Authorization: a.authHeader
     }
   })
 }
@@ -121,7 +122,7 @@ const caseFop = (a) => {
     },
     json: true,
     headers: {
-      'Authorization': a.authHeader
+      Authorization: a.authHeader
     }
   })
 }
@@ -191,7 +192,7 @@ const run = () => {
         body: casesRun[item],
         json: true,
         headers: {
-          'Authorization': a.authHeader
+          Authorization: a.authHeader
         }
       }).then((body) => {
         successCounter++

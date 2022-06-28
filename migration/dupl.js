@@ -17,8 +17,8 @@ async function migrate () {
   const client = await MongoClient.connect(connectionString, { useNewUrlParser: true })
   const rootDb = client.db(rootDatabase)
   const db = client.db(database)
-  let tenantsWithDuplicates = {}
-  let tenantsDuplicateItems = {}
+  const tenantsWithDuplicates = {}
+  const tenantsDuplicateItems = {}
 
   const collections = ['assets', 'data', 'schedules', 'scripts', 'tags', 'templates', 'users', 'xlsxTemplates']
 
@@ -46,6 +46,7 @@ async function migrate () {
   let tCounter = 1
 
   try {
+    // eslint-disable-next-line no-unused-vars
     for (const t of tenants) {
       currentTenant = t.name
 
@@ -55,6 +56,7 @@ async function migrate () {
 
       let allEntities = []
 
+      // eslint-disable-next-line no-unused-vars
       for (const c of collections) {
         const entities = await db.collection(c).find({
           tenantId: t.name
@@ -66,6 +68,7 @@ async function migrate () {
         })))
       }
 
+      // eslint-disable-next-line no-unused-vars
       for (const c of collections) {
         currentCollection = c
 
@@ -78,6 +81,7 @@ async function migrate () {
 
         const duplicatesAtCollection = {}
 
+        // eslint-disable-next-line no-unused-vars
         for (const e of entities) {
           const duplicates = entities.filter(a => {
             return (

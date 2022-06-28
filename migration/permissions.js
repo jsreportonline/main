@@ -1,5 +1,7 @@
 const MongoClient = require('mongodb').MongoClient
 const winston = require('winston')
+const createDefaultLoggerFormat = require('./createDefaultLoggerFormat')
+const defaultLoggerFormatWithTimestamp = createDefaultLoggerFormat({ timestamp: true })
 
 const connectionString = 'mongodb://localhost:27017'
 const database = 'multitenant'
@@ -7,7 +9,7 @@ const rootDatabase = 'multitenant-root'
 
 const logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.Console)({ colorize: true })
+    new winston.transports.Console({ format: winston.format.combine(winston.format.colorize(), defaultLoggerFormatWithTimestamp()) })
   ]
 })
 
@@ -16,7 +18,7 @@ async function migrate () {
   const client = await MongoClient.connect(connectionString, { useNewUrlParser: true })
   const rootDb = client.db(rootDatabase)
   const db = client.db(database)
-  let tenantsIgnored = 0
+  const tenantsIgnored = 0
 
   const collections = ['assets', 'data', 'schedules', 'scripts', 'tags', 'templates', 'users', 'xlsxTemplates']
 
@@ -27,6 +29,7 @@ async function migrate () {
   let tCounter = 1
 
   try {
+    // eslint-disable-next-line no-unused-vars
     for (const t of tenants) {
       currentTenant = t.name
 
@@ -36,14 +39,17 @@ async function migrate () {
 
       let folders = await db.collection('folders').find({ tenantId: currentTenant }).toArray()
 
-      // process the system fodler at the end
+      // process the system folder at the end
       folders = folders.sort((a, b) => a.name === 'system')
 
+      // eslint-disable-next-line no-unused-vars
       for (const f of folders) {
         const finalVisibilityPermissionsSet = new Set()
 
+        // eslint-disable-next-line no-unused-vars
         for (const c of collections) {
-          let entities = await db.collection(c).find({
+          // eslint-disable-next-line no-unused-vars
+          const entities = await db.collection(c).find({
             folder: {
               shortid: f.shortid
             },

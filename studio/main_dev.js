@@ -31,14 +31,14 @@ Studio.readyListeners.push(() => {
   const contactEmailModal = () => Studio.openModal(ContactEmailModal)
 
   const creditsExceededModal = () => Studio.openModal((props) => {
-    let creditsAvailable = Studio.authentication.user.creditsAvailable
-    let creditsUsed = Math.round(Studio.authentication.user.creditsUsed / 1000)
+    const creditsAvailable = Studio.authentication.user.creditsAvailable
+    const creditsUsed = Math.round(Studio.authentication.user.creditsUsed / 1000)
 
     return (
       <div>
         <p>
           The monthly prepaid credits in your account has been exceeded.
-          Please upgrade your <a href='https://jsreport.net/buy/online' target='_blank'>jsreportonline plan</a> to avoid service interruption.
+          Please upgrade your <a href='https://jsreport.net/buy/online' rel='noreferrer' target='_blank'>jsreportonline plan</a> to avoid service interruption.
         </p>
         <p>
           <b>
@@ -67,6 +67,10 @@ Studio.readyListeners.push(() => {
     const request = superagent.get(Studio.resolveUrl('/api/message'))
     // eslint-disable-next-line handle-callback-err
     request.end((err, response) => {
+      if (err) {
+        return
+      }
+
       if (response && response.body) {
         const messageId = localStorage.getItem('messageId')
 
@@ -125,7 +129,7 @@ Studio.initializeListeners.push(async () => {
 
   Studio.addToolbarComponent(() => (
     <div className='toolbar-button'>
-      <a href='https://jsreport.net/learn/online-faq' target='_blank' style={{ color: 'inherit', textDecoration: 'none' }}>
+      <a href='https://jsreport.net/learn/online-faq' rel='noreferrer' target='_blank' style={{ color: 'inherit', textDecoration: 'none' }}>
         <i className='fa fa-info-circle' /> FAQ
       </a>
     </div>

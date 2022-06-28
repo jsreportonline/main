@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Studio from 'jsreport-studio'
 
-export default class ChangeEmailModal extends Component {
+class ChangeEmailModal extends Component {
   static propTypes = {
     close: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired
@@ -10,11 +11,12 @@ export default class ChangeEmailModal extends Component {
   constructor () {
     super()
     this.state = { loading: false, completed: false }
+    this.newEmailRef = React.createRef()
   }
 
   componentDidMount () {
-    if (this.refs.newEmail) {
-      this.refs.newEmail.focus()
+    if (this.newEmailRef.current) {
+      this.newEmailRef.current.focus()
     }
   }
 
@@ -26,17 +28,17 @@ export default class ChangeEmailModal extends Component {
 
   async changeEmail () {
     try {
-      let data = {
-        newEmail: this.refs.newEmail.value
+      const data = {
+        newEmail: this.newEmailRef.current.value
       }
 
       this.setState({ loading: true })
 
-      const response = await Studio.api.post(`/api/account-email`, { data: data })
+      const response = await Studio.api.post('/api/account-email', { data: data })
 
       this.setState({ loading: false })
 
-      this.refs.newEmail.value = ''
+      this.newEmailRef.current.value = ''
 
       if (response.code !== 'ok') {
         this.setState({ validationError: response.code })
@@ -94,7 +96,7 @@ export default class ChangeEmailModal extends Component {
         </div>
         <div className='form-group'>
           <label>new email</label>
-          <input type='email' ref='newEmail' onFocus={() => this.setState({ validationError: null, apiError: null })} />
+          <input type='email' ref={this.newEmailRef} onFocus={() => this.setState({ validationError: null, apiError: null })} />
         </div>
         <div className='form-group'>
           <span style={{ color: 'red', display: this.state.validationError ? 'block' : 'none' }}>{this.state.validationError}</span>
@@ -108,3 +110,5 @@ export default class ChangeEmailModal extends Component {
     )
   }
 }
+
+export default ChangeEmailModal

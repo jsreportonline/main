@@ -40,6 +40,7 @@ async function migrate () {
   let tCounter = 1
 
   try {
+    // eslint-disable-next-line no-unused-vars
     for (const t of tenants) {
       currentTenant = t.name
 
@@ -50,6 +51,7 @@ async function migrate () {
       let allEntities = []
       let templatesCount = 0
 
+      // eslint-disable-next-line no-unused-vars
       for (const c of collections) {
         const entities = await db.collection(c).find({
           tenantId: t.name
@@ -67,6 +69,7 @@ async function migrate () {
 
       let unique = true
 
+      // eslint-disable-next-line no-unused-vars
       for (const e of allEntities) {
         const duplicateFound = allEntities.find(a => {
           return (
@@ -90,6 +93,7 @@ async function migrate () {
         continue
       }
 
+      // eslint-disable-next-line no-unused-vars
       for (const c of collections) {
         currentCollection = c
 
@@ -102,6 +106,7 @@ async function migrate () {
 
         const duplicatesAtCollection = {}
 
+        // eslint-disable-next-line no-unused-vars
         for (const e of entities) {
           const duplicates = entities.filter(a => {
             return (
@@ -131,7 +136,9 @@ async function migrate () {
         const skipEntities = []
 
         if (Object.keys(duplicatesAtCollection).length > 0) {
+          // eslint-disable-next-line no-unused-vars
           for (const [duplicateName, duplicates] of Object.entries(duplicatesAtCollection)) {
+            // eslint-disable-next-line no-unused-vars
             for (const dupl of duplicates) {
               const entityFolder = await createFolder(`${duplicateName}-folder`, t.name, folder.shortid, false)
 
@@ -150,6 +157,7 @@ async function migrate () {
           }
         }
 
+        // eslint-disable-next-line no-unused-vars
         for (const e of entities) {
           if (skipEntities.includes(e._id.toString())) {
             continue

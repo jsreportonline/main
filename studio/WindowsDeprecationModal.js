@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Studio from 'jsreport-studio'
 
-export default class WindowsDeprecationModal extends Component {
+class WindowsDeprecationModal extends Component {
   static propTypes = {
     close: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired
@@ -11,7 +12,7 @@ export default class WindowsDeprecationModal extends Component {
     const { close } = this.props
 
     try {
-      await Studio.api.post(`/api/tenant-windows-stopped-inform`, { })
+      await Studio.api.post('/api/tenant-windows-stopped-inform', { })
       close()
     } finally {
       close()
@@ -23,7 +24,7 @@ export default class WindowsDeprecationModal extends Component {
       <div>
         <p>
           <b>Important!</b> We migrated some of your templates from the old windows deprecated infrastructure to the current linux.
-          You can find the details in <a target='_blank' href='https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline'>this blog post</a>.
+          You can find the details in <a target='_blank' rel='noreferrer' href='https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline'>this blog post</a>.
         </p>
         <p>
           This change may cause layout issues because linux uses different sizes.
@@ -37,3 +38,5 @@ export default class WindowsDeprecationModal extends Component {
     )
   }
 }
+
+export default WindowsDeprecationModal
