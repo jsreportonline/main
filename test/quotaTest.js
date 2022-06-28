@@ -1,4 +1,4 @@
-const createRequest = require('jsreport-core/lib/render/request')
+const createRequest = require('@jsreport/jsreport-core').Request
 const init = require('../lib/init')
 require('should')
 
@@ -30,7 +30,11 @@ describe('quota', () => {
       context: {
         id: 1,
         user: t,
-        tenant: t
+        tenant: t,
+        profiling: {
+          mode: 'disabled',
+          entity: {}
+        }
       },
       options: {}
     })
@@ -60,7 +64,11 @@ describe('quota', () => {
         tenant: Object.assign(t, {
           quotaStart: new Date(),
           quotaUsed: 1000000
-        })
+        }),
+        profiling: {
+          mode: 'disabled',
+          entity: {}
+        }
       },
       options: {}
     })
@@ -90,7 +98,11 @@ describe('quota', () => {
         tenant: Object.assign(t, {
           quotaStart: new Date(new Date().getTime() - 60 * 10 * 1000),
           quotaUsed: 1000000
-        })
+        }),
+        profiling: {
+          mode: 'disabled',
+          entity: {}
+        }
       },
       options: {}
     })

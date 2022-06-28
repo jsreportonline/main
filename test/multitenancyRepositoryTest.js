@@ -92,14 +92,14 @@ describe('multitenancyRepository', () => {
     await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
 
     await jsreport.documentStore.collection('users').insert({
-      username: 'foo@foo.com',
+      name: 'foo@foo.com',
       password: 'password',
       tenantId: 'test'
     })
 
     const t = await jsreport.multitenancyRepository.findTenantInExtension('foo@foo.com')
 
-    t.username.should.be.eql('foo@foo.com')
+    t.name.should.be.eql('foo@foo.com')
     t.isAdmin.should.be.eql(false)
   })
 
@@ -107,7 +107,7 @@ describe('multitenancyRepository', () => {
     await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
 
     await jsreport.documentStore.collection('users').insert({
-      username: 'foo@foo.com',
+      name: 'foo@foo.com',
       password: 'password',
       tenantId: 'test'
     })
@@ -121,14 +121,14 @@ describe('multitenancyRepository', () => {
     await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
 
     await jsreport.documentStore.collection('users').insert({
-      username: 'test',
+      name: 'test',
       password: 'password',
       tenantId: 'test'
     })
 
     const t = await jsreport.multitenancyRepository.findTenant('test')
 
-    t.username.should.be.eql('test')
+    t.name.should.be.eql('test')
     t.isAdmin.should.be.eql(false)
   })
 

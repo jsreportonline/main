@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Studio from 'jsreport-studio'
 
-export default class ReportsButton extends Component {
+class BillingButton extends Component {
   openBilling () {
     Studio.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' })
   }
@@ -14,3 +14,5 @@ export default class ReportsButton extends Component {
     )
   }
 }
+
+export default BillingButton

@@ -5,7 +5,6 @@ import BillingButton from './BillingButton.js'
 import ChangePasswordSettingsButton from './ChangePasswordSettingsButton'
 import ChangeEmailSettingsButton from './ChangeEmailSettingsButton'
 import AboutModal from './AboutModal'
-import WindowsDeprecationModal from './WindowsDeprecationModal'
 import ContactEmailModal from './ContactEmailModal'
 
 const localStorage = window.localStorage
@@ -23,10 +22,6 @@ Studio.readyListeners.push(() => {
   }
 
   const contactEmailNotRegistered = Studio.authentication.user.isAdmin && Studio.authentication.user.contactEmail == null
-
-  const tenantHadWindowsRecipes = Studio.authentication.user.windowsMigrated === true && Studio.authentication.user.windowsStoppedInformed !== true
-
-  const windowsDeprecationModal = () => Studio.openModal(WindowsDeprecationModal)
 
   const contactEmailModal = () => Studio.openModal(ContactEmailModal)
 
@@ -111,10 +106,6 @@ Studio.readyListeners.push(() => {
 
   if (contactEmailNotRegistered) {
     pendingModalsLaunch.push(contactEmailModal)
-  }
-
-  if (tenantHadWindowsRecipes) {
-    pendingModalsLaunch.push(windowsDeprecationModal)
   }
 
   setInterval(checkMessages, 5 * 60 * 1000)

@@ -110,24 +110,7 @@ const caseXlsx = (a) => {
   })
 }
 
-const caseFop = (a) => {
-  return request.post({
-    url: `${a.url}/odata/templates`,
-    body: {
-      content: fs.readFileSync(path.join(__dirname, 'cases', 'fop', 'content.html')).toString(),
-      helpers: fs.readFileSync(path.join(__dirname, 'cases', 'fop', 'helpers.js')).toString(),
-      recipe: 'fop-pdf',
-      engine: 'jsrender',
-      name: 'fop'
-    },
-    json: true,
-    headers: {
-      Authorization: a.authHeader
-    }
-  })
-}
-
-const cases = [caseInvoice, caseScript, caseXlsx, caseFop]
+const cases = [caseInvoice, caseScript, caseXlsx]
 
 const casesRun = [{
   template: {

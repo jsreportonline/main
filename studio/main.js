@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -98,6 +98,12 @@ module.exports = Studio.libraries['react'];
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = Studio.libraries['prop-types'];
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -107,33 +113,29 @@ var _jsreportStudio = __webpack_require__(0);
 
 var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
 
-var _BillingEditor = __webpack_require__(3);
+var _BillingEditor = __webpack_require__(4);
 
 var _BillingEditor2 = _interopRequireDefault(_BillingEditor);
 
-var _superagent = __webpack_require__(5);
+var _superagent = __webpack_require__(6);
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
-var _BillingButton = __webpack_require__(6);
+var _BillingButton = __webpack_require__(7);
 
 var _BillingButton2 = _interopRequireDefault(_BillingButton);
 
-var _ChangePasswordSettingsButton = __webpack_require__(7);
+var _ChangePasswordSettingsButton = __webpack_require__(8);
 
 var _ChangePasswordSettingsButton2 = _interopRequireDefault(_ChangePasswordSettingsButton);
 
-var _ChangeEmailSettingsButton = __webpack_require__(9);
+var _ChangeEmailSettingsButton = __webpack_require__(10);
 
 var _ChangeEmailSettingsButton2 = _interopRequireDefault(_ChangeEmailSettingsButton);
 
-var _AboutModal = __webpack_require__(11);
+var _AboutModal = __webpack_require__(12);
 
 var _AboutModal2 = _interopRequireDefault(_AboutModal);
-
-var _WindowsDeprecationModal = __webpack_require__(12);
-
-var _WindowsDeprecationModal2 = _interopRequireDefault(_WindowsDeprecationModal);
 
 var _ContactEmailModal = __webpack_require__(13);
 
@@ -159,12 +161,6 @@ _jsreportStudio2.default.readyListeners.push(function () {
 
   var contactEmailNotRegistered = _jsreportStudio2.default.authentication.user.isAdmin && _jsreportStudio2.default.authentication.user.contactEmail == null;
 
-  var tenantHadWindowsRecipes = _jsreportStudio2.default.authentication.user.windowsMigrated === true && _jsreportStudio2.default.authentication.user.windowsStoppedInformed !== true;
-
-  var windowsDeprecationModal = function windowsDeprecationModal() {
-    return _jsreportStudio2.default.openModal(_WindowsDeprecationModal2.default);
-  };
-
   var contactEmailModal = function contactEmailModal() {
     return _jsreportStudio2.default.openModal(_ContactEmailModal2.default);
   };
@@ -183,7 +179,7 @@ _jsreportStudio2.default.readyListeners.push(function () {
           'The monthly prepaid credits in your account has been exceeded. Please upgrade your ',
           React.createElement(
             'a',
-            { href: 'https://jsreport.net/buy/online', target: '_blank' },
+            { href: 'https://jsreport.net/buy/online', rel: 'noreferrer', target: '_blank' },
             'jsreportonline plan'
           ),
           ' to avoid service interruption.'
@@ -253,6 +249,10 @@ _jsreportStudio2.default.readyListeners.push(function () {
               // eslint-disable-next-line handle-callback-err
 
               request.end(function (err, response) {
+                if (err) {
+                  return;
+                }
+
                 if (response && response.body) {
                   var messageId = localStorage.getItem('messageId');
 
@@ -317,10 +317,6 @@ _jsreportStudio2.default.readyListeners.push(function () {
     pendingModalsLaunch.push(contactEmailModal);
   }
 
-  if (tenantHadWindowsRecipes) {
-    pendingModalsLaunch.push(windowsDeprecationModal);
-  }
-
   setInterval(checkMessages, 5 * 60 * 1000);
   checkMessages();
 });
@@ -343,7 +339,7 @@ _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__
               { className: 'toolbar-button' },
               React.createElement(
                 'a',
-                { href: 'https://jsreport.net/learn/online-faq', target: '_blank', style: { color: 'inherit', textDecoration: 'none' } },
+                { href: 'https://jsreport.net/learn/online-faq', rel: 'noreferrer', target: '_blank', style: { color: 'inherit', textDecoration: 'none' } },
                 React.createElement('i', { className: 'fa fa-info-circle' }),
                 ' FAQ'
               )
@@ -377,7 +373,7 @@ _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__
 })));
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -397,7 +393,7 @@ var _jsreportStudio = __webpack_require__(0);
 
 var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
 
-var _UpgradePlanModal = __webpack_require__(4);
+var _UpgradePlanModal = __webpack_require__(5);
 
 var _UpgradePlanModal2 = _interopRequireDefault(_UpgradePlanModal);
 
@@ -411,16 +407,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ReportEditor = function (_Component) {
-  _inherits(ReportEditor, _Component);
+var BillingEditor = function (_Component) {
+  _inherits(BillingEditor, _Component);
 
-  function ReportEditor() {
-    _classCallCheck(this, ReportEditor);
+  function BillingEditor() {
+    _classCallCheck(this, BillingEditor);
 
-    return _possibleConstructorReturn(this, (ReportEditor.__proto__ || Object.getPrototypeOf(ReportEditor)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (BillingEditor.__proto__ || Object.getPrototypeOf(BillingEditor)).apply(this, arguments));
   }
 
-  _createClass(ReportEditor, [{
+  _createClass(BillingEditor, [{
     key: 'openUpgradeModal',
     value: function openUpgradeModal() {
       _jsreportStudio2.default.openModal(_UpgradePlanModal2.default, {});
@@ -576,12 +572,12 @@ var ReportEditor = function (_Component) {
           ),
           _react2.default.createElement(
             'a',
-            { className: 'button confirmation', style: { display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, href: 'https://gumroad.com/library', target: '_blank' },
+            { className: 'button confirmation', rel: 'noreferrer', style: { display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, href: 'https://gumroad.com/library', target: '_blank' },
             'Payment details'
           ),
           _react2.default.createElement(
             'a',
-            { className: 'button danger', style: { display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, href: 'https://gumroad.com/library', target: '_blank' },
+            { className: 'button danger', rel: 'noreferrer', style: { display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, href: 'https://gumroad.com/library', target: '_blank' },
             'Cancel subscription'
           ),
           _react2.default.createElement(
@@ -593,7 +589,7 @@ var ReportEditor = function (_Component) {
               'We use ',
               _react2.default.createElement(
                 'a',
-                { href: 'https://gumroad.com', target: '_blank' },
+                { href: 'https://gumroad.com', rel: 'noreferrer', target: '_blank' },
                 'gumroad.com'
               ),
               ' to mange jsreportonline payments and subscriptions. If you have any issues with payments, please contact gumroad support.',
@@ -664,13 +660,13 @@ var ReportEditor = function (_Component) {
     }
   }]);
 
-  return ReportEditor;
+  return BillingEditor;
 }(_react.Component);
 
-exports.default = ReportEditor;
+exports.default = BillingEditor;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -685,6 +681,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -718,19 +718,19 @@ var UpgradePlanModal = function (_Component) {
 }(_react.Component);
 
 UpgradePlanModal.propTypes = {
-  close: _react.PropTypes.func.isRequired,
-  options: _react.PropTypes.object.isRequired
+  close: _propTypes2.default.func.isRequired,
+  options: _propTypes2.default.object.isRequired
 };
 exports.default = UpgradePlanModal;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = Studio.libraries['superagent'];
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -758,16 +758,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ReportsButton = function (_Component) {
-  _inherits(ReportsButton, _Component);
+var BillingButton = function (_Component) {
+  _inherits(BillingButton, _Component);
 
-  function ReportsButton() {
-    _classCallCheck(this, ReportsButton);
+  function BillingButton() {
+    _classCallCheck(this, BillingButton);
 
-    return _possibleConstructorReturn(this, (ReportsButton.__proto__ || Object.getPrototypeOf(ReportsButton)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (BillingButton.__proto__ || Object.getPrototypeOf(BillingButton)).apply(this, arguments));
   }
 
-  _createClass(ReportsButton, [{
+  _createClass(BillingButton, [{
     key: 'openBilling',
     value: function openBilling() {
       _jsreportStudio2.default.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' });
@@ -791,13 +791,13 @@ var ReportsButton = function (_Component) {
     }
   }]);
 
-  return ReportsButton;
+  return BillingButton;
 }(_react.Component);
 
-exports.default = ReportsButton;
+exports.default = BillingButton;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -807,7 +807,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ChangePasswordModal = __webpack_require__(8);
+var _ChangePasswordModal = __webpack_require__(9);
 
 var _ChangePasswordModal2 = _interopRequireDefault(_ChangePasswordModal);
 
@@ -817,26 +817,35 @@ var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (props) {
-  return _jsreportStudio2.default.authentication.user.isAdmin ? React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'a',
-      {
-        id: 'changePassword',
-        onClick: function onClick() {
-          return _jsreportStudio2.default.openModal(_ChangePasswordModal2.default, { entity: _jsreportStudio2.default.authentication.user });
+function ChangePasswordSettingsButton(props) {
+  var ui = null;
+
+  if (_jsreportStudio2.default.authentication.user.isAdmin) {
+    ui = React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'a',
+        {
+          id: 'changePassword',
+          onClick: function onClick() {
+            return _jsreportStudio2.default.openModal(_ChangePasswordModal2.default, { entity: _jsreportStudio2.default.authentication.user });
+          },
+          style: { cursor: 'pointer' }
         },
-        style: { cursor: 'pointer' } },
-      React.createElement('i', { className: 'fa fa-key' }),
-      ' Change password'
-    )
-  ) : null;
-};
+        React.createElement('i', { className: 'fa fa-key' }),
+        ' Change password'
+      )
+    );
+  }
+
+  return ui;
+}
+
+exports.default = ChangePasswordSettingsButton;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -851,6 +860,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _jsreportStudio = __webpack_require__(0);
 
@@ -875,6 +888,9 @@ var ChangePasswordModal = function (_Component) {
     var _this = _possibleConstructorReturn(this, (ChangePasswordModal.__proto__ || Object.getPrototypeOf(ChangePasswordModal)).call(this));
 
     _this.state = {};
+    _this.oldPasswordRef = _react2.default.createRef();
+    _this.newPassword1Ref = _react2.default.createRef();
+    _this.newPassword2Ref = _react2.default.createRef();
     return _this;
   }
 
@@ -890,8 +906,8 @@ var ChangePasswordModal = function (_Component) {
                 close = this.props.close;
                 _context.prev = 1;
                 data = {
-                  newPassword: this.refs.newPassword1.value,
-                  oldPassword: this.refs.oldPassword.value
+                  newPassword: this.newPassword1Ref.current.value,
+                  oldPassword: this.oldPasswordRef.current.value
                 };
                 _context.next = 5;
                 return _jsreportStudio2.default.api.post('/api/password', { data: data });
@@ -900,8 +916,8 @@ var ChangePasswordModal = function (_Component) {
                 response = _context.sent;
 
 
-                this.refs.newPassword1.value = '';
-                this.refs.newPassword2.value = '';
+                this.newPassword1Ref.current.value = '';
+                this.newPassword2Ref.current.value = '';
 
                 if (!(response.code !== 'ok')) {
                   _context.next = 11;
@@ -941,7 +957,7 @@ var ChangePasswordModal = function (_Component) {
     key: 'validatePassword',
     value: function validatePassword() {
       this.setState({
-        passwordError: this.refs.newPassword2.value && this.refs.newPassword2.value !== this.refs.newPassword1.value,
+        passwordError: this.newPassword2Ref.current.value && this.newPassword2Ref.current.value !== this.newPassword1Ref.current.value,
         apiError: null
       });
     }
@@ -961,7 +977,7 @@ var ChangePasswordModal = function (_Component) {
             null,
             'old password'
           ),
-          _react2.default.createElement('input', { type: 'password', ref: 'oldPassword' })
+          _react2.default.createElement('input', { type: 'password', ref: this.oldPasswordRef })
         ),
         _react2.default.createElement(
           'div',
@@ -971,7 +987,7 @@ var ChangePasswordModal = function (_Component) {
             null,
             'new password'
           ),
-          _react2.default.createElement('input', { type: 'password', ref: 'newPassword1' })
+          _react2.default.createElement('input', { type: 'password', ref: this.newPassword1Ref })
         ),
         _react2.default.createElement(
           'div',
@@ -981,7 +997,7 @@ var ChangePasswordModal = function (_Component) {
             null,
             'new password verification'
           ),
-          _react2.default.createElement('input', { type: 'password', ref: 'newPassword2', onChange: function onChange() {
+          _react2.default.createElement('input', { type: 'password', ref: this.newPassword2Ref, onChange: function onChange() {
               return _this2.validatePassword();
             } })
         ),
@@ -1023,13 +1039,13 @@ var ChangePasswordModal = function (_Component) {
 }(_react.Component);
 
 ChangePasswordModal.propTypes = {
-  close: _react.PropTypes.func.isRequired,
-  options: _react.PropTypes.object.isRequired
+  close: _propTypes2.default.func.isRequired,
+  options: _propTypes2.default.object.isRequired
 };
 exports.default = ChangePasswordModal;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1039,7 +1055,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ChangeEmailModal = __webpack_require__(10);
+var _ChangeEmailModal = __webpack_require__(11);
 
 var _ChangeEmailModal2 = _interopRequireDefault(_ChangeEmailModal);
 
@@ -1049,26 +1065,35 @@ var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (props) {
-  return _jsreportStudio2.default.authentication.user.isAdmin ? React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'a',
-      {
-        id: 'changeEmail',
-        onClick: function onClick() {
-          return _jsreportStudio2.default.openModal(_ChangeEmailModal2.default, { entity: _jsreportStudio2.default.authentication.user });
+function ChangeEmailSettingsButton(props) {
+  var ui = null;
+
+  if (_jsreportStudio2.default.authentication.user.isAdmin) {
+    ui = React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'a',
+        {
+          id: 'changeEmail',
+          onClick: function onClick() {
+            return _jsreportStudio2.default.openModal(_ChangeEmailModal2.default, { entity: _jsreportStudio2.default.authentication.user });
+          },
+          style: { cursor: 'pointer' }
         },
-        style: { cursor: 'pointer' } },
-      React.createElement('i', { className: 'fa fa-at' }),
-      ' Change email'
-    )
-  ) : null;
-};
+        React.createElement('i', { className: 'fa fa-at' }),
+        ' Change email'
+      )
+    );
+  }
+
+  return ui;
+}
+
+exports.default = ChangeEmailSettingsButton;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1083,6 +1108,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _jsreportStudio = __webpack_require__(0);
 
@@ -1107,14 +1136,15 @@ var ChangeEmailModal = function (_Component) {
     var _this = _possibleConstructorReturn(this, (ChangeEmailModal.__proto__ || Object.getPrototypeOf(ChangeEmailModal)).call(this));
 
     _this.state = { loading: false, completed: false };
+    _this.newEmailRef = _react2.default.createRef();
     return _this;
   }
 
   _createClass(ChangeEmailModal, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      if (this.refs.newEmail) {
-        this.refs.newEmail.focus();
+      if (this.newEmailRef.current) {
+        this.newEmailRef.current.focus();
       }
     }
   }, {
@@ -1135,7 +1165,7 @@ var ChangeEmailModal = function (_Component) {
               case 0:
                 _context.prev = 0;
                 data = {
-                  newEmail: this.refs.newEmail.value
+                  newEmail: this.newEmailRef.current.value
                 };
 
 
@@ -1150,7 +1180,7 @@ var ChangeEmailModal = function (_Component) {
 
                 this.setState({ loading: false });
 
-                this.refs.newEmail.value = '';
+                this.newEmailRef.current.value = '';
 
                 if (!(response.code !== 'ok')) {
                   _context.next = 11;
@@ -1278,7 +1308,7 @@ var ChangeEmailModal = function (_Component) {
             null,
             'new email'
           ),
-          _react2.default.createElement('input', { type: 'email', ref: 'newEmail', onFocus: function onFocus() {
+          _react2.default.createElement('input', { type: 'email', ref: this.newEmailRef, onFocus: function onFocus() {
               return _this2.setState({ validationError: null, apiError: null });
             } })
         ),
@@ -1322,13 +1352,13 @@ var ChangeEmailModal = function (_Component) {
 }(_react.Component);
 
 ChangeEmailModal.propTypes = {
-  close: _react.PropTypes.func.isRequired,
-  options: _react.PropTypes.object.isRequired
+  close: _propTypes2.default.func.isRequired,
+  options: _propTypes2.default.object.isRequired
 };
 exports.default = ChangeEmailModal;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1343,6 +1373,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1422,7 +1456,8 @@ var AboutModal = function (_Component) {
               className: 'button confirmation',
               href: 'https://jsreport.net/learn/online-versions',
               target: '_blank',
-              style: { marginLeft: 0 }
+              style: { marginLeft: 0 },
+              rel: 'noreferrer'
             },
             'jsreportonline releases'
           )
@@ -1435,139 +1470,9 @@ var AboutModal = function (_Component) {
 }(_react.Component);
 
 AboutModal.propTypes = {
-  options: _react.PropTypes.object.isRequired
+  options: _propTypes2.default.object.isRequired
 };
 exports.default = AboutModal;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _jsreportStudio = __webpack_require__(0);
-
-var _jsreportStudio2 = _interopRequireDefault(_jsreportStudio);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var WindowsDeprecationModal = function (_Component) {
-  _inherits(WindowsDeprecationModal, _Component);
-
-  function WindowsDeprecationModal() {
-    _classCallCheck(this, WindowsDeprecationModal);
-
-    return _possibleConstructorReturn(this, (WindowsDeprecationModal.__proto__ || Object.getPrototypeOf(WindowsDeprecationModal)).apply(this, arguments));
-  }
-
-  _createClass(WindowsDeprecationModal, [{
-    key: 'saveTenantInformed',
-    value: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var close;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                close = this.props.close;
-                _context.prev = 1;
-                _context.next = 4;
-                return _jsreportStudio2.default.api.post('/api/tenant-windows-stopped-inform', {});
-
-              case 4:
-                close();
-
-              case 5:
-                _context.prev = 5;
-
-                close();
-                return _context.finish(5);
-
-              case 8:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this, [[1,, 5, 8]]);
-      }));
-
-      function saveTenantInformed() {
-        return _ref.apply(this, arguments);
-      }
-
-      return saveTenantInformed;
-    }()
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'p',
-          null,
-          _react2.default.createElement(
-            'b',
-            null,
-            'Important!'
-          ),
-          ' We migrated some of your templates from the old windows deprecated infrastructure to the current linux. You can find the details in ',
-          _react2.default.createElement(
-            'a',
-            { target: '_blank', href: 'https://jsreport.net/blog/stopping-windows-rendering-support-in-jsreportonline' },
-            'this blog post'
-          ),
-          '.'
-        ),
-        _react2.default.createElement(
-          'p',
-          null,
-          'This change may cause layout issues because linux uses different sizes. In case you aren\'t able to quickly fix them, you can contact our support at support@jsreport.net and we can give you windows rendering temporarily back.'
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'button-bar' },
-          _react2.default.createElement(
-            'button',
-            { className: 'button confirmation', onClick: function onClick() {
-                return _this2.saveTenantInformed();
-              } },
-            'ok'
-          )
-        )
-      );
-    }
-  }]);
-
-  return WindowsDeprecationModal;
-}(_react.Component);
-
-WindowsDeprecationModal.propTypes = {
-  close: _react.PropTypes.func.isRequired,
-  options: _react.PropTypes.object.isRequired
-};
-exports.default = WindowsDeprecationModal;
 
 /***/ }),
 /* 13 */
@@ -1585,6 +1490,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _jsreportStudio = __webpack_require__(0);
 
@@ -1612,6 +1521,8 @@ var ContactEmailModal = function (_Component) {
       validationError: null,
       apiError: null
     };
+
+    _this.contactEmailRef = _react2.default.createRef();
     return _this;
   }
 
@@ -1627,7 +1538,7 @@ var ContactEmailModal = function (_Component) {
                 close = this.props.close;
                 _context.prev = 1;
                 data = {
-                  contactEmail: this.refs.contactEmail.value
+                  contactEmail: this.contactEmailRef.current.value
                 };
                 _context.next = 5;
                 return _jsreportStudio2.default.api.post('/api/register-contact-email', { data: data });
@@ -1636,7 +1547,7 @@ var ContactEmailModal = function (_Component) {
                 response = _context.sent;
 
 
-                this.refs.contactEmail.value = '';
+                this.contactEmailRef.current.value = '';
 
                 if (!(response.code !== 'ok')) {
                   _context.next = 10;
@@ -1698,7 +1609,7 @@ var ContactEmailModal = function (_Component) {
               null,
               'Contact Email'
             ),
-            _react2.default.createElement('input', { type: 'text', placeholder: 'email...', ref: 'contactEmail' })
+            _react2.default.createElement('input', { type: 'text', placeholder: 'email...', ref: this.contactEmailRef })
           ),
           _react2.default.createElement(
             'div',
@@ -1734,8 +1645,8 @@ var ContactEmailModal = function (_Component) {
 }(_react.Component);
 
 ContactEmailModal.propTypes = {
-  close: _react.PropTypes.func.isRequired,
-  options: _react.PropTypes.object.isRequired
+  close: _propTypes2.default.func.isRequired,
+  options: _propTypes2.default.object.isRequired
 };
 exports.default = ContactEmailModal;
 

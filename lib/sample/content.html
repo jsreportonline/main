@@ -1,6 +1,6 @@
 <!--
 Invoice dynamically rendered into html using handlebars and converted into pdf
-using phantom-pdf recipe. The styles are extracted into separate asset for
+using chrome-pdf recipe. The styles are extracted into separate asset for
 better readability and later reuse.
 
 Data to this sample are mocked at the design time and should be filled on the
@@ -10,7 +10,7 @@ Find more examples on https://playground.jsreport.net/
 !-->
 
 <style>
-    {#asset invoice-styles.css @encoding=utf8}
+    {{asset "invoice-styles.css"}}
 </style>
 
 <div class="invoice-box">

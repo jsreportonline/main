@@ -1,5 +1,5 @@
 const Promise = require('bluebird')
-const createRequest = require('jsreport-core').Request
+const createRequest = require('@jsreport/jsreport-core').Request
 const init = require('../lib/init')
 const should = require('should')
 

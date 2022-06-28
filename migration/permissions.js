@@ -7,7 +7,8 @@ const connectionString = 'mongodb://localhost:27017'
 const database = 'multitenant'
 const rootDatabase = 'multitenant-root'
 
-const logger = new (winston.Logger)({
+const logger = winston.createLogger({
+  format: defaultLoggerFormatWithTimestamp(),
   transports: [
     new winston.transports.Console({ format: winston.format.combine(winston.format.colorize(), defaultLoggerFormatWithTimestamp()) })
   ]

@@ -1,6 +1,6 @@
-name: main 
+name: main
 
-on: 
+on:
   release:
     types:
       - published
@@ -12,19 +12,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
-      
+          node-version: '16.11.x'
+
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.5.0
         with:
           mongodb-version: '4.2'
 
-      - run: npm ci    
-      - run: npm build    
+      - run: npm ci
+      - run: npm build
       - run: npm test
 
       - name: Log in to Docker Hub
@@ -37,5 +37,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: jsreportonline/main:${{ github.event.release.tag_name }} 
-     
+          tags: jsreportonline/main:${{ github.event.release.tag_name }}

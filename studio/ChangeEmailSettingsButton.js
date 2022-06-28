@@ -1,7 +1,7 @@
 import ChangeEmailModal from './ChangeEmailModal.js'
 import Studio from 'jsreport-studio'
 
-export default (props) => {
+function ChangeEmailSettingsButton (props) {
   let ui = null
 
   if (Studio.authentication.user.isAdmin) {
@@ -20,3 +20,5 @@ export default (props) => {
 
   return ui
 }
+
+export default ChangeEmailSettingsButton

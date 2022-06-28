@@ -1,15 +1,18 @@
 const MongoClient = require('mongodb').MongoClient
-const nanoid = require('nanoid')
+const { nanoid } = require('nanoid')
 const winston = require('winston')
+const createDefaultLoggerFormat = require('./createDefaultLoggerFormat')
+const defaultLoggerFormatWithTimestamp = createDefaultLoggerFormat({ timestamp: true })
 
 const connectionString = 'mongodb://localhost:27017'
 const database = 'multitenant'
 const rootDatabase = 'multitenant-root'
 
-const logger = new (winston.Logger)({
+const logger = winston.createLogger({
+  format: defaultLoggerFormatWithTimestamp(),
   transports: [
-    new (winston.transports.Console)({ colorize: true }),
-    new (winston.transports.File)({ filename: 'foldersMigration.log', json: false, options: { flags: 'w' } })
+    new winston.transports.Console({ format: winston.format.combine(winston.format.colorize(), defaultLoggerFormatWithTimestamp()) }),
+    new winston.transports.File({ filename: 'foldersMigration.log', options: { flags: 'w' } })
   ]
 })
 
