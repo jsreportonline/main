@@ -80,7 +80,7 @@
     "serializator": "1.0.2",
     "uuid": "3.3.2",
     "validator": "10.7.1",
-    "winston": "3.3.3",
+    "winston": "3.8.0",
     "winston-loggly-bulk": "3.2.1"
   },
   "devDependencies": {
