@@ -1,5 +1,4 @@
 FROM ubuntu:bionic
-MAINTAINER Jan Blaha
 
 RUN apt-get update && apt-get install -y curl sudo git gnupg bzip2 && \
     apt-get update && \

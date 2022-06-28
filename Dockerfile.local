@@ -1,0 +1,58 @@
+FROM ubuntu:bionic
+
+RUN apt-get update && apt-get install -y curl sudo git gnupg bzip2 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends docker.io && \
+    # cleanup
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
+    rm -rf /src/*.deb
+
+RUN mkdir -p /usr/src/app
+RUN rm -rf /tmp/*
+
+ENV NVM_DIR /root/.nvm
+ENV NODE_VERSION 16.11.1
+
+# node
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash && \
+    /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
+WORKDIR /usr/src/app
+
+# we are copying from another image,
+# this needs that we build the jsreport/worker, joworker previously
+# with this tag from the jsreport and joworker workspaces
+# docker build . -f packages/worker/Dockerfile.local -t jsreport/worker
+# docker build . -f Dockerfile.local -t joworker
+COPY --from=joworker /app/packages /usr/src/app/packages
+COPY package.json /usr/src/app/
+COPY build /usr/src/app/build
+
+RUN npm i -g rimraf yarn json-merger
+
+# ensure clean state, don't copy packages node_modules, so yarn can install from clean state
+RUN rimraf packages/**/node_modules
+
+RUN mkdir -p /tmp/yarn-cache
+
+RUN json-merger -p package.json ./build/workspaces-changes.json -o package.json
+
+RUN yarn install --cache-folder /tmp/yarn-cache
+RUN yarn cache clean --all && rm -rf /tmp/*
+
+RUN mkdir /tmp/jsreport
+
+COPY . /usr/src/app
+
+# this part is commented because copying the patches to node_modules/@jsreport/jsreport-core
+# does not work on symlinks, and honestly we don't need this patch for our local testing
+# COPY patch /usr/src/app
+
+EXPOSE 5488
+
+HEALTHCHECK CMD curl --fail http://localhost:5488 || exit 1
+
+CMD [ "node", "index.js" ]
