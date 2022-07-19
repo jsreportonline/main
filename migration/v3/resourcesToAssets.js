@@ -22,7 +22,7 @@ async function migrate () {
   const rootDb = client.db(rootDatabase)
   const db = client.db(database)
 
-  const tenants = await rootDb.collection('tenants').find({}).project({ _id: 1, name: 1 }).toArray()
+  const tenants = await rootDb.collection('tenants').find({ }).project({ _id: 1, name: 1 }).toArray()
 
   let currentTenant
   let tCounter = 1
@@ -51,6 +51,11 @@ async function migrate () {
           continue
         }
 
+        // there is some garbage...
+        if (template.name == null) {
+          continue
+        }
+
         if (Array.isArray(template.resources.items)) {
           // eslint-disable-next-line no-unused-vars
           for (const dataItem of template.resources.items) {
@@ -59,8 +64,8 @@ async function migrate () {
             if (dataEntity) {
               let newAsset
 
-              if (dataToAssetMap.has(dataEntity._id)) {
-                newAsset = dataToAssetMap.get(dataEntity._id)
+              if (dataToAssetMap.has(dataEntity.shortid)) {
+                newAsset = dataToAssetMap.get(dataEntity.shortid)
               } else {
                 const assetProps = {
                   content: Buffer.from(dataEntity.dataJson || ''),
@@ -77,23 +82,23 @@ async function migrate () {
 
                 newAsset = await insertUnique(db, 'assets', `${dataEntity.name}.json`, assetProps, t.name)
 
-                dataToAssetMap.set(dataEntity._id, newAsset)
+                dataToAssetMap.set(dataEntity.shortid, newAsset)
               }
 
-              const assetResources = templateToAssetResourcesMap.get(template._id) || []
+              const assetResources = templateToAssetResourcesMap.get(template.shortid) || []
 
               assetResources.push({
                 ...newAsset,
                 originalName: dataEntity.name
               })
 
-              templateToAssetResourcesMap.set(template._id, assetResources)
+              templateToAssetResourcesMap.set(template.shortid, assetResources)
               dataEntitiesToRemove.push(dataEntity)
             }
           }
         }
 
-        const templateAssetResources = templateToAssetResourcesMap.get(template._id) || []
+        const templateAssetResources = templateToAssetResourcesMap.get(template.shortid) || []
 
         if (templateAssetResources.length > 0) {
           const scriptProps = {
@@ -198,12 +203,7 @@ async function migrate () {
 
         templatesMigrated++
 
-        await db.collection('templates').updateOne({ _id: template._id, tenantId: t.name }, {
-          $set: {
-            resources: template.resources,
-            scripts: template.scripts
-          }
-        })
+        await db.collection('templates').updateOne({ _id: template._id, tenantId: t.name }, { $set: template })
       }
 
       // eslint-disable-next-line no-unused-vars
@@ -224,7 +224,7 @@ async function migrate () {
   }
 
   if (templatesMigrated > 0) {
-    logger.info(`migrated xlsxTemplates ${templatesMigrated}`)
+    logger.info(`migrated templates with resources ${templatesMigrated}`)
   } else {
     logger.info('no templates to migrate!')
   }
