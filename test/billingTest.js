@@ -1,4 +1,4 @@
-const billing = require('../lib/billing.js')
+const billing = require('../lib/main/billing.js')
 const should = require('should')
 
 describe('checkBilling', () => {

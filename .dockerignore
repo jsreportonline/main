@@ -3,3 +3,9 @@ package-lock.json
 jsreport.config.json
 dev.config.json
 prod.config.json
+packages
+test
+performance
+migration
+.vscode
+aws

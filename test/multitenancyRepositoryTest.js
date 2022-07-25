@@ -15,7 +15,7 @@ describe('multitenancyRepository', () => {
     ])
   })
 
-  afterEach(() => jsreport.close())
+  afterEach(() => jsreport && jsreport.close())
 
   it('registerTenant should pass', async () => {
     await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')

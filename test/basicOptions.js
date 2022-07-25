@@ -3,7 +3,7 @@ const path = require('path')
 const extend = require('node.extend.without.arrays')
 const ip = require('ip')
 
-module.exports = extend(true, {}, process.env, {
+module.exports = extend(true, {}, { ...process.env }, {
   debug: 'jsreport',
   stack: 'test',
   ip: ip.address(),
@@ -24,7 +24,7 @@ module.exports = extend(true, {}, process.env, {
     dockerWorkers: {
       numberOfWorkers: 2,
       container: {
-        image: 'jsreportonline/worker'
+        image: 'joworker'
       }
     },
     authentication: {

@@ -1,5 +1,4 @@
 const init = require('../lib/init')
-const Promise = require('bluebird')
 require('should')
 
 process.env = require('./basicOptions')
@@ -19,7 +18,7 @@ describe('reports', () => {
 
   afterEach(() => {
     process.env.extensions.jo.reportsCleanupInterval = '1d'
-    return jsreport.close()
+    return jsreport && jsreport.close()
   })
 
   it('should do autocleanup', async () => {
@@ -39,7 +38,7 @@ describe('reports', () => {
       context: { tenant, user: tenantUser }
     })
 
-    await Promise.delay(1000)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     const count = await jsreport.documentStore.collection('reports').find({}).count()
     count.should.be.eql(0)

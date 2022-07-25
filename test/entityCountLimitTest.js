@@ -1,6 +1,5 @@
 const Request = require('@jsreport/jsreport-core').Request
 const init = require('../lib/init')
-const Promise = require('bluebird')
 require('should')
 
 process.env = require('./basicOptions')
@@ -77,7 +76,9 @@ describe('entityCountLimit', () => {
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
 
     try {
-      await Promise.mapSeries(Array(21), (item, i) => createTemplate(`demo${i}`, t))
+      for (let i = 0; i < 21; i++) {
+        await createTemplate(`demo${i}`, t)
+      }
     } catch (e) {
       e.should.be.Error()
       e.message.should.match(/Maximum entity count limit reached/)
@@ -98,6 +99,8 @@ describe('entityCountLimit', () => {
 
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
 
-    await Promise.mapSeries(Array(21), (item, i) => createFolder(`demo${i}`, t))
+    for (let i = 0; i < 21; i++) {
+      await createFolder(`demo${i}`, t)
+    }
   })
 })

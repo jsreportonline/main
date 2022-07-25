@@ -1,4 +1,3 @@
-const createRequest = require('@jsreport/jsreport-core').Request
 const init = require('../lib/init')
 require('should')
 
@@ -18,100 +17,66 @@ describe('quota', () => {
 
   afterEach(() => jsreport.close())
 
-  it('beforeRenderListeners should set quotaUsed and quotaStart', async () => {
+  it('report should set quotaUsed and quotaStart', async () => {
+    const start = new Date()
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
     const tUser = await jsreport.multitenancyRepository.findTenantUser('test@test.com')
 
-    const req = createRequest({
+    await jsreport.render({
       template: {
         content: 'foo',
         engine: 'none',
         recipe: 'html'
       },
       context: {
-        id: 1,
         user: tUser,
-        tenant: t,
-        profiling: {
-          mode: 'disabled',
-          entity: {}
-        }
-      },
-      options: {}
-    })
-
-    await jsreport.beforeRenderListeners.fire(req, {
-      meta: {}
+        tenant: t
+      }
     })
 
     const tenant = (await jsreport.multitenancyRepository.find({ email: 'test@test.com' }))[0]
 
-    tenant.quotaUsed.should.be.eql(0)
-    tenant.quotaStart.should.be.ok()
+    tenant.quotaUsed.should.be.greaterThan(0)
+    tenant.quotaStart.should.be.greaterThan(start)
   })
 
-  it('beforeRenderListeners should throw if quotaUsed exceeds', async () => {
+  it('report should throw if quotaUsed exceeds', async () => {
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
     const tUser = await jsreport.multitenancyRepository.findTenantUser('test@test.com')
 
-    const req = createRequest({
+    return jsreport.render({
       template: {
         content: 'foo',
         engine: 'none',
         recipe: 'html'
       },
       context: {
-        id: 1,
         user: tUser,
         tenant: Object.assign(t, {
           quotaStart: new Date(),
           quotaUsed: 1000000
-        }),
-        profiling: {
-          mode: 'disabled',
-          entity: {}
-        }
-      },
-      options: {}
-    })
-
-    try {
-      await jsreport.beforeRenderListeners.fire(req, {
-        meta: {}
-      })
-    } catch (e) {
-      e.should.be.Error()
-      e.message.should.match(/Request quota exceeded/)
-    }
+        })
+      }
+    }).should.be.rejectedWith(/Request quota exceeded/)
   })
 
-  it('beforeRenderListeners should not throw if quotaUsed exceeds but quotaStart long time before', async () => {
+  it('report should not throw if quotaUsed exceeds but quotaStart long time before', async () => {
     const t = await jsreport.multitenancyRepository.registerTenant('test@test.com', 'test', 'password')
     const tUser = await jsreport.multitenancyRepository.findTenantUser('test@test.com')
 
-    const req = createRequest({
+    await jsreport.render({
       template: {
         content: 'foo',
         engine: 'none',
         recipe: 'html'
       },
       context: {
-        id: 1,
         user: tUser,
         tenant: Object.assign(t, {
           quotaStart: new Date(new Date().getTime() - 60 * 10 * 1000),
           quotaUsed: 1000000
-        }),
-        profiling: {
-          mode: 'disabled',
-          entity: {}
-        }
-      },
-      options: {}
-    })
-
-    await jsreport.beforeRenderListeners.fire(req, {
-      meta: {}
+        })
+      }
     })
   })
 })

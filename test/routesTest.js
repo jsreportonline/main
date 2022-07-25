@@ -16,7 +16,7 @@ describe('routes', () => {
     ])
   })
 
-  afterEach(() => jsreport.close())
+  afterEach(() => jsreport && jsreport.close())
 
   it('GET /sign => 200', (done) => {
     request(jsreport.express.app)

@@ -1,9 +1,6 @@
-const request = require('request-promise')
-const Promise = require('bluebird')
-const fs = require('fs')
-const path = require('path')
+const axios = require('axios')
 const url = require('url')
-const _ = require('underscore')
+const querystring = require('querystring')
 
 const server = 'http://localtest.me:5488'
 // const server = 'https://jsreportonline-test.net'
@@ -12,14 +9,14 @@ const serverUrl = url.parse(server)
 
 const config = {
   numberOfAccounts: 10,
-  iterations: 20
+  iterations: 10
 }
 
 let accounts = []
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const createAccounts = () => {
+const createAccounts = async () => {
   let counter = 0
 
   console.log(`creating ${config.numberOfAccounts} accounts`)
@@ -36,122 +33,84 @@ const createAccounts = () => {
       password: 'password',
       passwordConfirm: 'password',
       authHeader: `Basic ${Buffer.from(`${id}@perf.com:password`).toString('base64')}`,
-      terms: true
+      terms: 'on'
     }))
 
-  return Promise.map(accounts, (a) => request.post(`${server}/register`, {
-    form: a,
-    simple: false
-  }), { concurrency: 1 })
-}
-
-const caseInvoice = (a) => {
-  return request.post({
-    url: `${a.url}/odata/templates`,
-    body: {
-      content: fs.readFileSync(path.join(__dirname, 'cases', 'invoice', 'content.html')).toString(),
-      helpers: fs.readFileSync(path.join(__dirname, 'cases', 'invoice', 'helpers.js')).toString(),
-      recipe: 'chrome-pdf',
-      engine: 'jsrender',
-      name: 'invoice'
-    },
-    json: true,
-    headers: {
-      Authorization: a.authHeader
-    }
-  })
-}
-
-const caseScript = (a) => {
-  return request.post({
-    url: `${a.url}/odata/scripts`,
-    body: {
-      content: fs.readFileSync(path.join(__dirname, 'cases', 'script', 'script.js')).toString(),
-      name: 'script'
-    },
-    json: true,
-    headers: {
-      Authorization: a.authHeader
-    }
-  }).then((body) => {
-    return request.post({
-      url: `${a.url}/odata/templates`,
-      body: {
-        content: fs.readFileSync(path.join(__dirname, 'cases', 'script', 'content.html')).toString(),
-        recipe: 'phantom-pdf',
-        engine: 'handlebars',
-        name: 'script',
-        scripts: [{
-          shortid: body.shortid
-        }]
-      },
-      json: true,
-      headers: {
-        Authorization: a.authHeader
-      }
+  // eslint-disable-next-line no-unused-vars
+  for (const account of accounts) {
+    await axios({
+      url: `${server}/register`,
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: querystring.stringify(account)
     })
-  })
+  }
 }
 
-const caseXlsx = (a) => {
-  return request.post({
-    url: `${a.url}/odata/templates`,
-    body: {
-      content: fs.readFileSync(path.join(__dirname, 'cases', 'xlsx', 'content.html')).toString(),
-      helpers: fs.readFileSync(path.join(__dirname, 'cases', 'xlsx', 'helpers.js')).toString(),
-      recipe: 'xlsx',
-      engine: 'handlebars',
-      name: 'xlsx'
-    },
-    json: true,
-    headers: {
-      Authorization: a.authHeader
-    }
-  })
+const invoiceData = {
+  number: '123',
+  seller: {
+    name: 'Next Step Webs, Inc.',
+    road: '12345 Sunny Road',
+    country: 'Sunnyville, TX 12345'
+  },
+  buyer: {
+    name: 'Acme Corp.',
+    road: '16 Johnson Road',
+    country: 'Paris, France 8060'
+  },
+  items: [{
+    name: 'Website design',
+    price: 300
+  }],
+  somethingBig: 'x'.padStart(1000 * 1000, 'x')
 }
 
-const cases = [caseInvoice, caseScript, caseXlsx]
+// eslint-disable-next-line no-unused-vars
+for (let i = 0; i < 100; i++) {
+  invoiceData.items.push({
+    name: 'Website implementation',
+    price: i
+  })
+}
 
 const casesRun = [{
   template: {
-    name: 'invoice'
+    name: 'invoice-main',
+    recipe: 'html'
   },
-  data: JSON.parse(fs.readFileSync(path.join(__dirname, 'cases', 'invoice', 'data.json')).toString())
-}, {
-  template: {
-    name: 'script',
-    recipe: 'wkhtmltopdf'
+  data: invoiceData,
+  options: {
+    preview: true
   }
 }, {
   template: {
-    name: 'xlsx'
-  }
-}, {
-  template: {
-    content: fs.readFileSync(path.join(__dirname, 'cases', 'image', 'content.html')).toString(),
-    recipe: 'phantom-pdf',
-    engine: 'ejs'
-  }
-}, {
-  template: {
-    name: 'fop'
-  }
-}, {
-  template: {
-    content: '{{for numbers}}{{:#data}}{{/for}}',
-    recipe: 'html',
-    engine: 'jsrender'
+    content: `{{#many}}
+    {{#xlsxAdd "xl/worksheets/sheet1.xml" "worksheet.sheetData[0].row"}}
+    <row>
+        <c t="inlineStr"><is><t>Hello world</t></is></c>
+        <c><v>11</v></c>
+    </row>
+    {{/xlsxAdd}}
+    {{/many}}
+    
+    {{{xlsxPrint}}}`,
+    helpers: `function many(opts) {
+      var res = ''
+    
+      for (var i = 0; i < 1000; i++) {
+        res += opts.fn(this)
+      }
+    
+      return res
+    }`,
+    recipe: 'xlsx',
+    engine: 'handlebars'
   },
-  data: {
-    numbers: _.range(0, 1000000)
+  options: {
+    preview: true
   }
 }]
-
-const createReports = () => {
-  console.log('creating cases')
-
-  return Promise.all(accounts.map((a) => Promise.all(cases.map((c) => c(a)))))
-}
 
 let renderCounter = 0
 let successCounter = 0
@@ -161,8 +120,10 @@ let tooManyRequestsError = 0
 const run = () => {
   console.log(`rendering reports (${config.iterations} report case(s) will be run per each account. total accounts: ${accounts.length})`)
 
-  return Promise.all(accounts.map((a) => Promise.map(new Array(config.iterations).fill(1),
-    () => Promise.delay(a.delay).then(() => {
+  return Promise.all(accounts.map(async (a) => {
+    await new Promise((resolve) => setTimeout(resolve, a.delay))
+
+    for (let i = 0; i < config.iterations; i++) {
       const startTime = new Date().getTime()
       const item = Math.floor(Math.random() * casesRun.length)
 
@@ -170,29 +131,32 @@ const run = () => {
 
       const requestNumber = renderCounter
 
-      return request.post({
-        url: `${a.url}/api/report`,
-        body: casesRun[item],
-        json: true,
-        headers: {
-          Authorization: a.authHeader
-        }
-      }).then((body) => {
+      try {
+        await axios({
+          url: `${a.url}/api/report`,
+          method: 'POST',
+          data: casesRun[item],
+          headers: {
+            Authorization: a.authHeader
+          }
+        })
+
         successCounter++
         console.log(`Success! account: ${a.index}, case item: ${item}, render counter: ${requestNumber}, time: ${new Date().getTime() - startTime}ms`)
-      }).catch((e) => {
+      } catch (e) {
         errorCounter++
 
-        if (e.statusCode !== 429) {
-          console.error(`Failed! account: ${a.index}, case item ${item}, render counter: ${requestNumber}: ${e.toString()}`)
-        } else {
+        if (e.response?.status === 429) {
           tooManyRequestsError++
-          console.log(`Failed! account: ${a.index}, case item: ${item}, render counter: ${requestNumber}. 429 error`)
+          console.log(`Failed! account: ${a.username}, case item: ${item}, render counter: ${requestNumber}. 429 error`)
+        } else {
+          console.error(`Failed! account: ${a.username}, case item ${item}, render counter: ${requestNumber}: ${e.toString()}`)
         }
-        return Promise.delay(5000)
-      })
-    }), { concurrency: 1 })
-  ))
+
+        return new Promise((resolve) => setTimeout(resolve, 5000))
+      }
+    }
+  }))
 }
 
 const start = new Date().getTime()
@@ -200,7 +164,6 @@ const start = new Date().getTime()
 ;(async () => {
   try {
     await createAccounts()
-    await createReports()
 
     const renderStart = new Date().getTime()
 
