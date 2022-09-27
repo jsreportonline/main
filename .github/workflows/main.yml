@@ -24,7 +24,7 @@ jobs:
           mongodb-version: '4.2'
 
       - run: npm ci
-      - run: npm build
+      - run: npm run build
       - run: npm test
 
       - name: Log in to Docker Hub
