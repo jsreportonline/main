@@ -112,7 +112,7 @@ async function migrate () {
   const jsreport = require('jsreport-proxy')
   
   async function beforeRender (req, res) {
-    req.options.language = req.options.language || req.template.localization?.language
+    req.options.language = req.options.language || (req.template.localization != null ? req.template.localization.language : null)
     const defaultLanguage = ${template.resources.defaultLanguage != null ? '\'' + template.resources.defaultLanguage + '\'' : 'undefined'}
     const assetsResources = [${templateAssetResources.map(a => `{ name: '${a.originalName}', shortid: '${a.shortid}' }`).join(', ')}]
   
@@ -199,11 +199,11 @@ async function migrate () {
           })
         }
 
-        template.resources = null
+        delete template.resources
 
         templatesMigrated++
 
-        await db.collection('templates').updateOne({ _id: template._id, tenantId: t.name }, { $set: template })
+        await db.collection('templates').updateOne({ _id: template._id, tenantId: t.name }, { $set: template, $unset: { resources: '' } })
       }
 
       // eslint-disable-next-line no-unused-vars
