@@ -1,0 +1,23 @@
+.plans > * {
+  color: white;
+}
+
+.plans > button > h3 {
+  color: white;
+}
+
+.plans > button {
+  width: 10rem;
+  margin: 5px;
+  border: 0px;
+  cursor: pointer;
+  color: white;
+}
+
+.plans > button:hover {
+  background-color: #898989 !important;
+}
+
+.selected {
+    border: $button-confirmation-backgroundColor 4px solid !important;
+}

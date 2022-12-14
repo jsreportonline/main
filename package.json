@@ -16,7 +16,7 @@
   "scripts": {
     "build": "jsreport-studio-build",
     "lint": "standard",
-    "test": "docker pull jsreportonline/worker:1.6.0&&mocha --timeout 30000 --exit test"
+    "test": "docker pull jsreportonline/worker:1.6.1&&mocha --timeout 30000 --exit test"
   },
   "dependencies": {
     "@jsreport/jsreport-assets": "3.4.3",
@@ -62,7 +62,10 @@
     "ejs": "3.1.8",
     "express": "4.17.1",
     "handlebars": "4.7.7",
+    "react-chartjs-2": "4.3.1",
+    "chart.js": "3.9.1",
     "lodash.omit": "4.5.0",
+    "mjml": "4.13.0",
     "moment": "2.29.3",
     "mongodb": "3.6.5",
     "nanoid": "3.2.0",
@@ -83,7 +86,7 @@
     "winston-loggly-bulk": "3.2.1"
   },
   "devDependencies": {
-    "@jsreport/studio-dev": "3.1.0",
+    "@jsreport/studio-dev": "3.2.0",
     "babel-eslint": "10.0.2",
     "dotenv": "16.0.1",
     "ip": "1.1.8",
@@ -102,7 +105,8 @@
     ],
     "env": {
       "node": true,
-      "mocha": true
+      "mocha": true,
+      "browser": true
     }
   }
 }

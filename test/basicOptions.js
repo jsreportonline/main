@@ -24,7 +24,7 @@ module.exports = extend(true, {}, { ...process.env }, {
     dockerWorkers: {
       numberOfWorkers: 2,
       container: {
-        image: 'jsreportonline/worker:1.6.0 '
+        image: 'jsreportonline/worker:1.6.1 '
       }
     },
     authentication: {

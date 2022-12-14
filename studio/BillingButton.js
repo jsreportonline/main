@@ -6,6 +6,14 @@ class BillingButton extends Component {
     Studio.openTab({ key: 'Billing', editorComponentKey: 'billing', title: 'Billing' })
   }
 
+  componentDidMount () {
+    this.interval = setInterval(() => this.forceUpdate(), 3000)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.interval)
+  }
+
   render () {
     return (
       <div onClick={() => this.openBilling()} className='toolbar-button'>

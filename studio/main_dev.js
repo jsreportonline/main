@@ -1,13 +1,9 @@
 import Studio from 'jsreport-studio'
 import BillingEditor from './BillingEditor.js'
-import superagent from 'superagent'
 import BillingButton from './BillingButton.js'
 import ChangePasswordSettingsButton from './ChangePasswordSettingsButton'
 import ChangeEmailSettingsButton from './ChangeEmailSettingsButton'
 import AboutModal from './AboutModal'
-import ContactEmailModal from './ContactEmailModal'
-
-const localStorage = window.localStorage
 
 Studio.addEditorComponent('billing', BillingEditor)
 
@@ -16,14 +12,6 @@ Studio.setAboutModal(AboutModal)
 Studio.readyListeners.push(() => {
   const pendingModalsLaunch = []
   const creditsExceeded = Math.round(Studio.authentication.user.tenant.creditsUsed / 1000) > Studio.authentication.user.tenant.creditsAvailable
-
-  const isModalUsed = () => {
-    return Studio.isModalOpen()
-  }
-
-  const contactEmailNotRegistered = Studio.authentication.user.isAdmin && Studio.authentication.user.tenant.contactEmail == null
-
-  const contactEmailModal = () => Studio.openModal(ContactEmailModal)
 
   const creditsExceededModal = () => Studio.openModal((props) => {
     const creditsAvailable = Studio.authentication.user.tenant.creditsAvailable
@@ -58,37 +46,6 @@ Studio.readyListeners.push(() => {
     )
   })
 
-  const checkMessages = async () => {
-    const request = superagent.get(Studio.resolveUrl('/api/message'))
-    // eslint-disable-next-line handle-callback-err
-    request.end((err, response) => {
-      if (err) {
-        return
-      }
-
-      if (response && response.body) {
-        const messageId = localStorage.getItem('messageId')
-
-        if (isModalUsed()) {
-          return
-        }
-
-        if (messageId !== response.body.id) {
-          localStorage.setItem('messageId', response.body.id)
-
-          Studio.openModal((props) => (
-            <div>
-              <div dangerouslySetInnerHTML={{ __html: response.body.content }} />
-              <div className='button-bar'>
-                <button className='button confirmation' onClick={() => props.close()}>ok</button>
-              </div>
-            </div>
-          ))
-        }
-      }
-    })
-  }
-
   // interval for modal launching
   setInterval(() => {
     if (pendingModalsLaunch.length === 0 || Studio.isModalOpen()) {
@@ -104,12 +61,16 @@ Studio.readyListeners.push(() => {
     pendingModalsLaunch.push(creditsExceededModal)
   }
 
-  if (contactEmailNotRegistered) {
-    pendingModalsLaunch.push(contactEmailModal)
+  if (Studio.authentication.user.tenant.plan !== 'free' && Studio.authentication.user.tenant.payments && Studio.authentication.user.tenant.payments.customer.product.subscription.plannedCancelation) {
+    pendingModalsLaunch.push(() => Studio.openModal((props) => {
+      return (
+        <div>
+          <p style={{ color: 'red' }}>The subscription renewal failed because the bank rejected the payment!</p>
+          <p>Please visit the billing and update the payment, otherwise the subscription will be switched to the limited plan on {Studio.authentication.user.tenant.payments.customer.product.subscription.plannedCancelation.toLocaleDateString()}</p>
+        </div>
+      )
+    }))
   }
-
-  setInterval(checkMessages, 5 * 60 * 1000)
-  checkMessages()
 })
 
 Studio.initializeListeners.push(async () => {
