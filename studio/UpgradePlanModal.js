@@ -41,7 +41,7 @@ class UpgradePlanModal extends Component {
 
     if (window.confirm('We will now navigate you to the payment form')) {
       this.props.close()
-      window.open(`http://localhost:3000/payments/checkout/email/${encodeURIComponent(Studio.authentication.user.tenant.email)}/jsreportonline/${this.state.selected}`)
+      window.open(`https://jsreport.net/payments/checkout/email/${encodeURIComponent(Studio.authentication.user.tenant.email)}/jsreportonline/${this.state.selected}`)
     }
   }
 

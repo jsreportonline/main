@@ -77,7 +77,7 @@ class BillingEditor extends Component {
     }
 
     if (Studio.authentication.user.tenant.payments) {
-      return window.open(`http://localhost:3000/payments/customer/${Studio.authentication.user.tenant.payments.customer.uuid}`, '_blank')
+      return window.open(`https://jsreport.net/payments/customer/${Studio.authentication.user.tenant.payments.customer.uuid}`, '_blank')
     }
 
     event.preventDefault()
