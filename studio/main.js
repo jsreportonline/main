@@ -34782,7 +34782,7 @@ var BillingEditor = function (_Component) {
       }
 
       if (_jsreportStudio2.default.authentication.user.tenant.payments) {
-        return window.open('http://localhost:3000/payments/customer/' + _jsreportStudio2.default.authentication.user.tenant.payments.customer.uuid, '_blank');
+        return window.open('https://jsreport.net/payments/customer/' + _jsreportStudio2.default.authentication.user.tenant.payments.customer.uuid, '_blank');
       }
 
       event.preventDefault();
@@ -35182,7 +35182,7 @@ var UpgradePlanModal = function (_Component) {
 
                 if (window.confirm('We will now navigate you to the payment form')) {
                   this.props.close();
-                  window.open('http://localhost:3000/payments/checkout/email/' + encodeURIComponent(_jsreportStudio2.default.authentication.user.tenant.email) + '/jsreportonline/' + this.state.selected);
+                  window.open('https://jsreport.net/payments/checkout/email/' + encodeURIComponent(_jsreportStudio2.default.authentication.user.tenant.email) + '/jsreportonline/' + this.state.selected);
                 }
 
               case 24:
@@ -35375,7 +35375,7 @@ exports.default = UpgradePlanModal;
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-module.exports = {"plans":"x-pJ7J11-UpgradePlanModal-plans","selected":"x-pJ7J11-UpgradePlanModal-selected"};
+module.exports = {"plans":"x-v0e2Ap-UpgradePlanModal-plans","selected":"x-v0e2Ap-UpgradePlanModal-selected"};
 
 /***/ }),
 /* 146 */

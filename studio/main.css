@@ -1,12 +1,12 @@
-.x-pJ7J11-UpgradePlanModal-plans > * {
+.x-v0e2Ap-UpgradePlanModal-plans > * {
   color: white;
 }
 
-.x-pJ7J11-UpgradePlanModal-plans > button > h3 {
+.x-v0e2Ap-UpgradePlanModal-plans > button > h3 {
   color: white;
 }
 
-.x-pJ7J11-UpgradePlanModal-plans > button {
+.x-v0e2Ap-UpgradePlanModal-plans > button {
   width: 10rem;
   margin: 5px;
   border: 0px;
@@ -14,10 +14,10 @@
   color: white;
 }
 
-.x-pJ7J11-UpgradePlanModal-plans > button:hover {
+.x-v0e2Ap-UpgradePlanModal-plans > button:hover {
   background-color: #898989 !important;
 }
 
-.x-pJ7J11-UpgradePlanModal-selected {
+.x-v0e2Ap-UpgradePlanModal-selected {
     border: $button-confirmation-backgroundColor 4px solid !important;
 }
