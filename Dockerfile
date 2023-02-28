@@ -37,4 +37,4 @@ EXPOSE 5488
 
 HEALTHCHECK CMD curl --fail http://localhost:5488 || exit 1
 
-CMD ["node", "--expose-gc", "--max-old-space-size=500", "--diagnostic-dir=/memory-dump", "--heapsnapshot-near-heap-limit=1", "index.js"]
+CMD ["node", "index.js"]
