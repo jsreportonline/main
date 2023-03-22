@@ -92,19 +92,6 @@ class BillingEditor extends Component {
           several minutes, please contact jsreport support.<br /><br />
 
           <b>Please cancel the old subscription when upgrading between payed plans.</b>
-
-          <p>
-            You can also switch to the direct payment and billing from us
-            <a
-              href='#' onClick={(e) => {
-                e.preventDefault()
-                Studio.openModal(UpgradePlanModal, { refresh: () => this.refresh() })
-              }}
-            > here.
-            </a>
-            <br />
-            Just don't forget to <a href='https://gumroad.com/library' target='_blank' rel='noreferrer'>cancel</a> the old gumroad subscription afterward.
-          </p>
         </small>
       </p>
     )
@@ -116,6 +103,13 @@ class BillingEditor extends Component {
       case 'silver': return '#647687'
       case 'gold': return '#e3c800'
       default: return '#60a917'
+    }
+  }
+
+  switchToOurBilling (e) {
+    e.preventDefault()
+    if (window.confirm('Billing from us is preferred, just please cancel your subscription at gumroad.com if you have one afterwards.')) {
+      Studio.openModal(UpgradePlanModal, { refresh: () => this.refresh(), allowSelectCurrent: true })
     }
   }
 
@@ -155,6 +149,9 @@ class BillingEditor extends Component {
             ? <a className='button confirmation' rel='noreferrer' enabl style={{ display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }} onClick={(event) => this.openPaymentDetails(event)}>Manage payments</a>
             : <span />}
 
+          {isGumroad()
+            ? <a className='button confirmation' rel='noreferrer' enabl style={{ display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }} onClick={(event) => this.switchToOurBilling(event)}>Switch from gumroad to jsreport billing</a>
+            : <span />}
         </div>
         <div>
           <h2>billing history</h2>

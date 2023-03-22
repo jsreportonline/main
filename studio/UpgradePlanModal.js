@@ -35,7 +35,7 @@ class UpgradePlanModal extends Component {
       }
     }
 
-    if ((Studio.authentication.user.tenant.plan || 'free') === this.state.selected) {
+    if (!this.props.options.allowSelectCurrent && ((Studio.authentication.user.tenant.plan || 'free') === this.state.selected)) {
       return this.props.close()
     }
 
@@ -94,7 +94,7 @@ class UpgradePlanModal extends Component {
         </div>
 
         <button className='button confirmation' style={{ marginTop: '0.5rem', marginLeft: '5px' }} onClick={() => this.submit()}>
-          {this.state.selected === currentPlan ? 'Close' : 'Process change'}
+          {this.state.selected === currentPlan && !this.props.options.allowSelectCurrent ? 'Close' : 'Process change'}
         </button>
       </div>
     )

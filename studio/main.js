@@ -2840,7 +2840,7 @@ function styleChanged(style, prevStyle) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
-//! version : 2.29.3
+//! version : 2.29.4
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -5294,7 +5294,7 @@ function styleChanged(style, prevStyle) {
     function preprocessRFC2822(s) {
         // Remove comments and folding whitespace and replace multiple-spaces with a single space
         return s
-            .replace(/\([^)]*\)|[\n\t]/g, ' ')
+            .replace(/\([^()]*\)|[\n\t]/g, ' ')
             .replace(/(\s\s+)/g, ' ')
             .replace(/^\s\s*/, '')
             .replace(/\s\s*$/, '');
@@ -8475,7 +8475,7 @@ function styleChanged(style, prevStyle) {
 
     //! moment.js
 
-    hooks.version = '2.29.3';
+    hooks.version = '2.29.4';
 
     setHookCallback(createLocal);
 
@@ -34790,8 +34790,6 @@ var BillingEditor = function (_Component) {
   }, {
     key: 'gumroadNote',
     value: function gumroadNote() {
-      var _this3 = this;
-
       return _react2.default.createElement(
         'p',
         null,
@@ -34813,31 +34811,6 @@ var BillingEditor = function (_Component) {
             'b',
             null,
             'Please cancel the old subscription when upgrading between payed plans.'
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            'You can also switch to the direct payment and billing from us',
-            _react2.default.createElement(
-              'a',
-              {
-                href: '#', onClick: function onClick(e) {
-                  e.preventDefault();
-                  _jsreportStudio2.default.openModal(_UpgradePlanModal2.default, { refresh: function refresh() {
-                      return _this3.refresh();
-                    } });
-                }
-              },
-              ' here.'
-            ),
-            _react2.default.createElement('br', null),
-            'Just don\'t forget to ',
-            _react2.default.createElement(
-              'a',
-              { href: 'https://gumroad.com/library', target: '_blank', rel: 'noreferrer' },
-              'cancel'
-            ),
-            ' the old gumroad subscription afterward.'
           )
         )
       );
@@ -34854,6 +34827,18 @@ var BillingEditor = function (_Component) {
           return '#e3c800';
         default:
           return '#60a917';
+      }
+    }
+  }, {
+    key: 'switchToOurBilling',
+    value: function switchToOurBilling(e) {
+      var _this3 = this;
+
+      e.preventDefault();
+      if (window.confirm('Billing from us is preferred, just please cancel your subscription at gumroad.com if you have one afterwards.')) {
+        _jsreportStudio2.default.openModal(_UpgradePlanModal2.default, { refresh: function refresh() {
+            return _this3.refresh();
+          }, allowSelectCurrent: true });
       }
     }
   }, {
@@ -34939,6 +34924,13 @@ var BillingEditor = function (_Component) {
                 return _this4.openPaymentDetails(event);
               } },
             'Manage payments'
+          ) : _react2.default.createElement('span', null),
+          isGumroad() ? _react2.default.createElement(
+            'a',
+            { className: 'button confirmation', rel: 'noreferrer', enabl: true, style: { display: 'inline-block', marginTop: '0.25rem', marginLeft: '0rem', marginRight: '1rem' }, onClick: function onClick(event) {
+                return _this4.switchToOurBilling(event);
+              } },
+            'Switch from gumroad to jsreport billing'
           ) : _react2.default.createElement('span', null)
         ),
         _react2.default.createElement(
@@ -35171,7 +35163,7 @@ var UpgradePlanModal = function (_Component) {
                 return _context.finish(18);
 
               case 21:
-                if (!((_jsreportStudio2.default.authentication.user.tenant.plan || 'free') === this.state.selected)) {
+                if (!(!this.props.options.allowSelectCurrent && (_jsreportStudio2.default.authentication.user.tenant.plan || 'free') === this.state.selected)) {
                   _context.next = 23;
                   break;
                 }
@@ -35359,7 +35351,7 @@ var UpgradePlanModal = function (_Component) {
           { className: 'button confirmation', style: { marginTop: '0.5rem', marginLeft: '5px' }, onClick: function onClick() {
               return _this2.submit();
             } },
-          this.state.selected === currentPlan ? 'Close' : 'Process change'
+          this.state.selected === currentPlan && !this.props.options.allowSelectCurrent ? 'Close' : 'Process change'
         )
       );
     }
@@ -35375,7 +35367,7 @@ exports.default = UpgradePlanModal;
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-module.exports = {"plans":"x-v0e2Ap-UpgradePlanModal-plans","selected":"x-v0e2Ap-UpgradePlanModal-selected"};
+module.exports = {"plans":"x-jXLSr9-UpgradePlanModal-plans","selected":"x-jXLSr9-UpgradePlanModal-selected"};
 
 /***/ }),
 /* 146 */
