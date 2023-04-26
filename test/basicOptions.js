@@ -19,12 +19,12 @@ module.exports = extend(true, {}, { ...process.env }, {
   },
   extensions: {
     mongodbStore: {
-      uri: 'mongodb://localhost:27017/multitenant-test?'
+      uri: 'mongodb://127.0.0.1:27017/multitenant-test?'
     },
     dockerWorkers: {
       numberOfWorkers: 2,
       container: {
-        image: 'jsreportonline/worker:1.6.1 '
+        image: 'jsreportonline/worker:3.11.0 '
       }
     },
     authentication: {
