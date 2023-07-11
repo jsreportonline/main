@@ -34620,6 +34620,30 @@ _jsreportStudio2.default.initializeListeners.push(_asyncToGenerator( /*#__PURE__
   }, _callee, undefined);
 })));
 
+var recipesDeprecationInformed = false;
+_jsreportStudio2.default.runListeners.push(function (request, entities) {
+  if (recipesDeprecationInformed) {
+    return;
+  }
+
+  if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'phantom-image' && request.template.recipe !== 'wkhtmltopdf' && request.template.recipe !== 'electron-pdf') {
+    return;
+  }
+
+  recipesDeprecationInformed = true;
+  _jsreportStudio2.default.openModal(function () {
+    return React.createElement(
+      'div',
+      null,
+      'The recipes phantom-pdf, phantom-image, wkhtmltopdf, and electron-pdf are deprecated.',
+      React.createElement('br', null),
+      'We still keep them running, but in the future, we may need to stop the support because of the necessary OS updates which may break the recipes\' underlying technologies.',
+      React.createElement('br', null),
+      'Please consider migrating to chrome-based recipes.'
+    );
+  });
+});
+
 /***/ }),
 /* 142 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -35367,7 +35391,7 @@ exports.default = UpgradePlanModal;
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-module.exports = {"plans":"x-jXLSr9-UpgradePlanModal-plans","selected":"x-jXLSr9-UpgradePlanModal-selected"};
+module.exports = {"plans":"x-wwT8SH-UpgradePlanModal-plans","selected":"x-wwT8SH-UpgradePlanModal-selected"};
 
 /***/ }),
 /* 146 */

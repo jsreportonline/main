@@ -100,3 +100,23 @@ Studio.initializeListeners.push(async () => {
 
   Studio.addToolbarComponent(ChangeEmailSettingsButton, 'settings')
 })
+
+let recipesDeprecationInformed = false
+Studio.runListeners.push((request, entities) => {
+  if (recipesDeprecationInformed) {
+    return
+  }
+
+  if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'phantom-image' && request.template.recipe !== 'wkhtmltopdf' && request.template.recipe !== 'electron-pdf') {
+    return
+  }
+
+  recipesDeprecationInformed = true
+  Studio.openModal(() => (
+    <div>
+      The recipes phantom-pdf, phantom-image, wkhtmltopdf, and electron-pdf are deprecated.<br />
+      We still keep them running, but in the future, we may need to stop the support because of the necessary OS updates which may break the recipes' underlying technologies.<br />
+      Please consider migrating to chrome-based recipes.
+    </div>
+  ))
+})
