@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
 RUN apt-get update && apt-get install -y curl sudo git gnupg bzip2 && \
     apt-get update && \
@@ -11,7 +11,7 @@ RUN mkdir -p /usr/src/app
 RUN rm -rf /tmp/*
 
 ENV NVM_DIR /root/.nvm
-ENV NODE_VERSION 16.19.0
+ENV NODE_VERSION 18.16.1
 
 # node
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash && \
