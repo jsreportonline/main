@@ -23,7 +23,7 @@ jobs:
         with:
           mongodb-version: '4.2'
 
-      - run: npm ci
+      - run: npm i
       - run: npm run build
       - run: npm test
 
