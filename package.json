@@ -1,6 +1,6 @@
 {
   "name": "main",
-  "version": "3.13.0",
+  "version": "3.13.1",
   "description": "",
   "homepage": "https://github.com/jsreportonline/main#readme",
   "bugs": {
@@ -41,7 +41,7 @@
     "@jsreport/jsreport-mongodb-store": "3.2.0",
     "@jsreport/jsreport-npm": "3.2.0",
     "@jsreport/jsreport-pdf-utils": "3.9.0",
-    "@jsreport/jsreport-phantom-pdf": "3.3.0",
+    "@jsreport/jsreport-phantom-pdf": "3.3.1",
     "@jsreport/jsreport-pptx": "3.4.0",
     "@jsreport/jsreport-public-templates": "3.0.0",
     "@jsreport/jsreport-pug": "4.0.0",
