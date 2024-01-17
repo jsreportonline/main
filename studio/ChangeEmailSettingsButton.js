@@ -4,7 +4,7 @@ import Studio from 'jsreport-studio'
 function ChangeEmailSettingsButton (props) {
   let ui = null
 
-  if (Studio.authentication.user.isAdmin) {
+  if (Studio.authentication.user.isSuperAdmin) {
     ui = (
       <div>
         <a

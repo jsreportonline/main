@@ -11,7 +11,7 @@ import {
   LineElement,
   Tooltip
 } from 'chart.js'
-import moment from 'moment'
+import { subYears } from 'date-fns'
 
 ChartJS.register(
   CategoryScale,
@@ -162,7 +162,7 @@ class BillingEditor extends Component {
   }
 
   usageChart () {
-    const usageChartStart = moment().add(-1, 'years').toDate()
+    const usageChartStart = subYears(new Date(), 1)
     const usage = Studio.authentication.user.tenant.billingHistory.filter((h) => h.billedDate > usageChartStart)
     usage.reverse()
     const data = {

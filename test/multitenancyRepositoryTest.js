@@ -101,6 +101,7 @@ describe('multitenancyRepository', () => {
     const tUser = await jsreport.multitenancyRepository.findTenantUserInExtension('foo@foo.com')
 
     tUser.name.should.be.eql('foo@foo.com')
+    tUser.isSuperAdmin.should.be.eql(false)
     tUser.isAdmin.should.be.eql(false)
   })
 
@@ -130,6 +131,7 @@ describe('multitenancyRepository', () => {
     const tUser = await jsreport.multitenancyRepository.findTenantUser('test')
 
     tUser.name.should.be.eql('test')
+    tUser.isSuperAdmin.should.be.eql(false)
     tUser.isAdmin.should.be.eql(false)
     tUser.tenant.name.should.be.eql('test')
   })
