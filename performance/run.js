@@ -20,20 +20,27 @@ const createAccounts = async () => {
 
   console.log(`creating ${config.numberOfAccounts} accounts`)
 
-  accounts = new Array(config.numberOfAccounts)
-    .fill(1)
-    .map(() => Math.floor(Math.random() * 100000000))
-    .map((id) => ({
-      username: `${id}@perf.com`,
-      url: `${serverUrl.protocol}//${id}.${serverUrl.hostname}${serverUrl.port ? ':' + serverUrl.port : ''}`,
-      name: id,
-      index: counter++,
-      delay: (Math.random() * 10000),
-      password: 'password',
-      passwordConfirm: 'password',
-      authHeader: `Basic ${Buffer.from(`${id}@perf.com:password`).toString('base64')}`,
-      terms: 'on'
-    }))
+  let baseAccountNames
+
+  if (process.env.STATIC_ACCOUNTS === '1') {
+    baseAccountNames = ['perfu1', 'perfu2', 'perfu3', 'perfu4', 'perfu5', 'perfu6', 'perfu7', 'perfu8', 'perfu9', 'perfu10']
+  } else {
+    baseAccountNames = new Array(config.numberOfAccounts)
+      .fill(1)
+      .map(() => Math.floor(Math.random() * 100000000))
+  }
+
+  accounts = baseAccountNames.map((id) => ({
+    username: `${id}@perf.com`,
+    url: `${serverUrl.protocol}//${id}.${serverUrl.hostname}${serverUrl.port ? ':' + serverUrl.port : ''}`,
+    name: id,
+    index: counter++,
+    delay: (Math.random() * 10000),
+    password: 'password',
+    passwordConfirm: 'password',
+    authHeader: `Basic ${Buffer.from(`${id}@perf.com:password`).toString('base64')}`,
+    terms: 'on'
+  }))
 
   // eslint-disable-next-line no-unused-vars
   for (const account of accounts) {
@@ -92,15 +99,15 @@ const casesRun = [{
     </row>
     {{/xlsxAdd}}
     {{/many}}
-    
+
     {{{xlsxPrint}}}`,
     helpers: `function many(opts) {
       var res = ''
-    
+
       for (var i = 0; i < 1000; i++) {
         res += opts.fn(this)
       }
-    
+
       return res
     }`,
     recipe: 'xlsx',
