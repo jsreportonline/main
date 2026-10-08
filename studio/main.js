@@ -13959,7 +13959,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"plans":"x-6tu1vP-UpgradePlanModal-plans","selected":"x-6tu1vP-UpgradePlanModal-selected"});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"plans":"x-RuuqPE-UpgradePlanModal-plans","selected":"x-RuuqPE-UpgradePlanModal-selected"});
 
 /***/ }),
 /* 11 */
@@ -15017,17 +15017,6 @@ jsreport_studio__WEBPACK_IMPORTED_MODULE_0___default().initializeListeners.push(
   }), " Billing"), 'settings');
   jsreport_studio__WEBPACK_IMPORTED_MODULE_0___default().addToolbarComponent(_ChangePasswordSettingsButton__WEBPACK_IMPORTED_MODULE_3__["default"], 'settings');
   jsreport_studio__WEBPACK_IMPORTED_MODULE_0___default().addToolbarComponent(_ChangeEmailSettingsButton__WEBPACK_IMPORTED_MODULE_4__["default"], 'settings');
-});
-let recipesDeprecationInformed = false;
-jsreport_studio__WEBPACK_IMPORTED_MODULE_0___default().runListeners.push((request, entities) => {
-  if (recipesDeprecationInformed) {
-    return;
-  }
-  if (request.template.recipe !== 'phantom-pdf' && request.template.recipe !== 'phantom-image' && request.template.recipe !== 'wkhtmltopdf' && request.template.recipe !== 'electron-pdf') {
-    return;
-  }
-  recipesDeprecationInformed = true;
-  jsreport_studio__WEBPACK_IMPORTED_MODULE_0___default().openModal(() => /*#__PURE__*/React.createElement("div", null, "The recipes phantom-pdf, phantom-image, wkhtmltopdf, and electron-pdf are deprecated.", /*#__PURE__*/React.createElement("br", null), "We still keep them running, but in the future, we may need to stop the support because of the necessary OS updates which may break the recipes' underlying technologies.", /*#__PURE__*/React.createElement("br", null), "Please consider migrating to chrome-based recipes."));
 });
 })();
 

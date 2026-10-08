@@ -2,8 +2,7 @@ const axios = require('axios')
 const url = require('url')
 const querystring = require('querystring')
 
-const server = 'http://localtest.me:5488'
-// const server = 'https://jsreportonline-test.net'
+const server = 'https://jsreportonline-test.net'
 // eslint-disable-next-line node/no-deprecated-api
 const serverUrl = url.parse(server)
 

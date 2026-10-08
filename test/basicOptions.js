@@ -1,12 +1,11 @@
 const os = require('os')
 const path = require('path')
 const extend = require('node.extend.without.arrays')
-const ip = require('ip')
 
 module.exports = extend(true, {}, { ...process.env }, {
   debug: 'jsreport',
   stack: 'test',
-  ip: ip.address(),
+  ip: getLocalIpV4Address(),
   NODE_ENV: 'development',
   tempDirectory: path.join(os.platform() === 'darwin' ? '/tmp' : os.tmpdir(), 'jsreport'),
   db: {
@@ -49,3 +48,15 @@ module.exports = extend(true, {}, { ...process.env }, {
     enabled: false
   }
 })
+
+function getLocalIpV4Address () {
+  const addresses = Object.values(os.networkInterfaces()).flatMap(addresses => addresses ?? [])
+
+  const ip = addresses.find((address) => address.family === 'IPv4' && !address.internal)?.address
+
+  if (ip == null) {
+    throw new Error('Could not find and IP v4 address')
+  }
+
+  return ip
+}

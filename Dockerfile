@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:noble
 
 RUN apt-get update && apt-get install -y curl sudo git gnupg bzip2 && \
     apt-get update && \
@@ -10,15 +10,15 @@ RUN apt-get update && apt-get install -y curl sudo git gnupg bzip2 && \
 RUN mkdir -p /usr/src/app
 RUN rm -rf /tmp/*
 
-ENV NVM_DIR /root/.nvm
-ENV NODE_VERSION 18.16.1
+ENV NVM_DIR=/root/.nvm
+ENV NODE_VERSION=22.21.1
 
 # node
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash && \
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash && \
     /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
 
-ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 WORKDIR /usr/src/app
 
